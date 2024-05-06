@@ -1,0 +1,23 @@
+{
+    "name": "lkn/lkn-mercadopago-for-givewp",
+    "type": "project",
+    "license": "Proprietary",
+    "autoload": {
+        "psr-4": {
+            "Lkn\\GiveGetnetPayment\\Includes\\": "Includes/",
+            "Lkn\\GiveGetnetPayment\\Admin\\": "Admin/",
+            "Lkn\\GiveGetnetPayment\\PublicView\\": "Public/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Link Nacional",
+            "email": "ticket@linknacional.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phan/phan": "5.4.1"
+    },
+    "require": {}
+}
