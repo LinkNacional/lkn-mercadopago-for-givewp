@@ -44,6 +44,13 @@ abstract class LknMercadoPagoForGiveWPHelper {
      * @return void
      */
     final public static function reg_log($advanced, $message, $configs): void {
+        global $wp_filesystem;
+        WP_Filesystem();
+
+        if ( ! $wp_filesystem ) {
+            return;
+        }
+    
         if ($advanced && 'enabled' === $configs['debugAdvanced']) {
             $log = true;
         } 
@@ -52,10 +59,11 @@ abstract class LknMercadoPagoForGiveWPHelper {
         }
         
         if ($log) {
-            $jsonMsg = json_encode($message, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
+            $jsonMsg = wp_json_encode($message, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
 
-            error_log($jsonMsg, 3, $configs['base']);
-            chmod($configs['base'], 0600);
+            $file_path = $configs['base'];
+            $wp_filesystem->put_contents( $file_path, $jsonMsg, FS_CHMOD_FILE );
+            $wp_filesystem->chmod( $file_path, 0600 );
         }
     }
 
@@ -80,13 +88,13 @@ abstract class LknMercadoPagoForGiveWPHelper {
                 $logDate = $logYear . '-' . $logMonth . '-' . $logDay;
 
                 $logDate = new DateTime($logDate);
-                $now = new DateTime(date('Y-m-d'));
+                $now = new DateTime(gmdate('Y-m-d'));
 
                 $interval = $logDate->diff($now);
                 $logAge = $interval->format('%a');
 
                 if ($logAge >= 5) {
-                    unlink($logsPath . '/' . $logFilename);
+                    wp_delete_file($logsPath . '/' . $logFilename);
                 }
             }
         }
@@ -110,7 +118,7 @@ abstract class LknMercadoPagoForGiveWPHelper {
             'para o plugin Give Getnet ativar.'
         );
 
-        echo $message;
+        echo esc_html($message);
     } 
 
     /**
