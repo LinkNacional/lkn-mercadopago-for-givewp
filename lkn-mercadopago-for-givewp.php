@@ -1,4 +1,7 @@
 <?php
+use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPActivator;
+use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPDeactivator;
+use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGivewp;
 
 /**
  * The plugin bootstrap file
@@ -54,8 +57,8 @@ if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_DIR')) {
  * This action is documented in includes/class-lkn-mercadopago-for-givewp-activator.php
  */
 function activate_lkn_mercadopago_for_givewp(): void {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-lkn-mercadopago-for-givewp-activator.php';
-    Lkn_Mercadopago_For_Givewp_Activator::activate();
+    require_once plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWPActivator.php';
+    LknMercadoPagoForGiveWPActivator::activate();
 }
 
 /**
@@ -63,8 +66,8 @@ function activate_lkn_mercadopago_for_givewp(): void {
  * This action is documented in includes/class-lkn-mercadopago-for-givewp-deactivator.php
  */
 function deactivate_lkn_mercadopago_for_givewp(): void {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-lkn-mercadopago-for-givewp-deactivator.php';
-    Lkn_Mercadopago_For_Givewp_Deactivator::deactivate();
+    require_once plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWPDeactivator.php';
+    LknMercadoPagoForGiveWPDeactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_lkn_mercadopago_for_givewp' );
@@ -74,7 +77,7 @@ register_deactivation_hook( __FILE__, 'deactivate_lkn_mercadopago_for_givewp' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-lkn-mercadopago-for-givewp.php';
+require plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWP.php';
 
 /**
  * Begins execution of the plugin.
@@ -86,7 +89,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-lkn-mercadopago-for-givewp
  * @since    1.0.0
  */
 function run_lkn_mercadopago_for_givewp(): void {
-    $plugin = new Lkn_Mercadopago_For_Givewp();
+    $plugin = new LknMercadoPagoForGivewp();
     $plugin->run();
 }
 run_lkn_mercadopago_for_givewp();
