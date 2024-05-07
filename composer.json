@@ -4,9 +4,9 @@
     "license": "Proprietary",
     "autoload": {
         "psr-4": {
-            "Lkn\\GiveGetnetPayment\\Includes\\": "Includes/",
-            "Lkn\\GiveGetnetPayment\\Admin\\": "Admin/",
-            "Lkn\\GiveGetnetPayment\\PublicView\\": "Public/"
+            "Lkn\\LknMercadoPagoForGiveWp\\Includes\\": "Includes/",
+            "Lkn\\LknMercadoPagoForGiveWp\\Admin\\": "Admin/",
+            "Lkn\\LknMercadoPagoForGiveWp\\PublicView\\": "Public/"
         }
     },
     "authors": [

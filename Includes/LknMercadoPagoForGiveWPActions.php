@@ -1,6 +1,6 @@
 <?php
 
-namespace Lkn\lkn_mercadopago_for_givewp\Includes;
+namespace Lkn\LknMercadoPagoForGiveWp\Includes;
 
 use Give\Log\Log;
 
