@@ -37,10 +37,16 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'LKN_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.0.0' );
 
-//TODO definido a constante
-// QUal versão?
 if ( ! defined('LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION')) {
     define('LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION', '3.0.0');
+}
+
+if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_FILE')) {
+    define('LKN_MERCADOPAGO_FOR_GIVEWP_FILE', __DIR__ . '/lkn-mercadopago-for-givewp.php');
+}
+
+if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_DIR')) {
+    define('LKN_MERCADOPAGO_FOR_GIVEWP_DIR', plugin_dir_path(LKN_MERCADOPAGO_FOR_GIVEWP_FILE));
 }
 
 /**
