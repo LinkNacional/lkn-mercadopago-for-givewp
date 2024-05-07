@@ -30,19 +30,6 @@ abstract class LknMercadoPagoForGiveWPActions {
     }
 
     /**
-     * Function that validates the module key
-     *
-     * @return mixed $result
-     */
-    final public static function get_module_key() {
-        $moduleKey = trim(give_get_option('getnet_setting_field'));
-
-        $result = LknMercadoPagoForGiveWPLicenseFunctions::save_license($moduleKey);
-
-        return $result;
-    }
-
-    /**
      * This function centralizes the data in one spot for ease mannagment
      *
      * @return array
