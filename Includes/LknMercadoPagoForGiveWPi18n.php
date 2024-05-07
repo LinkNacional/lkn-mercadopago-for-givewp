@@ -1,5 +1,6 @@
 <?php
 
+namespace Lkn\LknMercadoPagoForGiveWp\Includes;
 /**
  * Define the internationalization functionality
  *
@@ -24,24 +25,17 @@
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-class Lkn_Mercadopago_For_Givewp_i18n
-{
+final class LknMercadoPagoForGiveWPi18n {
     /**
      * Load the plugin text domain for translation.
      *
      * @since    1.0.0
      */
-    public function load_plugin_textdomain()
-    {
-
+    public function load_plugin_textdomain(): void {
         load_plugin_textdomain(
             'lkn-mercadopago-for-givewp',
             false,
             dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
         );
-
     }
-
-
-
 }
