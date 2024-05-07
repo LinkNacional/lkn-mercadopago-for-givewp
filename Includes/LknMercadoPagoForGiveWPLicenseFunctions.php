@@ -26,8 +26,8 @@ abstract class LknMercadoPagoForGiveWPLicenseFunctions {
         $localkeydays = 90;
         $allowcheckfaildays = 5;
 
-        $check_token = time() . md5(mt_rand(100000000, mt_getrandmax()) . $licensekey);
-        $checkdate = date('Ymd');
+        $check_token = time() . md5(wp_rand(100000000, mt_getrandmax()) . $licensekey);
+        $checkdate = gmdate('Ymd');
         $domain = $_SERVER['SERVER_NAME'];
         $usersip = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : $_SERVER['LOCAL_ADDR'];
         $dirpath = __DIR__;
@@ -46,7 +46,7 @@ abstract class LknMercadoPagoForGiveWPLicenseFunctions {
                 $localkeyresults = json_decode($localdata, true);
                 $originalcheckdate = $localkeyresults['checkdate'];
                 if (md5($originalcheckdate . $licensing_secret_key) == $md5hash) {
-                    $localexpiry = date('Ymd', mktime(0, 0, 0, date('m'), date('d') - $localkeydays, date('Y')));
+                    $localexpiry = gmdate('Ymd', mktime(0, 0, 0, gmdate('m'), gmdate('d') - $localkeydays, gmdate('Y')));
                     if ($originalcheckdate > $localexpiry) {
                         $localkeyvalid = true;
                         $results = $localkeyresults;
@@ -129,7 +129,7 @@ abstract class LknMercadoPagoForGiveWPLicenseFunctions {
                 }
             }
             if (200 != $responseCode) {
-                $localexpiry = date('Ymd', mktime(0, 0, 0, date('m'), date('d') - ($localkeydays + $allowcheckfaildays), date('Y')));
+                $localexpiry = gmdate('Ymd', mktime(0, 0, 0, gmdate('m'), gmdate('d') - ($localkeydays + $allowcheckfaildays), gmdate('Y')));
                 if ($originalcheckdate > $localexpiry) {
                     $results = $localkeyresults;
                 } else {
