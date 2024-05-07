@@ -1,5 +1,8 @@
 <?php
 
+namespace Lkn\lkn_mercadopago_for_givewp\Includes;
+use DateTime;
+
 /**
  * Fired during plugin deactivation
  *
@@ -20,7 +23,7 @@
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-abstract class Lkn_Mercadopago_For_Givewp_Helper {
+abstract class LknMercadoPagoForGiveWPHelper {
     /**
      * @since 1.0.0
      *
@@ -61,14 +64,8 @@ abstract class Lkn_Mercadopago_For_Givewp_Helper {
      *
      * @return void
      */
-
-    //TODO
-    //Criei a helper a partir de outro repositório
-    //Faltando a class Actions (?)
-
     final public static function delete_old_logs(): void {
-        //TODO criar função get_Configs
-        $configs = LknGiveGetnetPaymentActions::get_configs();
+        $configs = LknMercadoPagoForGiveWPActions::get_configs();
         $logsPath = $configs['basePath'];
 
         foreach (scandir($logsPath) as $logFilename) {
