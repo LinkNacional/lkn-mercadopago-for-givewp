@@ -159,7 +159,7 @@ abstract class LknMercadoPagoForGiveWPLicenseFunctions {
             }
             if ('Active' == $results['status']) {
                 $results['checkdate'] = $checkdate;
-                $data_encoded = json_encode($results);
+                $data_encoded = wp_json_encode($results);
                 $data_encoded = base64_encode($data_encoded);
                 $data_encoded = md5($checkdate . $licensing_secret_key) . $data_encoded;
                 $data_encoded = strrev($data_encoded);

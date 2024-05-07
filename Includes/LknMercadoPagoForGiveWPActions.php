@@ -51,7 +51,7 @@ abstract class LknMercadoPagoForGiveWPActions {
         $configs = array();
     
         $configs['basePath'] = LKN_MERCADOPAGO_FOR_GIVEWP_DIR . 'Includes/logs';
-        $configs['base'] = $configs['basePath'] . '/' . date('d.m.Y-H.i.s') . '.log';
+        $configs['base'] = $configs['basePath'] . '/' . gmdate('d.m.Y-H.i.s') . '.log';
     
         $configs['debug'] = give_get_option('lkn_getnet_debug');
         $configs['debugAdvanced'] = give_get_option('lkn_getnet_debug_advanced');
