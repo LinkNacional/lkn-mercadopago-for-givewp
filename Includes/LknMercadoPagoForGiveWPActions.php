@@ -55,7 +55,6 @@ abstract class LknMercadoPagoForGiveWPActions {
         }
     
         $configs['installments'] = self::get_installments();
-        $configs['moduleKey'] = self::get_module_key();
         $configs['sellerId'] = trim(give_get_option('lkn_getnet_seller_id_setting_field'));
         $configs['clientId'] = trim(give_get_option('lkn_getnet_client_id_setting_field'));
         $configs['clientSecret'] = trim(give_get_option('lkn_getnet_client_secret_setting_field'));
