@@ -34,14 +34,14 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
      * @inheritDoc
      */
     public function getName(): string {
-        return __('Example Gateway - Onsite', 'example-give');
+        return __('Mercado Pago', 'example-give');
     }
 
     /**
      * @inheritDoc
      */
     public function getPaymentMethodLabel(): string {
-        return __('Example Gateway - Onsite', 'example-give');
+        return __('Mercado Pago', 'example-give');
     }
 
     /**
