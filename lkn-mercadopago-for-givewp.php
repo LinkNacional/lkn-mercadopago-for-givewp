@@ -52,6 +52,14 @@ if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_DIR')) {
     define('LKN_MERCADOPAGO_FOR_GIVEWP_DIR', plugin_dir_path(LKN_MERCADOPAGO_FOR_GIVEWP_FILE));
 }
 
+if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_URL')) {
+    define('LKN_MERCADOPAGO_FOR_GIVEWP_URL', plugin_dir_url(LKN_MERCADOPAGO_FOR_GIVEWP_FILE));
+}
+
+if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME')) {
+    define('LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME', plugin_basename(LKN_MERCADOPAGO_FOR_GIVEWP_FILE));
+}
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-lkn-mercadopago-for-givewp-activator.php
