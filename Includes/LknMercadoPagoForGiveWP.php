@@ -2,6 +2,7 @@
 
 namespace Lkn\LknMercadoPagoForGiveWp\Includes;
 use Lkn\LknMercadoPagoForGiveWp\Admin\LknMercadoPagoForGiveWPAdmin;
+use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPPublic;
 
 /**
@@ -123,6 +124,8 @@ final class LknMercadopagoForGiveWP {
          */
         require_once plugin_dir_path(__DIR__) . 'public/LknMercadoPagoForGiveWPPublic.php';
 
+        require_once plugin_dir_path(__DIR__) . 'public/LknMercadoPagoForGiveWPGateway.php';
+
         $this->loader = new LknMercadoPagoForGiveWPLoader();
     }
 
@@ -153,6 +156,7 @@ final class LknMercadopagoForGiveWP {
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+        $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
     }
 
     /**
@@ -167,6 +171,7 @@ final class LknMercadopagoForGiveWP {
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+        $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
     }
 
     /**
@@ -207,5 +212,18 @@ final class LknMercadopagoForGiveWP {
      */
     public function get_version() {
         return $this->version;
+    }
+
+    /**
+     * Register gateway to new GiveWP v3
+     *
+     * @since 3.0.0
+     *
+     * @param  PaymentGatewayRegister $paymentGatewayRegister 
+     *
+     * @return void
+     */ 
+    public function new_gateway_register($paymentGatewayRegister) :void {
+        $paymentGatewayRegister->registerGateway('Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway');
     }
 }
