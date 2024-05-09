@@ -117,6 +117,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         //     LKN_MERCADOPAGO_FOR_GIVEWP_VERSION,
         //     true
         // );
-        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery'), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, true );
+        
+        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, true );
+
+        wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, false);
     }
 }

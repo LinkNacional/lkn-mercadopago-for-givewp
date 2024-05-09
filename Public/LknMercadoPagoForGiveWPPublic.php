@@ -90,5 +90,7 @@ final class LknMercadoPagoForGiveWPPublic {
          * class.
          */
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lkn-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
+
+        wp_enqueue_script( $this->plugin_name . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), $this->version, false);
     }
 }
