@@ -28,12 +28,13 @@ const gateway = {
     Fields() {
         const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
         const bricksBuilder = mp.bricks();
+
         return (
             <fieldset className="no-fields">
                 <h1>Hello Caio!</h1>
                 <input type="text" name="my-gateway-field-name" />
+                <div id="wallet_container"></div>
             </fieldset>
-            <div id="wallet_container"></div>
 
         )
     },

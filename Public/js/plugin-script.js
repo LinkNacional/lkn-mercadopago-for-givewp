@@ -26,11 +26,27 @@ const gateway = {
     },
     // Função onde os campos HTML são criados
     Fields() {
+        const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+        const bricksBuilder = mp.bricks();
+
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: "https://api.mercadopago.com/checkout/preferences",
+            },
+            customization: {
+                texts: {
+                    valueProp: 'smart_option',
+                },
+            },
+        });
+
         return /*#__PURE__*/React.createElement("fieldset", {
             className: "no-fields"
-        }, /*#__PURE__*/React.createElement("h1", null, "Hello World!"), /*#__PURE__*/React.createElement("input", {
+        }, /*#__PURE__*/React.createElement("h1", null, "Hello Caio!"), /*#__PURE__*/React.createElement("input", {
             type: "text",
             name: "my-gateway-field-name"
+        }), /*#__PURE__*/React.createElement("div", {
+            id: "wallet_container"
         }));
     }
 };
