@@ -1,13 +1,24 @@
 let preferenceID = null;
+function sanitizeInput(input) {
+    if (typeof input === 'string') {
+        return input.replace(/<[^>]*>/g, '').trim();
+    }
+    else if (typeof input === 'number') {
+        return parseFloat(input.toString().replace(/\D/g, ''));
+    }
+    else {
+        return input;
+    }
+}
 
 async function criarPreferenciaDePagamento() {
     const url = 'https://api.mercadopago.com/checkout/preferences';
     const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
 
     // Obter valores dos campos HTML
-    const nome = document.querySelector('input[name="firstName"]').value;
-    const sobrenome = document.querySelector('input[name="lastName"]').value;
-    const email = document.querySelector('input[name="email"]').value;
+    const nome = sanitizeInput(document.querySelector('input[name="firstName"]').value);
+    const sobrenome = sanitizeInput(document.querySelector('input[name="lastName"]').value);
+    const email = sanitizeInput(document.querySelector('input[name="email"]').value);
     //const dd = document.querySelector('input[name="dd"]').value;
     const dd = "84";
     //const numero = document.querySelector('input[name="numero"]').value;
@@ -59,20 +70,6 @@ async function criarPreferenciaDePagamento() {
         throw error;
     }
 }
-// async function getPreferenceID() {
-//     try {
-//         const preferenceData = await criarPreferenciaDePagamento();
-//         if (preferenceData && preferenceData.id) {
-//             console.log('ID da preferência de pagamento:', preferenceData.id);
-//             return preferenceData.id;
-//         } else {
-//             throw new Error('Erro ao obter o ID da preferência de pagamento');
-//         }
-//     } catch (error) {
-//         console.error('Erro ao obter o ID da preferência de pagamento:', error);
-//         throw error;
-//     }
-// }
 function updateDonationAmount() {
     const fieldValueElement = document.querySelector('.givewp-elements-donationSummary__list__item__value');
     const donationAmountElement = document.querySelector('#donation-amount');
@@ -181,6 +178,9 @@ const gateway = {
     },
     // Função onde os campos HTML são criados
     Fields() {
+
+        //Desabilitei botão para pagar com Mercado Pago
+        document.querySelector('button[type="submit"]').disabled = true;
 
         // Chamando funções após os elementos terem sido renderizados
         setTimeout(updateDonationAmount, 0);
