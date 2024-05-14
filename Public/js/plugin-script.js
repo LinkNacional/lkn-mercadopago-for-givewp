@@ -114,35 +114,40 @@ function observeDonationChanges() {
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
                 updateDonationAmount();
-                criarPreferenciaDePagamento().then(newPreferenceID => {
-                    console.log('Nova preferência criada:', newPreferenceID);
-                    const desativaBtn = document.querySelector('#wallet_container');
-                    preferenceID = newPreferenceID;
-                    const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
-                    const bricksBuilder = mp.bricks();
-                    mp.bricks().create("wallet", "wallet_container", {
-                        initialization: {
-                            preferenceId: preferenceID
-                        },
-                        customization: {
-                            texts: {
-                                valueProp: 'smart_option'
+
+                const nomeInput = document.querySelector('input[name="firstName"]');
+                const emailInput = document.querySelector('input[name="email"]');
+                if (nomeInput.value && emailInput.value) {
+                    criarPreferenciaDePagamento().then(newPreferenceID => {
+                        console.log('Nova preferência criada:', newPreferenceID);
+                        const desativaBtn = document.querySelector('#wallet_container');
+                        preferenceID = newPreferenceID;
+                        const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                        const bricksBuilder = mp.bricks();
+                        mp.bricks().create("wallet", "wallet_container", {
+                            initialization: {
+                                preferenceId: preferenceID
+                            },
+                            customization: {
+                                texts: {
+                                    valueProp: 'smart_option'
+                                }
                             }
+                        });
+
+                        // Cria um novo botão com a classe e ID desejados
+                        const newButton = document.createElement('div');
+                        newButton.id = 'wallet_container'; // ID do novo botão
+
+                        const oldContainer = document.querySelector('#wallet_container');
+                        if (oldContainer) {
+                            oldContainer.replaceWith(newButton);
                         }
+
+                    }).catch(error => {
+                        console.error('Erro ao criar nova preferência de pagamento:', error);
                     });
-
-                    // Cria um novo botão com a classe e ID desejados
-                    const newButton = document.createElement('div');
-                    newButton.id = 'wallet_container'; // ID do novo botão
-
-                    const oldContainer = document.querySelector('#wallet_container');
-                    if (oldContainer) {
-                        oldContainer.replaceWith(newButton);
-                    }
-
-                }).catch(error => {
-                    console.error('Erro ao criar nova preferência de pagamento:', error);
-                });
+                }
             }
         }
     });
@@ -218,7 +223,6 @@ const gateway = {
         observeDonationChanges();
         observeFormChanges();
         observeMetodoChanges();
-
 
         criarPreferenciaDePagamento()
             .then(preferenceID => {
