@@ -1,4 +1,5 @@
 let preferenceID = null;
+
 function sanitizeInput(input) {
     if (typeof input === 'string') {
         return input.replace(/<[^>]*>/g, '').trim();
@@ -78,6 +79,33 @@ function updateDonationAmount() {
         donationAmountElement.textContent = fieldValue;
     }
 }
+
+function observeMetodoChanges() {
+    const checkGateways = () => {
+        const offlineGateway = document.querySelector('.givewp-fields-gateways__gateway--offline.givewp-fields-gateways__gateway--active');
+        const manualGateway = document.querySelector('.givewp-fields-gateways__gateway--manual.givewp-fields-gateways__gateway--active');
+
+        // Se algum dos gateways estiver ativo, habilita o botão Donate Now
+        if (offlineGateway || manualGateway) {
+            document.querySelector('button[type="submit"]').disabled = false;
+        } else {
+            document.querySelector('button[type="submit"]').disabled = true;
+        }
+    };
+
+    checkGateways();
+
+    const observer = new MutationObserver((mutationsList, observer) => {
+        checkGateways();
+    });
+
+    const targetNode = document.querySelector('.givewp-fields-gateways');
+
+    const config = { childList: true, subtree: true };
+
+    observer.observe(targetNode, config);
+}
+
 function observeDonationChanges() {
     const targetNode = document.querySelector('.givewp-elements-donationSummary__list__item__value');
     if (!targetNode) return;
@@ -179,15 +207,18 @@ const gateway = {
     // Função onde os campos HTML são criados
     Fields() {
 
-        //Desabilitei botão para pagar com Mercado Pago
+        //Desabilitado botão Donate Now
         document.querySelector('button[type="submit"]').disabled = true;
 
         // Chamando funções após os elementos terem sido renderizados
         setTimeout(updateDonationAmount, 0);
         setTimeout(checkInputs, 0);
+
         //Observers
         observeDonationChanges();
         observeFormChanges();
+        observeMetodoChanges();
+
 
         criarPreferenciaDePagamento()
             .then(preferenceID => {
