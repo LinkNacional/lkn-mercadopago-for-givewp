@@ -78,10 +78,10 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
 
             DonationNote::create(array(
                 'donationId' => $donation->id,
-                'content' => sprintf(esc_html__('Donation failed. Reason: %s', 'example-give'), $errorMessage)
+                'content' => sprintf(esc_html__('Donation failed. Reason: %s', 'example-give'), $errorMessage) // Translators: %s é um espaço reservado para a mensagem de erro
             ));
 
-            throw new PaymentGatewayException($errorMessage);
+            throw new PaymentGatewayException(esc_html($errorMessage));
         }
     }
 
