@@ -1,3 +1,5 @@
+let preferenceID = null;
+
 async function criarPreferenciaDePagamento() {
     const url = 'https://api.mercadopago.com/checkout/preferences';
     const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
@@ -20,6 +22,7 @@ async function criarPreferenciaDePagamento() {
 
     const valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
+    console.log(valorNumerico)
 
     const valor = parseFloat(document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent);
     const preference = {
@@ -50,26 +53,26 @@ async function criarPreferenciaDePagamento() {
             throw new Error(`Erro ao criar preferência de pagamento: ${response.status}`);
         }
         const data = await response.json();
-        return data;
+        return data.id;
     } catch (error) {
         console.error('Erro ao criar preferência de pagamento:', error);
         throw error;
     }
 }
-async function getPreferenceID() {
-    try {
-        const preferenceData = await criarPreferenciaDePagamento();
-        if (preferenceData && preferenceData.id) {
-            console.log('ID da preferência de pagamento:', preferenceData.id);
-            return preferenceData.id;
-        } else {
-            throw new Error('Erro ao obter o ID da preferência de pagamento');
-        }
-    } catch (error) {
-        console.error('Erro ao obter o ID da preferência de pagamento:', error);
-        throw error;
-    }
-}
+// async function getPreferenceID() {
+//     try {
+//         const preferenceData = await criarPreferenciaDePagamento();
+//         if (preferenceData && preferenceData.id) {
+//             console.log('ID da preferência de pagamento:', preferenceData.id);
+//             return preferenceData.id;
+//         } else {
+//             throw new Error('Erro ao obter o ID da preferência de pagamento');
+//         }
+//     } catch (error) {
+//         console.error('Erro ao obter o ID da preferência de pagamento:', error);
+//         throw error;
+//     }
+// }
 function updateDonationAmount() {
     const fieldValueElement = document.querySelector('.givewp-elements-donationSummary__list__item__value');
     const donationAmountElement = document.querySelector('#donation-amount');
@@ -80,13 +83,41 @@ function updateDonationAmount() {
 }
 function observeDonationChanges() {
     const targetNode = document.querySelector('.givewp-elements-donationSummary__list__item__value');
-    if (!targetNode) return; // Sair se o elemento não for encontrado
+    if (!targetNode) return;
 
     const observer = new MutationObserver(function (mutationsList, observer) {
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                // Chamando a função para atualizar o valor do campo de doação
                 updateDonationAmount();
+                criarPreferenciaDePagamento().then(newPreferenceID => {
+                    console.log('Nova preferência criada:', newPreferenceID);
+                    const desativaBtn = document.querySelector('#wallet_container');
+                    preferenceID = newPreferenceID;
+                    const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                    const bricksBuilder = mp.bricks();
+                    mp.bricks().create("wallet", "wallet_container", {
+                        initialization: {
+                            preferenceId: preferenceID
+                        },
+                        customization: {
+                            texts: {
+                                valueProp: 'smart_option'
+                            }
+                        }
+                    });
+
+                    // Cria um novo botão com a classe e ID desejados
+                    const newButton = document.createElement('div');
+                    newButton.id = 'wallet_container'; // ID do novo botão
+
+                    const oldContainer = document.querySelector('#wallet_container');
+                    if (oldContainer) {
+                        oldContainer.replaceWith(newButton);
+                    }
+
+                }).catch(error => {
+                    console.error('Erro ao criar nova preferência de pagamento:', error);
+                });
             }
         }
     });
@@ -100,8 +131,6 @@ function observeDonationChanges() {
 function observeFormChanges() {
     const nomeInput = document.querySelector('input[name="firstName"]');
     const emailInput = document.querySelector('input[name="email"]');
-
-    // Verifica se os campos foram encontrados antes de adicionar ouvintes de eventos
     if (nomeInput && emailInput) {
         nomeInput.addEventListener('input', checkInputs);
         emailInput.addEventListener('input', checkInputs);
@@ -153,31 +182,34 @@ const gateway = {
     // Função onde os campos HTML são criados
     Fields() {
 
-        // Chamando a função updateFieldValue() após os elementos terem sido renderizados
+        // Chamando funções após os elementos terem sido renderizados
         setTimeout(updateDonationAmount, 0);
         setTimeout(checkInputs, 0);
+        //Observers
         observeDonationChanges();
         observeFormChanges();
 
-        criarPreferenciaDePagamento();
-
-        getPreferenceID().then(preferenceID => {
-            const id = preferenceID;
-            const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
-            const bricksBuilder = mp.bricks();
-            mp.bricks().create("wallet", "wallet_container", {
-                initialization: {
-                    preferenceId: id
-                },
-                customization: {
-                    texts: {
-                        valueProp: 'smart_option'
+        criarPreferenciaDePagamento()
+            .then(preferenceID => {
+                console.log('ID da preferência criada:', preferenceID);
+                preferenceID = preferenceID;
+                const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                const bricksBuilder = mp.bricks();
+                mp.bricks().create("wallet", "wallet_container", {
+                    initialization: {
+                        preferenceId: preferenceID
+                    },
+                    customization: {
+                        texts: {
+                            valueProp: 'smart_option'
+                        }
                     }
-                }
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao criar preferência de pagamento:', error);
             });
-        }).catch(error => {
-            // Lida com erros, se ocorrerem
-        });
+
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
             className: "no-fields"
         }, /*#__PURE__*/React.createElement("h1", null, "Doa\xE7\xE3o de ", /*#__PURE__*/React.createElement("span", {
