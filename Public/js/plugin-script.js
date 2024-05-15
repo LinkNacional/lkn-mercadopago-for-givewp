@@ -1,4 +1,42 @@
 let preferenceID = null;
+let hasRenderedComponents = false;
+
+function renderComponentsOnce() {
+    if (!hasRenderedComponents) {
+        criarPreferenciaDePagamento()
+            .then(preferenceID => {
+                console.log('ID da preferência criada:', preferenceID);
+                preferenceID = preferenceID;
+                const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                const bricksBuilder = mp.bricks();
+                mp.bricks().create("wallet", "wallet_container", {
+                    initialization: {
+                        preferenceId: preferenceID,
+                        redirectMode: "blank"
+                    },
+                    customization: {
+                        texts: {
+                            valueProp: 'smart_option'
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao criar preferência de pagamento:', error);
+            });
+
+        // Chamando funções após os elementos terem sido renderizados
+        setTimeout(updateDonationAmount, 0);
+        setTimeout(checkInputs, 0);
+
+        // Observers
+        observeDonationChanges();
+        observeFormChanges();
+        observeMetodoChanges();
+
+        hasRenderedComponents = true;
+    }
+}
 
 function sanitizeInput(input) {
     if (typeof input === 'string') {
@@ -88,6 +126,7 @@ function observeMetodoChanges() {
         // Se algum dos gateways estiver ativo, habilita o botão Donate Now
         if (offlineGateway || manualGateway) {
             document.querySelector('button[type="submit"]').disabled = false;
+            hasRenderedComponents = false;
         } else {
             document.querySelector('button[type="submit"]').disabled = true;
         }
@@ -119,14 +158,28 @@ function observeDonationChanges() {
                 const emailInput = document.querySelector('input[name="email"]');
                 if (nomeInput.value && emailInput.value) {
                     criarPreferenciaDePagamento().then(newPreferenceID => {
+
                         console.log('Nova preferência criada:', newPreferenceID);
-                        const desativaBtn = document.querySelector('#wallet_container');
+
+                        const oldButton = document.querySelector('#wallet_container');
+                        if (oldButton) {
+                            oldButton.remove(); // Remove o botão antigo se existir
+                        }
+
                         preferenceID = newPreferenceID;
+
+                        const newButton = document.createElement('div');
+                        newButton.id = 'wallet_container';
+                        const fieldset = document.querySelector('.no-fields');
+
+                        fieldset.appendChild(newButton);
+
                         const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
                         const bricksBuilder = mp.bricks();
                         mp.bricks().create("wallet", "wallet_container", {
                             initialization: {
-                                preferenceId: preferenceID
+                                preferenceId: preferenceID,
+                                redirectMode: "blank"
                             },
                             customization: {
                                 texts: {
@@ -134,15 +187,6 @@ function observeDonationChanges() {
                                 }
                             }
                         });
-
-                        // Cria um novo botão com a classe e ID desejados
-                        const newButton = document.createElement('div');
-                        newButton.id = 'wallet_container'; // ID do novo botão
-
-                        const oldContainer = document.querySelector('#wallet_container');
-                        if (oldContainer) {
-                            oldContainer.replaceWith(newButton);
-                        }
 
                     }).catch(error => {
                         console.error('Erro ao criar nova preferência de pagamento:', error);
@@ -212,38 +256,7 @@ const gateway = {
     // Função onde os campos HTML são criados
     Fields() {
 
-        //Desabilitado botão Donate Now
-        document.querySelector('button[type="submit"]').disabled = true;
-
-        // Chamando funções após os elementos terem sido renderizados
-        setTimeout(updateDonationAmount, 0);
-        setTimeout(checkInputs, 0);
-
-        //Observers
-        observeDonationChanges();
-        observeFormChanges();
-        observeMetodoChanges();
-
-        criarPreferenciaDePagamento()
-            .then(preferenceID => {
-                console.log('ID da preferência criada:', preferenceID);
-                preferenceID = preferenceID;
-                const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
-                const bricksBuilder = mp.bricks();
-                mp.bricks().create("wallet", "wallet_container", {
-                    initialization: {
-                        preferenceId: preferenceID
-                    },
-                    customization: {
-                        texts: {
-                            valueProp: 'smart_option'
-                        }
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao criar preferência de pagamento:', error);
-            });
+        renderComponentsOnce();
 
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
             className: "no-fields"
