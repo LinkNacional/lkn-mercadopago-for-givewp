@@ -74,12 +74,11 @@ async function criarPreferenciaDePagamento() {
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
     console.log(valorNumerico)
 
-    const valor = parseFloat(document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent);
     const preference = {
         "back_urls": {
-            "success": "http://test.com/success",
-            "pending": "http://test.com/pending",
-            "failure": "http://test.com/failure"
+            "success": "http://test.com/success", //site_url()
+            "pending": "http://test.com/pending", //site_url()
+            "failure": "http://test.com/failure" //site_url()
         },
         "items": [{
             "id": "Doação X",
@@ -145,11 +144,23 @@ function observeMetodoChanges() {
     observer.observe(targetNode, config);
 }
 
+function debounce(func, delay) {
+    let timer;
+    return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    };
+}
+
 function observeDonationChanges() {
     const targetNode = document.querySelector('.givewp-elements-donationSummary__list__item__value');
     if (!targetNode) return;
 
-    const observer = new MutationObserver(function (mutationsList, observer) {
+    const observer = new MutationObserver(debounce(function (mutationsList, observer) {
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
                 updateDonationAmount();
@@ -157,14 +168,16 @@ function observeDonationChanges() {
                 const nomeInput = document.querySelector('input[name="firstName"]');
                 const emailInput = document.querySelector('input[name="email"]');
                 if (nomeInput.value && emailInput.value) {
+                    const oldButton = document.querySelector('#wallet_container');
+
+                    if (oldButton) {
+                        oldButton.remove();
+                        console.log('botao removido')
+                    }
+
                     criarPreferenciaDePagamento().then(newPreferenceID => {
 
                         console.log('Nova preferência criada:', newPreferenceID);
-
-                        const oldButton = document.querySelector('#wallet_container');
-                        if (oldButton) {
-                            oldButton.remove(); // Remove o botão antigo se existir
-                        }
 
                         preferenceID = newPreferenceID;
 
@@ -194,7 +207,8 @@ function observeDonationChanges() {
                 }
             }
         }
-    });
+    }, 500)); // Atraso de 500 milissegundos
+
     observer.observe(targetNode, {
         attributes: true,
         childList: true,
@@ -202,6 +216,7 @@ function observeDonationChanges() {
         characterData: true
     });
 }
+
 function observeFormChanges() {
     const nomeInput = document.querySelector('input[name="firstName"]');
     const emailInput = document.querySelector('input[name="email"]');
