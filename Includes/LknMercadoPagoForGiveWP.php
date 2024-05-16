@@ -1,9 +1,13 @@
 <?php
 
 namespace Lkn\LknMercadoPagoForGiveWp\Includes;
+
+use Give\Donations\Models\Donation;
 use Lkn\LknMercadoPagoForGiveWp\Admin\LknMercadoPagoForGiveWPAdmin;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPPublic;
+use WP_Error;
+use WP_REST_Server;
 
 /**
  * The file that defines the core plugin class
@@ -153,10 +157,11 @@ final class LknMercadopagoForGiveWP {
      */
     private function define_admin_hooks(): void {
         $plugin_admin = new LknMercadoPagoForGiveWPAdmin($this->get_plugin_name(), $this->get_version());
-
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
+        $this->loader->add_action('rest_api_init', $this, 'register_payment_routes');
+        $this->loader->add_action('rest_api_init', $this, 'register_rest_route');
     }
 
     /**
@@ -225,5 +230,55 @@ final class LknMercadopagoForGiveWP {
      */ 
     public function new_gateway_register($paymentGatewayRegister) :void {
         $paymentGatewayRegister->registerGateway('Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway');
+    }
+
+    final public function mercadopago_get_endpoint_payments() {
+        // rest_ensure_response() wraps the data we want to return into a WP_REST_Response, and ensures it will be properly returned.
+        return rest_ensure_response( 'Hello World, this is the WordPress REST API' );
+    }
+    
+    /**
+     * This function is where we register our routes for our example endpoint.
+     */
+    final public function register_payment_routes(): void {
+        // register_rest_route() handles more arguments but we are going to stick to the basics for now.
+        register_rest_route('mercadopago/v1', '/payments', array(
+            'methods' => WP_REST_Server::READABLE,
+            'callback' => array($this, 'mercadopago_get_endpoint_payments'),
+        ) );
+    }
+
+    public function register_rest_route(): void {
+        register_rest_route( 'mercadopago/v1', '/payments/checkpayment', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'handle_custom_payment_route'),
+        ) );
+    }
+
+    public function handle_custom_payment_route($request) {
+        // Obtém o ID do pagamento da solicitação
+        $payment_id = $request->get_param('id');
+    
+        // Aqui você pode executar sua lógica com base no ID do pagamento
+        // Por exemplo, chamar sua função PHP personalizada
+        // my_custom_function($payment_id);
+    
+        // Retorna uma resposta de sucesso
+        $donation = Donation::find($payment_id);
+        //return json_encode($donation);
+        
+        if ($donation) {
+            // Atualiza o status da doação para "Aprovado"
+            $donation->status = "Aprovado";
+            $donation->save();
+            
+            // Retorna a URL para o painel administrativo do WordPress
+            return "https://wordpress.local/wp-admin/?post_type=give_forms&page=givewp-form-builder&donationFormID={$payment_id}";
+        } else {
+            // Se a doação não foi encontrada, retorna uma resposta de erro
+            return new WP_Error('rest_no_donation_found', 'Nenhuma doação encontrada com o ID fornecido.', array('status' => 404));
+        }
+
+        //return rest_ensure_response(array('message' => 'Função executada para o ID de pagamento: ' . $payment_id));
     }
 }
