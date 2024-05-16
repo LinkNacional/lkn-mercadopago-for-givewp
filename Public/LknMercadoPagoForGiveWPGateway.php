@@ -121,5 +121,21 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, true );
 
         wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, false);
+
+        $url_pagina = admin_url();
+        $url_pagina_personalizada = add_query_arg(array(
+            'post_type' => 'give_forms',
+            'page' => 'givewp-form-builder',
+            'donationFormID' => $formId
+        ), $url_pagina);
+
+        $urlsPreferences = array(
+            'back_urls' => array(
+                'success' => $url_pagina_personalizada,
+                'pending' => $url_pagina_personalizada . '&status=pending',
+                'failure' => $url_pagina_personalizada . '&status=failure'
+            )
+        );
+        wp_localize_script(self::id(), 'preferencia', $urlsPreferences);
     }
 }

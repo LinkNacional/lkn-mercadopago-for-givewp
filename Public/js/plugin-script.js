@@ -76,9 +76,9 @@ async function criarPreferenciaDePagamento() {
 
     const preference = {
         "back_urls": {
-            "success": "http://test.com/success", //site_url()
-            "pending": "http://test.com/pending", //site_url()
-            "failure": "http://test.com/failure" //site_url()
+            "success": preferencia.back_urls.success, //site_url()
+            "pending": preferencia.back_urls.pending, //site_url()
+            "failure": preferencia.back_urls.failure //site_url()
         },
         "items": [{
             "id": "Doação X",
@@ -270,6 +270,8 @@ const gateway = {
     },
     // Função onde os campos HTML são criados
     Fields() {
+
+        //console.log(preferencia.back_urls.success)
 
         renderComponentsOnce();
 
