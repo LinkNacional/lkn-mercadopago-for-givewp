@@ -1,6 +1,31 @@
 let preferenceID = null;
 let hasRenderedComponents = false;
 
+async function getPaymentIdFromAPI() {
+    try {
+        // Faz a requisição GET para obter o ID de pagamento da API
+        const response = await fetch('URL_DA_API', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Se necessário, adicione cabeçalhos de autorização ou outros cabeçalhos aqui
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ao obter ID de pagamento da API: ${response.status}`);
+        }
+
+        // Extrai o ID de pagamento da resposta da API
+        const data = await response.json();
+        return data.payment_id;
+    } catch (error) {
+        // Se houver um erro na requisição GET, trate-o aqui
+        console.error('Erro ao obter ID de pagamento da API:', error);
+        throw error;
+    }
+}
+
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
         criarPreferenciaDePagamento()
@@ -74,11 +99,16 @@ async function criarPreferenciaDePagamento() {
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
     console.log(valorNumerico)
 
+    // URL da rota da API REST com o ID da preferência de pagamento
+
+    var id = 52;
+    var $url = 'https://wordpress.local/wp-json/mercadopago/v1/payments/' + id;
+
     const preference = {
         "back_urls": {
-            "success": preferencia.back_urls.success, //site_url()
-            "pending": preferencia.back_urls.pending, //site_url()
-            "failure": preferencia.back_urls.failure //site_url()
+            "success": `https://wordpress.local/wp-json/mercadopago/v1/payments/${id}`,
+            "pending": `https://wordpress.local/wp-json/mercadopago/v1/payments/${id}`, //site_url()
+            "failure": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${id}}` //site_url()
         },
         "items": [{
             "id": "Doação X",
@@ -253,16 +283,28 @@ const gateway = {
 
         // Caso detecte algum erro de validação você pode adicionar uma exceção
         // A mensagem de erro aparecerá para o cliente já formatada
+
+
+        // Retorna os atributos usados pelo back-end
+        // Atributos do objeto value já são passados por padrão
+
         if (values.firstname === 'error') {
             throw new Error('Gateway failed');
         }
 
-        // Retorna os atributos usados pelo back-end
-        // Atributos do objeto value já são passados por padrão
-        return {
-            pluginIntent: 'lkn-plugin-intent',
-            custom: 'anything'
-        };
+        // try {
+        //     const paymentId = await getPaymentIdFromAPI();
+
+        //     return {
+        //         pluginIntent: 'lkn-plugin-intent',
+        //         custom: 'anything'
+        //     };
+
+        // } catch (error) {
+        //     console.error('Erro ao obter ID de pagamento da API:', error);
+        //     throw error;
+        // }
+
     },
     async afterCreatePayment(response) {
         // Aqui roda tudo que você precisa após o formulário ser submetido
