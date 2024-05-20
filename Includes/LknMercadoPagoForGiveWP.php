@@ -7,6 +7,8 @@ use Lkn\LknMercadoPagoForGiveWp\Admin\LknMercadoPagoForGiveWPAdmin;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPPublic;
 use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
 use WP_REST_Server;
 
 /**
@@ -162,6 +164,7 @@ final class LknMercadopagoForGiveWP {
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
         $this->loader->add_action('rest_api_init', $this, 'register_payment_routes');
         $this->loader->add_action('rest_api_init', $this, 'register_rest_route');
+        $this->loader->add_action('rest_api_init', $this, 'register_rest_route_post');
     }
 
     /**
@@ -251,34 +254,45 @@ final class LknMercadopagoForGiveWP {
     public function register_rest_route(): void {
         register_rest_route( 'mercadopago/v1', '/payments/checkpayment', array(
             'methods' => 'GET',
-            'callback' => array($this, 'handle_custom_payment_route'),
+            'callback' => array($this, 'get_handle_custom_payment_route'),
+            'permission_callback' => '__return_true',
         ) );
     }
 
-    public function handle_custom_payment_route($request) {
-        // Obtém o ID do pagamento da solicitação
-        $payment_id = $request->get_param('id');
-    
-        // Aqui você pode executar sua lógica com base no ID do pagamento
-        // Por exemplo, chamar sua função PHP personalizada
-        // my_custom_function($payment_id);
-    
-        // Retorna uma resposta de sucesso
-        $donation = Donation::find($payment_id);
-        //return json_encode($donation);
-        
-        if ($donation) {
-            // Atualiza o status da doação para "Aprovado"
-            $donation->status = "Aprovado";
-            $donation->save();
-            
-            // Retorna a URL para o painel administrativo do WordPress
-            return "https://wordpress.local/wp-admin/?post_type=give_forms&page=givewp-form-builder&donationFormID={$payment_id}";
-        } else {
-            // Se a doação não foi encontrada, retorna uma resposta de erro
-            return new WP_Error('rest_no_donation_found', 'Nenhuma doação encontrada com o ID fornecido.', array('status' => 404));
+    public function register_rest_route_post(): void {
+        register_rest_route( 'mercadopago/v1', '/payments/checkpayment', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'post_handle_custom_payment_route'),
+            'permission_callback' => '__return_true',
+        ) );
+    }
+
+    public function get_handle_custom_payment_route($request) {
+        $id = $request->get_param('id');
+        if (empty($id)) {
+            return new WP_Error('missing_params', 'Missing parameter id', array('status' => 422));
         }
 
-        //return rest_ensure_response(array('message' => 'Função executada para o ID de pagamento: ' . $payment_id));
+        // Recuperar os dados temporariamente armazenados
+        $status = get_option('payment_' . $id);
+        if (false === $status) {
+            return new WP_REST_Response(array('message' => 'Pagamento não encontrado'), 404);
+        }
+
+        return new WP_REST_Response(array('id' => $id, 'status' => $status), 200);
+    }
+
+    public function post_handle_custom_payment_route(WP_REST_Request $request) {
+        $parameters = $request->get_json_params();
+        if (empty($parameters['id']) || empty($parameters['status'])) {
+            return new WP_Error('missing_params', 'Missing parameters', array('status' => 422));
+        }
+
+        //$donation_id = give_get_donation_id_by_form_id($form_id);
+    
+        // Salvar os dados temporariamente (por exemplo, na tabela wp_options)
+        update_option('payment_' . $parameters['id'], $parameters['status']);
+    
+        return new WP_REST_Response(array('message' => 'Pagamento recebido'), 200);
     }
 }
