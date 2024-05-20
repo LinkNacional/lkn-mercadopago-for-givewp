@@ -70,23 +70,28 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
             // // Step 3: Return a command to complete the donation. You can alternatively return PaymentProcessing for gateways that require a webhook or similar to confirm that the payment is complete. PaymentProcessing will trigger a Payment Processing email notification, configurable in the settings.
             
             // return new PaymentComplete($response['transaction_id']);
+            
+            // $idDonation = $donation->id;
+            // wp_localize_script(self::id(), 'idDonation', $idDonation);
+
+            // sleep(3);
 
             return new PaymentPending();
         } catch (Exception $e) {
             // Step 4: If an error occurs, you can update the donation status to something appropriate like failed, and finally throw the PaymentGatewayException for the framework to catch the message.
             $errorMessage = $e->getMessage();
-
+    
             $donation->status = DonationStatus::FAILED();
             $donation->save();
-
+    
             DonationNote::create(array(
                 'donationId' => $donation->id,
                 'content' => sprintf(esc_html__('Donation failed. Reason: %s', 'example-give'), $errorMessage) // Translators: %s é um espaço reservado para a mensagem de erro
             ));
-
+    
             throw new PaymentGatewayException(esc_html($errorMessage));
         }
-    }
+    }    
 
     /**
      * @inerhitDoc
@@ -139,6 +144,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 'failure' => $url_pagina_personalizada
             )
         );
+
         wp_localize_script(self::id(), 'preferencia', $urlsPreferences);
+        wp_localize_script(self::id(), 'formID', $formId);
     }
 }
