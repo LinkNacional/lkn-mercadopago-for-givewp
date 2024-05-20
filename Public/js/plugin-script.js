@@ -1,31 +1,6 @@
 let preferenceID = null;
 let hasRenderedComponents = false;
 
-async function getPaymentIdFromAPI() {
-    try {
-        // Faz a requisição GET para obter o ID de pagamento da API
-        const response = await fetch('URL_DA_API', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                // Se necessário, adicione cabeçalhos de autorização ou outros cabeçalhos aqui
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erro ao obter ID de pagamento da API: ${response.status}`);
-        }
-
-        // Extrai o ID de pagamento da resposta da API
-        const data = await response.json();
-        return data.payment_id;
-    } catch (error) {
-        // Se houver um erro na requisição GET, trate-o aqui
-        console.error('Erro ao obter ID de pagamento da API:', error);
-        throw error;
-    }
-}
-
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
         criarPreferenciaDePagamento()
@@ -84,16 +59,10 @@ async function criarPreferenciaDePagamento() {
     const sobrenome = sanitizeInput(document.querySelector('input[name="lastName"]').value);
     const email = sanitizeInput(document.querySelector('input[name="email"]').value);
     //const dd = document.querySelector('input[name="dd"]').value;
-    const dd = "84";
     //const numero = document.querySelector('input[name="numero"]').value;
-    const numero = 998224031
     //const cpf = document.querySelector('input[name="cpf"]').value;
-    const cpf = "000.432.234-54";
     //const cep = document.querySelector('input[name="cep"]').value;
-    const cep = "59330-000"
     //const rua = document.querySelector('input[name="rua"]').value;
-    const rua = "Benjamin Constant"
-    const numerocasa = "07"
 
     const valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
@@ -101,14 +70,13 @@ async function criarPreferenciaDePagamento() {
 
     // URL da rota da API REST com o ID da preferência de pagamento
 
-    var id = 52;
-    var $url = 'https://wordpress.local/wp-json/mercadopago/v1/payments/' + id;
+    var $url = 'https://wordpress.local/wp-json/mercadopago/v1/payments/' + formID;
 
     const preference = {
         "back_urls": {
-            "success": `https://wordpress.local/wp-json/mercadopago/v1/payments/${id}`,
-            "pending": `https://wordpress.local/wp-json/mercadopago/v1/payments/${id}`, //site_url()
-            "failure": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${id}}` //site_url()
+            "success": `https://wordpress.local/wp-json/mercadopago/v1/payments/${formID}`,
+            "pending": `https://wordpress.local/wp-json/mercadopago/v1/payments/${formID}`, //site_url()
+            "failure": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${formID}}` //site_url()
         },
         "items": [{
             "id": "Doação X",
@@ -292,28 +260,24 @@ const gateway = {
             throw new Error('Gateway failed');
         }
 
-        // try {
-        //     const paymentId = await getPaymentIdFromAPI();
-
-        //     return {
-        //         pluginIntent: 'lkn-plugin-intent',
-        //         custom: 'anything'
-        //     };
-
-        // } catch (error) {
-        //     console.error('Erro ao obter ID de pagamento da API:', error);
-        //     throw error;
-        // }
-
     },
     async afterCreatePayment(response) {
-        // Aqui roda tudo que você precisa após o formulário ser submetido
-        // Antes de ir para a tela do comprovante de pagamento
+        fetch('https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: 123,
+                status: 'pendente'
+            })
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Erro:', error));
     },
     // Função onde os campos HTML são criados
     Fields() {
-
-        //console.log(preferencia.back_urls.success)
 
         renderComponentsOnce();
 
