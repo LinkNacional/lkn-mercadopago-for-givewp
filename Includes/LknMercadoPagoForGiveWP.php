@@ -3,6 +3,7 @@
 namespace Lkn\LknMercadoPagoForGiveWp\Includes;
 
 use Give\Donations\Models\Donation;
+use Give\Donations\ValueObjects\DonationStatus;
 use Lkn\LknMercadoPagoForGiveWp\Admin\LknMercadoPagoForGiveWPAdmin;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPPublic;
@@ -269,17 +270,29 @@ final class LknMercadopagoForGiveWP {
 
     public function get_handle_custom_payment_route($request) {
         $id = $request->get_param('id');
+        $status = $request->get_param('status');
         if (empty($id)) {
             return new WP_Error('missing_params', 'Missing parameter id', array('status' => 422));
         }
 
-        // Recuperar os dados temporariamente armazenados
-        $status = get_option('payment_' . $id);
-        if (false === $status) {
-            return new WP_REST_Response(array('message' => 'Pagamento não encontrado'), 404);
+        switch ($status) {
+            case '1':
+                break;
+            case '2':
+                break;
+            case '3':
+                break;
+            default:
+                break;
         }
 
-        return new WP_REST_Response(array('id' => $id, 'status' => $status), 200);
+        $donation_id = get_option($id);
+        $donation = Donation::find($donation_id);
+        $donation->status = DonationStatus::COMPLETE();
+        $donation->save();
+    
+        //return new WP_REST_Response(array('id' => $id, 'status' => $donation_id), 200);
+        return true;
     }
 
     public function post_handle_custom_payment_route(WP_REST_Request $request) {
