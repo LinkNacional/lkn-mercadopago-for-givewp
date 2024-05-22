@@ -5,7 +5,6 @@ namespace Lkn\LknMercadoPagoForGiveWp\Includes;
 use Give\Donations\Models\Donation;
 use Give\Donations\ValueObjects\DonationStatus;
 use Lkn\LknMercadoPagoForGiveWp\Admin\LknMercadoPagoForGiveWPAdmin;
-use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway;
 use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPPublic;
 use WP_Error;
 use WP_REST_Request;
@@ -270,29 +269,57 @@ final class LknMercadopagoForGiveWP {
 
     public function get_handle_custom_payment_route($request) {
         $id = $request->get_param('id');
-        $status = $request->get_param('status');
+        $statusFront = $request->get_param('statusFront');
         if (empty($id)) {
             return new WP_Error('missing_params', 'Missing parameter id', array('status' => 422));
         }
 
-        switch ($status) {
+        switch ($statusFront) {
             case '1':
+                $donation_id = get_option($id);
+                $donation = Donation::find($donation_id);
+                $donation->status = DonationStatus::COMPLETE();
+                $donation->save();
+            
+                $response_data = array(
+                    'id' => $id,
+                    'donation_id' => $donation_id,
+                    'status' => $donation->status
+                );
+                return new WP_REST_Response($response_data, 200);
                 break;
             case '2':
+                $donation_id = get_option($id);
+                $donation = Donation::find($donation_id);
+                $donation->status = DonationStatus::PENDING();
+                $donation->save();
+            
+                $response_data = array(
+                    'id' => $id,
+                    'donation_id' => $donation_id,
+                    'status' => $donation->status
+                );
+            
+                return new WP_REST_Response($response_data, 200);
                 break;
             case '3':
+                $donation_id = get_option($id);
+                $donation = Donation::find($donation_id);
+                $donation->status = DonationStatus::FAILED();
+                $donation->save();
+            
+                $response_data = array(
+                    'id' => $id,
+                    'donation_id' => $donation_id,
+                    'status' => $donation->status
+                );
+            
+                return new WP_REST_Response($response_data, 200);
                 break;
             default:
+                return new WP_REST_Response(array('message' => 'Houve erro no pagamento'), 200);
                 break;
         }
-
-        $donation_id = get_option($id);
-        $donation = Donation::find($donation_id);
-        $donation->status = DonationStatus::COMPLETE();
-        $donation->save();
-    
-        //return new WP_REST_Response(array('id' => $id, 'status' => $donation_id), 200);
-        return true;
     }
 
     public function post_handle_custom_payment_route(WP_REST_Request $request) {
