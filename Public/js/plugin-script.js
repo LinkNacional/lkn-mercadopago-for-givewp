@@ -65,9 +65,9 @@ async function criarPreferenciaDePagamento() {
 
     const preference = {
         "back_urls": {
-            "success": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
-            "pending": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
-            "failure": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1` //ALTERAR AQUI DEPOIS!!!
+            "success": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
+            "pending": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
+            "failure": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1` //ALTERAR AQUI DEPOIS!!!
         },
         "auto_return": "approved",
         "items": [{
