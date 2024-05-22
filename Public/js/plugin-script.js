@@ -58,26 +58,18 @@ async function criarPreferenciaDePagamento() {
     const nome = sanitizeInput(document.querySelector('input[name="firstName"]').value);
     const sobrenome = sanitizeInput(document.querySelector('input[name="lastName"]').value);
     const email = sanitizeInput(document.querySelector('input[name="email"]').value);
-    //const dd = document.querySelector('input[name="dd"]').value;
-    //const numero = document.querySelector('input[name="numero"]').value;
-    //const cpf = document.querySelector('input[name="cpf"]').value;
-    //const cep = document.querySelector('input[name="cep"]').value;
-    //const rua = document.querySelector('input[name="rua"]').value;
 
     const valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
     console.log(valorNumerico)
 
-    // URL da rota da API REST com o ID da preferência de pagamento
-
-    var $url = 'https://wordpress.local/wp-json/mercadopago/v1/payments/' + formID;
-
     const preference = {
         "back_urls": {
-            "success": `https://wordpress.local/wp-json/mercadopago/v1/payments/${formID}`,
-            "pending": `https://wordpress.local/wp-json/mercadopago/v1/payments/${formID}`, //site_url()
-            "failure": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${formID}}` //site_url()
+            "success": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
+            "pending": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
+            "failure": `https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1` //ALTERAR AQUI DEPOIS!!!
         },
+        "auto_return": "approved",
         "items": [{
             "id": "Doação X",
             "title": "Doação via Mercado Pago",
@@ -260,21 +252,13 @@ const gateway = {
             throw new Error('Gateway failed');
         }
 
+        return {
+            idUniqueAlterar: idUnique
+        };
+
     },
     async afterCreatePayment(response) {
-        fetch('https://wordpress.local/wp-json/mercadopago/v1/payments/checkpayment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: 123,
-                status: 'pendente'
-            })
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error('Erro:', error));
+        //Depois da criação do pagamento
     },
     // Função onde os campos HTML são criados
     Fields() {
