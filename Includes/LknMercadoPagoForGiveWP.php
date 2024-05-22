@@ -164,7 +164,6 @@ final class LknMercadopagoForGiveWP {
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
         $this->loader->add_action('rest_api_init', $this, 'register_payment_routes');
         $this->loader->add_action('rest_api_init', $this, 'register_rest_route');
-        $this->loader->add_action('rest_api_init', $this, 'register_rest_route_post');
     }
 
     /**
@@ -259,14 +258,6 @@ final class LknMercadopagoForGiveWP {
         ) );
     }
 
-    public function register_rest_route_post(): void {
-        register_rest_route( 'mercadopago/v1', '/payments/checkpayment', array(
-            'methods' => 'POST',
-            'callback' => array($this, 'post_handle_custom_payment_route'),
-            'permission_callback' => '__return_true',
-        ) );
-    }
-
     public function get_handle_custom_payment_route($request) {
         $id = $request->get_param('id');
         $statusFront = $request->get_param('statusFront');
@@ -281,12 +272,10 @@ final class LknMercadopagoForGiveWP {
                 $donation->status = DonationStatus::COMPLETE();
                 $donation->save();
             
-                $response_data = array(
-                    'id' => $id,
-                    'donation_id' => $donation_id,
-                    'status' => $donation->status
-                );
-                return new WP_REST_Response($response_data, 200);
+                $url_pagina = site_url('/donor-dashboard/'); // Substitua 'sua-pagina-aqui' com a página desejada
+
+                header("Location: $url_pagina", true, 302);
+                exit; 
                 break;
             case '2':
                 $donation_id = get_option($id);
@@ -294,13 +283,10 @@ final class LknMercadopagoForGiveWP {
                 $donation->status = DonationStatus::PENDING();
                 $donation->save();
             
-                $response_data = array(
-                    'id' => $id,
-                    'donation_id' => $donation_id,
-                    'status' => $donation->status
-                );
-            
-                return new WP_REST_Response($response_data, 200);
+                $url_pagina = site_url('/donor-dashboard/'); // Substitua 'sua-pagina-aqui' com a página desejada
+
+                header("Location: $url_pagina", true, 302);
+                exit; 
                 break;
             case '3':
                 $donation_id = get_option($id);
@@ -320,19 +306,5 @@ final class LknMercadopagoForGiveWP {
                 return new WP_REST_Response(array('message' => 'Houve erro no pagamento'), 200);
                 break;
         }
-    }
-
-    public function post_handle_custom_payment_route(WP_REST_Request $request) {
-        $parameters = $request->get_json_params();
-        if (empty($parameters['id']) || empty($parameters['status'])) {
-            return new WP_Error('missing_params', 'Missing parameters', array('status' => 422));
-        }
-
-        //$donation_id = give_get_donation_id_by_form_id($form_id);
-    
-        // Salvar os dados temporariamente (por exemplo, na tabela wp_options)
-        update_option('payment_' . $parameters['id'], $parameters['status']);
-    
-        return new WP_REST_Response(array('message' => 'Pagamento recebido'), 200);
     }
 }
