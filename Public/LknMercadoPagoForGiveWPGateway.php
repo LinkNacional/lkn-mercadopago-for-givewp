@@ -52,6 +52,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 1: add any gateway fields to the form using html.  In order to retrieve this data later the name of the input must be inside the key gatewayData (name='gatewayData[input_name]').
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
+        $url_pagina = site_url();
+        $idUnique = uniqid();
+
         $html = "
         <!DOCTYPE html>    
         <body>
@@ -63,14 +66,23 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 </fieldset>
         
             <script>
+            if (typeof hasRender === 'undefined'){
+            
+                document.querySelector('input[type=\"submit\"]').disabled = true;
+
+
                 async function criarPreferenciaDePagamento() {
+                    const amountGive = document.getElementsByName('give-amount')[0]
+                    console.log(amountGive.value)
+                        
+                    
                     const url = 'https://api.mercadopago.com/checkout/preferences';
                     const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
                     const preference = {
                         \"back_urls\": {
-                            \"success\": `a`,
-                            \"pending\": `a`, //site_url()
-                            \"failure\": `a` //site_url()
+                            \"success\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
+                            \"pending\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`, //site_url()
+                            \"failure\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=3` //site_url()
                         },
                         \"items\": [{
                             \"id\": \"Doação X\",
@@ -78,7 +90,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             \"description\": \"Sua doação foi de \",
                             \"quantity\": 1,
                             \"currency_id\": \"BRL\",
-                            \"unit_price\": 100
+                            \"unit_price\": parseFloat(amountGive.value) 
                         }]
                     };
                     try {
@@ -101,17 +113,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     }
                 }
 
-                const nomeInput = document.querySelector('input[name=\"give_first\"]');
-                const emailInput = document.querySelector('input[name=\"give_email\"]');
-                const walletContainer = document.querySelector('#wallet_container');
-                let warningText = document.querySelector('#warning-text');
-                if (nomeInput && emailInput && walletContainer) {
-                    if (nomeInput.value) {
-                        // Se ambos os campos de nome e e-mail estiverem preenchidos, habilitar o container
-                        walletContainer.style.display = 'block';
-                        warningText.textContent = '';
-
-                        criarPreferenciaDePagamento()
+                if (document.querySelector('input[name=\"give_first\"]') && document.querySelector('input[name=\"give_email\"]') && document.querySelector('#wallet_container')) {
+                    criarPreferenciaDePagamento()
                         .then(preferenceID => {
                             console.log('ID da preferência criada:', preferenceID);
                             preferenceID = preferenceID;
@@ -132,28 +135,17 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         .catch(error => {
                             console.error('Erro ao criar preferência de pagamento:', error);
                         });
+                    if (document.querySelector('input[name=\"give_first\"]').value) {
+                        // Se ambos os campos de nome e e-mail estiverem preenchidos, habilitar o container
+                        document.querySelector('#wallet_container').style.display = 'block';
+                        document.querySelector('#warning-text').textContent = '';
                         
                     } else {
                         // Se algum campo estiver vazio, desabilitar o container e exibir a mensagem de aviso
-                        walletContainer.style.display = 'none';
-                        console.log(warningText)
-                        warningText.textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
+                        document.querySelector('#wallet_container').style.display = 'none';
+                        document.querySelector('#warning-text').textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
                     }
                 }
-
-               
-        
-                    const totalElement = document.querySelector('.give-donation-summary-table-wrapper table tfoot tr th[data-tag=\"total\"]');
-                    if (totalElement) {
-                        const totalText = totalElement.textContent.trim();
-                        console.log('Texto total:', totalText);
-                        const totalText2 = totalText.replace(/\s+/g, '');
-                        console.log('Texto total sem espaços:', totalText2);
-                        console.log('totalElement.innerHTML:', totalElement.innerHTML);
-                        console.log('totalElement.outerText:', totalElement.outerText);
-                    } else {
-                        console.log('Elemento de total não encontrado.');
-                    }
 
                 function observeFormChanges() {
                     const nomeInput = document.querySelector('input[name=\"give_first\"]');
@@ -174,26 +166,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             // Se ambos os campos de nome e e-mail estiverem preenchidos, habilitar o container
                             walletContainer.style.display = 'block';
                             warningText.textContent = '';
-                            criarPreferenciaDePagamento()
-                            .then(preferenceID => {
-                                console.log('ID da preferência criada:', preferenceID);
-                                const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
-                                const bricksBuilder = mp.bricks();
-                                bricksBuilder.create(\"wallet\", \"wallet_container\", {
-                                    initialization: {
-                                        preferenceId: preferenceID,
-                                        redirectMode: \"blank\"
-                                    },
-                                    customization: {
-                                        texts: {
-                                            valueProp: 'smart_option'
-                                        }
-                                    }
-                                });
-                            })
-                            .catch(error => {
-                                console.error('Erro ao criar preferência de pagamento:', error);
-                            });
                         } else {
                             // Se algum campo estiver vazio, desabilitar o container e exibir a mensagem de aviso
                             walletContainer.style.display = 'none';
@@ -205,7 +177,11 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 //observeDonationChanges();
                 observeFormChanges();
                 //observeMetodoChanges();
-        
+            } else{
+                //render já foi declarada
+                console.log('renderiza denovo')
+            }
+
             </script>
         </body>
         </html>
