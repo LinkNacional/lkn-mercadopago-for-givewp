@@ -74,6 +74,14 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 async function criarPreferenciaDePagamento() {
                     const amountGive = document.getElementsByName('give-amount')[0]
                     console.log(amountGive.value)
+
+                    let valor = amountGive.value
+
+                    if(typeof amountGive.dataset.amount === 'undefined'){
+                        let valor = amountGive.value;
+                    } else{
+                        let valor = amountGive.dataset.amount;
+                    }
                         
                     
                     const url = 'https://api.mercadopago.com/checkout/preferences';
@@ -90,7 +98,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             \"description\": \"Sua doação foi de \",
                             \"quantity\": 1,
                             \"currency_id\": \"BRL\",
-                            \"unit_price\": parseFloat(amountGive.value) 
+                            \"unit_price\": parseFloat(valor) 
                         }]
                     };
                     try {
@@ -147,6 +155,61 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     }
                 }
 
+                function observeDonationChanges() {
+                    const targetNode = document.querySelector('input[name=\"give-amount\"]');
+                    console.log(targetNode)
+                    if (!targetNode) return;
+                
+                    const observer = new MutationObserver(function(mutationsList, observer) {
+                        for (const mutation of mutationsList) {
+                            if (mutation.type === 'attributes' && mutation.attributeName === 'data-amount') {
+                                console.log('Mudança no data-amount');
+                
+                                const nomeInput = document.querySelector('input[name=\"give_first\"]');
+                                const emailInput = document.querySelector('input[name=\"give_email\"]');
+                                if (nomeInput.value && emailInput.value) {
+                                    const oldButton = document.querySelector('#wallet_container');
+                
+                                    if (oldButton) {
+                                        oldButton.remove();
+                                        console.log('Botão removido');
+                                    }
+                
+                                    criarPreferenciaDePagamento().then(newPreferenceID => {
+                                        console.log('Nova preferência criada:', newPreferenceID);
+                                        preferenceID = newPreferenceID;
+                
+                                        const newButton = document.createElement('div');
+                                        newButton.id = 'wallet_container';
+                                        const fieldset = document.querySelector('.no-fields');
+                                        fieldset.appendChild(newButton);
+                
+                                        const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                                        const bricksBuilder = mp.bricks();
+                                        mp.bricks().create(\"wallet\", \"wallet_container\", {
+                                            initialization: {
+                                                preferenceId: preferenceID,
+                                                redirectMode: \"blank\"
+                                            },
+                                            customization: {
+                                                texts: {
+                                                    valueProp: 'smart_option'
+                                                }
+                                            }
+                                        });
+                                    }).catch(error => {
+                                        console.error('Erro ao criar nova preferência de pagamento:', error);
+                                    });
+                                }
+                            }
+                        }
+                    });
+                
+                    observer.observe(targetNode, {
+                        attributes: true // Observar mudanças nos atributos
+                    });
+                }
+                
                 function observeFormChanges() {
                     const nomeInput = document.querySelector('input[name=\"give_first\"]');
                     const emailInput = document.querySelector('input[name=\"give_email\"]');
@@ -174,7 +237,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     }
                 }
 
-                //observeDonationChanges();
+                observeDonationChanges();
                 observeFormChanges();
                 //observeMetodoChanges();
             } else{
