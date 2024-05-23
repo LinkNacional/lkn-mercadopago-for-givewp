@@ -268,10 +268,21 @@ final class LknMercadopagoForGiveWP {
         switch ($statusFront) {
             case '1':
                 $donation_id = get_option($id);
+                if ( ! $donation_id) {
+                    return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
+                }
+                
                 $donation = Donation::find($donation_id);
+                if ( ! $donation) {
+                    return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
+                }
+                
                 $donation->status = DonationStatus::COMPLETE();
                 $donation->save();
-            
+                if ( ! $donation) {
+                    return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
+                }
+                
                 $url_pagina = site_url('/donor-dashboard/'); // Substitua 'sua-pagina-aqui' com a página desejada
 
                 header("Location: $url_pagina", true, 302);
@@ -279,9 +290,18 @@ final class LknMercadopagoForGiveWP {
                 break;
             case '2':
                 $donation_id = get_option($id);
+                if ( ! $donation_id) {
+                    return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
+                }
                 $donation = Donation::find($donation_id);
+                if ( ! $donation) {
+                    return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
+                }
                 $donation->status = DonationStatus::PENDING();
                 $donation->save();
+                if ( ! $donation) {
+                    return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
+                }
             
                 $url_pagina = site_url('/donor-dashboard/'); // Substitua 'sua-pagina-aqui' com a página desejada
 
@@ -290,14 +310,23 @@ final class LknMercadopagoForGiveWP {
                 break;
             case '3':
                 $donation_id = get_option($id);
+                if ( ! $donation_id) {
+                    return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
+                }
                 $donation = Donation::find($donation_id);
+                if ( ! $donation) {
+                    return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
+                }
+                
                 $donation->status = DonationStatus::FAILED();
                 $donation->save();
+                if ( ! $donation) {
+                    return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
+                }
             
                 $response_data = array(
                     'id' => $id,
                     'donation_id' => $donation_id,
-                    'status' => $donation->status
                 );
             
                 return new WP_REST_Response($response_data, 200);
