@@ -17,6 +17,12 @@ use Give\Framework\PaymentGateways\PaymentGateway;
  * @inheritDoc
  */
 final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
+    public $idUnique;
+
+    public function __construct() {
+        $this->idUnique = uniqid();
+    }
+
     /**
      * @inheritDoc
      */
@@ -53,7 +59,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
         $url_pagina = site_url();
-        $idUnique = uniqid();
 
         $html = "
         <!DOCTYPE html>    
@@ -63,13 +68,14 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
             <fieldset class=\"no-fields\">
                 <h3 id=\"warning-text\"></h3>
                 <div id=\"wallet_container\"></div>
+                <input type=\"hidden\" name=\"gatewayData[gatewayId]\" value=\"$this->idUnique\"></input>
                 </fieldset>
         
             <script>
+            
             if (typeof hasRender === 'undefined'){
             
                 document.querySelector('input[type=\"submit\"]').disabled = true;
-
 
                 async function criarPreferenciaDePagamento() {
                     const amountGive = document.getElementsByName('give-amount')[0]
@@ -82,15 +88,14 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     } else{
                         let valor = amountGive.dataset.amount;
                     }
-                        
                     
                     const url = 'https://api.mercadopago.com/checkout/preferences';
                     const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
                     const preference = {
                         \"back_urls\": {
-                            \"success\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
-                            \"pending\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`, //site_url()
-                            \"failure\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=3` //site_url()
+                            \"success\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=1`,
+                            \"pending\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=2`, //site_url()
+                            \"failure\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=1` //site_url()
                         },
                         \"items\": [{
                             \"id\": \"Doação X\",
@@ -268,8 +273,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
             // // Step 3: Return a command to complete the donation. You can alternatively return PaymentProcessing for gateways that require a webhook or similar to confirm that the payment is complete. PaymentProcessing will trigger a Payment Processing email notification, configurable in the settings.
             
             // return new PaymentComplete($response['transaction_id']);
+            $idTeste = isset($gatewayData['idUniqueAlterar']) ? $gatewayData['idUniqueAlterar'] : (isset($gatewayData['gatewayId']) ? $gatewayData['gatewayId'] : $this->idUnique);
 
-            $idTeste = $gatewayData['idUniqueAlterar'];
             add_option($idTeste, $donation->id);
 
             return new PaymentPending();
