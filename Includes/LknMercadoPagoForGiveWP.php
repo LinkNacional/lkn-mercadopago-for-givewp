@@ -283,7 +283,7 @@ final class LknMercadopagoForGiveWP {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
                 
-                $url_pagina = site_url('/donor-dashboard/'); // Substitua 'sua-pagina-aqui' com a página desejada
+                $url_pagina = give_get_success_page_uri();
 
                 header("Location: $url_pagina", true, 302);
                 exit; 
@@ -303,7 +303,7 @@ final class LknMercadopagoForGiveWP {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
             
-                $url_pagina = site_url('/donor-dashboard/'); // Substitua 'sua-pagina-aqui' com a página desejada
+                $url_pagina = give_get_success_page_uri();
 
                 header("Location: $url_pagina", true, 302);
                 exit; 
@@ -329,7 +329,10 @@ final class LknMercadopagoForGiveWP {
                     'donation_id' => $donation_id,
                 );
             
-                return new WP_REST_Response($response_data, 200);
+                $url_pagina = give_get_failed_transaction_uri();
+
+                header("Location: $url_pagina", true, 302);
+                exit; 
                 break;
             default:
                 return new WP_REST_Response(array('message' => 'Houve erro no pagamento'), 200);
