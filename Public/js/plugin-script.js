@@ -253,7 +253,7 @@ const gateway = {
         }
 
         return {
-            idUniqueAlterar: idUnique
+            gatewayId: idUnique
         };
 
     },

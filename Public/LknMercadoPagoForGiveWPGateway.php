@@ -273,8 +273,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
             // // Step 3: Return a command to complete the donation. You can alternatively return PaymentProcessing for gateways that require a webhook or similar to confirm that the payment is complete. PaymentProcessing will trigger a Payment Processing email notification, configurable in the settings.
             
             // return new PaymentComplete($response['transaction_id']);
-            $idTeste = isset($gatewayData['idUniqueAlterar']) ? $gatewayData['idUniqueAlterar'] : (isset($gatewayData['gatewayId']) ? $gatewayData['gatewayId'] : $this->idUnique);
-
+            $idTeste = $gatewayData['gatewayId'];
             add_option($idTeste, $donation->id);
 
             return new PaymentPending();
