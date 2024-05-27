@@ -1,6 +1,5 @@
 let preferenceID = null;
 let hasRenderedComponents = false;
-let hasRenderedComponentsCheck = false;
 let OneLoad = true;
 
 function renderComponentsOnce() {
@@ -125,10 +124,10 @@ function observeMetodoChanges() {
         if (offlineGateway || manualGateway) {
             document.querySelector('button[type="submit"]').disabled = false;
             hasRenderedComponents = false;
-            hasRenderedComponentsCheck = true;
         } else {
             document.querySelector('button[type="submit"]').disabled = true;
         }
+        updateDonationAmount();
     };
 
     checkGateways();
@@ -273,11 +272,11 @@ const gateway = {
     // Função onde os campos HTML são criados
     Fields() {
         if (!hasRenderedComponents) {
-            document.addEventListener('DOMContentLoaded', function () {
-                renderComponentsOnce();
-            });
-
-            if (hasRenderedComponentsCheck) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    renderComponentsOnce();
+                });
+            } else {
                 renderComponentsOnce();
             }
         }
