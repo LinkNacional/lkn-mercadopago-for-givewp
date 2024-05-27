@@ -114,18 +114,14 @@ function updateDonationAmount() {
 
 function observeMetodoChanges() {
     const checkGateways = () => {
+        const myGateway = document.querySelector('.givewp-fields-gateways__gateway.givewp-fields-gateways__gateway--lnk-mercadopago-forgivewp.givewp-fields-gateways__gateway--active');
 
-        //TODO
-        // CONSERTAR AQUI
-        const offlineGateway = document.querySelector('.givewp-fields-gateways__gateway--offline.givewp-fields-gateways__gateway--active');
-        const manualGateway = document.querySelector('.givewp-fields-gateways__gateway--manual.givewp-fields-gateways__gateway--active');
-
-        // Se algum dos gateways estiver ativo, habilita o botão Donate Now
-        if (offlineGateway || manualGateway) {
+        // Se ele estiver ativo, habilita o botão Donate Now
+        if (myGateway) {
+            document.querySelector('button[type="submit"]').disabled = true;
+        } else {
             document.querySelector('button[type="submit"]').disabled = false;
             hasRenderedComponents = false;
-        } else {
-            document.querySelector('button[type="submit"]').disabled = true;
         }
         updateDonationAmount();
     };
