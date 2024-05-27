@@ -1,5 +1,7 @@
 let preferenceID = null;
 let hasRenderedComponents = false;
+let hasRenderedComponentsCheck = false;
+let OneLoad = true;
 
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
@@ -25,15 +27,19 @@ function renderComponentsOnce() {
                 console.error('Erro ao criar preferência de pagamento:', error);
             });
 
-        // Chamando funções após os elementos terem sido renderizados
-        setTimeout(updateDonationAmount, 0);
-        setTimeout(checkInputs, 0);
+        if (OneLoad) {
+            // Chamando funções após os elementos terem sido renderizados
+            setTimeout(updateDonationAmount, 0);
+            setTimeout(checkInputs, 0);
 
-        // Observers
-        observeDonationChanges();
-        observeFormChanges();
-        observeMetodoChanges();
+            // Observers
+            observeDonationChanges();
+            observeFormChanges();
+            observeMetodoChanges();
 
+            //hasRenderedComponentsCheck = false;
+            OneLoad = false;
+        }
         hasRenderedComponents = true;
     }
 }
@@ -67,7 +73,7 @@ async function criarPreferenciaDePagamento() {
         "back_urls": {
             "success": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
             "pending": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
-            "failure": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1` //ALTERAR AQUI DEPOIS!!!
+            "failure": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=3` //ALTERAR AQUI DEPOIS!!!
         },
         "auto_return": "approved",
         "items": [{
@@ -109,6 +115,9 @@ function updateDonationAmount() {
 
 function observeMetodoChanges() {
     const checkGateways = () => {
+
+        //TODO
+        // CONSERTAR AQUI
         const offlineGateway = document.querySelector('.givewp-fields-gateways__gateway--offline.givewp-fields-gateways__gateway--active');
         const manualGateway = document.querySelector('.givewp-fields-gateways__gateway--manual.givewp-fields-gateways__gateway--active');
 
@@ -116,6 +125,7 @@ function observeMetodoChanges() {
         if (offlineGateway || manualGateway) {
             document.querySelector('button[type="submit"]').disabled = false;
             hasRenderedComponents = false;
+            hasRenderedComponentsCheck = true;
         } else {
             document.querySelector('button[type="submit"]').disabled = true;
         }
@@ -262,8 +272,15 @@ const gateway = {
     },
     // Função onde os campos HTML são criados
     Fields() {
+        if (!hasRenderedComponents) {
+            document.addEventListener('DOMContentLoaded', function () {
+                renderComponentsOnce();
+            });
 
-        renderComponentsOnce();
+            if (hasRenderedComponentsCheck) {
+                renderComponentsOnce();
+            }
+        }
 
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
             className: "no-fields"
