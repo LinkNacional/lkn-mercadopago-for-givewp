@@ -72,21 +72,20 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 </fieldset>
         
             <script>
-            
-            if (typeof hasRender === 'undefined'){
-            
+
+            function initializeMercadoPago() {
                 document.querySelector('input[type=\"submit\"]').disabled = true;
-
+        
                 async function criarPreferenciaDePagamento() {
-                    const amountGive = document.getElementsByName('give-amount')[0]
-                    console.log(amountGive.value)
-
-                    let valor = amountGive.value
-
-                    if(typeof amountGive.dataset.amount === 'undefined'){
-                        let valor = amountGive.value;
-                    } else{
-                        let valor = amountGive.dataset.amount;
+                    const amountGive = document.getElementsByName('give-amount')[0];
+                    console.log(amountGive.value);
+        
+                    let valor = amountGive.value;
+        
+                    if (typeof amountGive.dataset.amount === 'undefined') {
+                        valor = amountGive.value;
+                    } else {
+                        valor = amountGive.dataset.amount;
                     }
                     
                     const url = 'https://api.mercadopago.com/checkout/preferences';
@@ -94,8 +93,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     const preference = {
                         \"back_urls\": {
                             \"success\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=1`,
-                            \"pending\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=2`, //site_url()
-                            \"failure\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=1` //site_url()
+                            \"pending\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=2`,
+                            \"failure\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=3`
                         },
                         \"items\": [{
                             \"id\": \"Doação X\",
@@ -103,16 +102,16 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             \"description\": \"Sua doação foi de \",
                             \"quantity\": 1,
                             \"currency_id\": \"BRL\",
-                            \"unit_price\": parseFloat(valor) 
+                            \"unit_price\": parseFloat(valor)
                         }]
                     };
+        
                     try {
                         const response = await fetch(url, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223`
-                            },
+                                'Authorization': `Bearer TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223`                            },
                             body: JSON.stringify(preference)
                         });
                         if (!response.ok) {
@@ -125,12 +124,11 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         throw error;
                     }
                 }
-
+        
                 if (document.querySelector('input[name=\"give_first\"]') && document.querySelector('input[name=\"give_email\"]') && document.querySelector('#wallet_container')) {
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
                             console.log('ID da preferência criada:', preferenceID);
-                            preferenceID = preferenceID;
                             const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
                             const bricksBuilder = mp.bricks();
                             mp.bricks().create(\"wallet\", \"wallet_container\", {
@@ -148,52 +146,49 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         .catch(error => {
                             console.error('Erro ao criar preferência de pagamento:', error);
                         });
+        
                     if (document.querySelector('input[name=\"give_first\"]').value) {
-                        // Se ambos os campos de nome e e-mail estiverem preenchidos, habilitar o container
                         document.querySelector('#wallet_container').style.display = 'block';
                         document.querySelector('#warning-text').textContent = '';
-                        
                     } else {
-                        // Se algum campo estiver vazio, desabilitar o container e exibir a mensagem de aviso
                         document.querySelector('#wallet_container').style.display = 'none';
                         document.querySelector('#warning-text').textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
                     }
                 }
-
+        
                 function observeDonationChanges() {
                     const targetNode = document.querySelector('input[name=\"give-amount\"]');
-                    console.log(targetNode)
+                    console.log(targetNode);
                     if (!targetNode) return;
                 
                     const observer = new MutationObserver(function(mutationsList, observer) {
                         for (const mutation of mutationsList) {
                             if (mutation.type === 'attributes' && mutation.attributeName === 'data-amount') {
                                 console.log('Mudança no data-amount');
-                
+        
                                 const nomeInput = document.querySelector('input[name=\"give_first\"]');
                                 const emailInput = document.querySelector('input[name=\"give_email\"]');
                                 if (nomeInput.value && emailInput.value) {
                                     const oldButton = document.querySelector('#wallet_container');
-                
+        
                                     if (oldButton) {
                                         oldButton.remove();
                                         console.log('Botão removido');
                                     }
-                
+        
                                     criarPreferenciaDePagamento().then(newPreferenceID => {
                                         console.log('Nova preferência criada:', newPreferenceID);
-                                        preferenceID = newPreferenceID;
-                
+        
                                         const newButton = document.createElement('div');
                                         newButton.id = 'wallet_container';
                                         const fieldset = document.querySelector('.no-fields');
                                         fieldset.appendChild(newButton);
-                
+        
                                         const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
                                         const bricksBuilder = mp.bricks();
                                         mp.bricks().create(\"wallet\", \"wallet_container\", {
                                             initialization: {
-                                                preferenceId: preferenceID,
+                                                preferenceId: newPreferenceID,
                                                 redirectMode: \"blank\"
                                             },
                                             customization: {
@@ -209,12 +204,12 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             }
                         }
                     });
-                
+        
                     observer.observe(targetNode, {
-                        attributes: true // Observar mudanças nos atributos
+                        attributes: true
                     });
                 }
-                
+        
                 function observeFormChanges() {
                     const nomeInput = document.querySelector('input[name=\"give_first\"]');
                     const emailInput = document.querySelector('input[name=\"give_email\"]');
@@ -223,7 +218,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         emailInput.addEventListener('input', checkInputs);
                     }
                 }
-
+        
                 function checkInputs() {
                     const nomeInput = document.querySelector('input[name=\"give_first\"]');
                     const emailInput = document.querySelector('input[name=\"give_email\"]');
@@ -231,25 +226,24 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     let warningText = document.querySelector('#warning-text');
                     if (nomeInput && emailInput && walletContainer) {
                         if (nomeInput.value && emailInput.value) {
-                            // Se ambos os campos de nome e e-mail estiverem preenchidos, habilitar o container
                             walletContainer.style.display = 'block';
                             warningText.textContent = '';
                         } else {
-                            // Se algum campo estiver vazio, desabilitar o container e exibir a mensagem de aviso
                             walletContainer.style.display = 'none';
                             warningText.textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
                         }
                     }
                 }
-
+        
                 observeDonationChanges();
                 observeFormChanges();
-                //observeMetodoChanges();
-            } else{
-                //render já foi declarada
-                console.log('renderiza denovo')
             }
-
+        
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeMercadoPago);
+            } else {
+                initializeMercadoPago();
+            }
             </script>
         </body>
         </html>
@@ -314,7 +308,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
     }
 
     /**
-     * // TODO needs this function to appear in v3 forms
+     * // TO DO needs this function to appear in v3 forms
      * @since 3.0.0
      */
     public function enqueueScript(int $formId): void {
