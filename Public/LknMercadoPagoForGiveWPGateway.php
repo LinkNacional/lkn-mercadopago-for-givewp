@@ -59,7 +59,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
         $url_pagina = site_url();
-
+         
         $html = "
         <!DOCTYPE html>    
         <body>
@@ -72,9 +72,25 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 </fieldset>
         
             <script>
-
             function initializeMercadoPago() {
                 document.querySelector('input[type=\"submit\"]').disabled = true;
+
+                //Enter não aciona wallet
+                const walletButton = document.querySelector('#wallet_container');
+                if (walletButton) {
+                    walletButton.addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    });
+                }
+
+                function checkSidebarExists() {
+                    const sidebarDiv = document.getElementById('give-sidebar-left');
+                    //console.log(sidebarDiv); // Log para verificar a presença do elemento
+                    return sidebarDiv !== null;
+                }
         
                 async function criarPreferenciaDePagamento() {
                     const amountGive = document.getElementsByName('give-amount')[0];
@@ -125,6 +141,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     }
                 }
                 if (document.querySelector('#wallet_container')) {
+                    const sidebarDiv = document.getElementById('give-sidebar-left'); //Diferencial do Legado Form
+                    //console.log(sidebarDiv)
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
                             console.log('ID da preferência criada:', preferenceID);
@@ -133,7 +151,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             mp.bricks().create(\"wallet\", \"wallet_container\", {
                                 initialization: {
                                     preferenceId: preferenceID,
-                                    redirectMode: \"blank\"
+                                    redirectMode: checkSidebarExists() ? \"self\" : \"blank\"
                                 },
                                 customization: {
                                     texts: {
