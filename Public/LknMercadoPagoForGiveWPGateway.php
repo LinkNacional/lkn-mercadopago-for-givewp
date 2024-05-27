@@ -124,8 +124,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         throw error;
                     }
                 }
-        
-                if (document.querySelector('input[name=\"give_first\"]') && document.querySelector('input[name=\"give_email\"]') && document.querySelector('#wallet_container')) {
+                if (document.querySelector('#wallet_container')) {
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
                             console.log('ID da preferência criada:', preferenceID);
@@ -147,18 +146,13 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             console.error('Erro ao criar preferência de pagamento:', error);
                         });
         
-                    if (document.querySelector('input[name=\"give_first\"]').value) {
-                        document.querySelector('#wallet_container').style.display = 'block';
-                        document.querySelector('#warning-text').textContent = '';
-                    } else {
-                        document.querySelector('#wallet_container').style.display = 'none';
-                        document.querySelector('#warning-text').textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
-                    }
+                        checkInputs();
+                        observeDonationChanges();
+                        observeFormChanges();
                 }
         
                 function observeDonationChanges() {
                     const targetNode = document.querySelector('input[name=\"give-amount\"]');
-                    console.log(targetNode);
                     if (!targetNode) return;
                 
                     const observer = new MutationObserver(function(mutationsList, observer) {
@@ -173,7 +167,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         
                                     if (oldButton) {
                                         oldButton.remove();
-                                        console.log('Botão removido');
                                     }
         
                                     criarPreferenciaDePagamento().then(newPreferenceID => {
@@ -224,7 +217,10 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     const emailInput = document.querySelector('input[name=\"give_email\"]');
                     const walletContainer = document.querySelector('#wallet_container');
                     let warningText = document.querySelector('#warning-text');
-                    if (nomeInput && emailInput && walletContainer) {
+                    //console.log(nomeInput.value)
+                    //console.log(emailInput.value)
+
+                    if (nomeInput && emailInput) {
                         if (nomeInput.value && emailInput.value) {
                             walletContainer.style.display = 'block';
                             warningText.textContent = '';
@@ -234,9 +230,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         }
                     }
                 }
-        
-                observeDonationChanges();
-                observeFormChanges();
             }
         
             if (document.readyState === 'loading') {
