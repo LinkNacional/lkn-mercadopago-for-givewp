@@ -1,6 +1,7 @@
 let preferenceID = null;
 let hasRenderedComponents = false;
 let OneLoad = true;
+let showMP = true;
 
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
@@ -180,6 +181,12 @@ function observeDonationChanges() {
                         newButton.id = 'wallet_container';
                         const fieldset = document.querySelector('.no-fields');
 
+                        if (showMP) {
+                            newButton.style.display = 'block';
+                        } else {
+                            newButton.style.display = 'none';
+                        }
+
                         fieldset.appendChild(newButton);
 
                         const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
@@ -235,18 +242,24 @@ function checkInputs() {
         if (!nomeInput.value.trim()) {
             walletContainer.style.display = 'none';
             warningText.textContent = 'O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir.';
+            showMP = false;
         } else if (nomeInput.value.trim().length < 3) {
             walletContainer.style.display = 'none';
             warningText.textContent = 'O campo Nome deve ter no mínimo 3 letras.';
+            showMP = false;
         } else if (!emailInput.value.trim()) {
             walletContainer.style.display = 'none';
             warningText.textContent = 'O campo Email está vazio. Por favor, preencha este campo antes de prosseguir.';
+            showMP = false;
+
         } else if (!isValidEmail(emailInput.value)) {
             walletContainer.style.display = 'none';
             warningText.textContent = 'O campo Email está inválido. Por favor, insira um endereço de email válido.';
+            showMP = false;
         } else {
             walletContainer.style.display = 'block';
             warningText.textContent = '';
+            showMP = true;
         }
     }
 }
