@@ -72,6 +72,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         
             <script>
             function initializeMercadoPago() {
+                let showMP = true;
                 document.querySelector('input[type=\"submit\"]').disabled = true;
 
                 //Enter não aciona wallet
@@ -95,12 +96,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     console.log(amountGive.value);
         
                     let valor = amountGive.value;
-        
-                    if (typeof amountGive.dataset.amount === 'undefined') {
-                        valor = amountGive.value;
-                    } else {
-                        valor = amountGive.dataset.amount;
-                    }
+    
+                    console.log(valor)
                     
                     const url = 'https://api.mercadopago.com/checkout/preferences';
                     const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
@@ -182,7 +179,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         
                                 const nomeInput = document.querySelector('input[name=\"give_first\"]');
                                 const emailInput = document.querySelector('input[name=\"give_email\"]');
-                                if (nomeInput.value && emailInput.value) {
+                              
                                     const oldButton = document.querySelector('#wallet_container');
         
                                     if (oldButton) {
@@ -195,6 +192,13 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                                         const newButton = document.createElement('div');
                                         newButton.id = 'wallet_container';
                                         const fieldset = document.querySelector('.no-fields');
+
+                                        if (showMP) {
+                                            newButton.style.display = 'block';
+                                        } else {
+                                            newButton.style.display = 'none';
+                                        }
+
                                         fieldset.appendChild(newButton);
         
                                         const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
@@ -213,7 +217,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                                     }).catch(error => {
                                         console.error('Erro ao criar nova preferência de pagamento:', error);
                                     });
-                                }
                             }
                         }
                     });
@@ -248,18 +251,24 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         if (!nomeInput.value.trim()) {
                             walletContainer.style.display = 'none';
                             warningText.textContent = 'O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir.';
+                            showMP = false;
                         } else if (nomeInput.value.trim().length < 3) {
                             walletContainer.style.display = 'none';
                             warningText.textContent = 'O campo Nome deve ter no mínimo 3 letras.';
+                            showMP = false;
                         } else if (!emailInput.value.trim()) {
                             walletContainer.style.display = 'none';
                             warningText.textContent = 'O campo Email está vazio. Por favor, preencha este campo antes de prosseguir.';
+                            showMP = false;
+                
                         } else if (!isValidEmail(emailInput.value)) {
                             walletContainer.style.display = 'none';
                             warningText.textContent = 'O campo Email está inválido. Por favor, insira um endereço de email válido.';
+                            showMP = false;
                         } else {
                             walletContainer.style.display = 'block';
                             warningText.textContent = '';
+                            showMP = true;
                         }
                     }
                 }
