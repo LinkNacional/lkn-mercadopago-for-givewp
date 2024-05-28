@@ -141,7 +141,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 if (document.querySelector('#wallet_container')) {
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
-                            console.log('ID da preferência criada:', preferenceID);
+                            //console.log('ID da preferência criada:', preferenceID);
                             const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
                             const bricksBuilder = mp.bricks();
                             mp.bricks().create(\"wallet\", \"wallet_container\", {
@@ -161,13 +161,19 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                         });
         
                         checkInputs();
-                        observeDonationChanges();
+                        if(!document.querySelector('#verificador')){  
+                            observeDonationChanges();
+                        }
                         observeFormChanges();
                 }
         
                 function observeDonationChanges() {
                     const targetNode = document.querySelector('input[name=\"give-amount\"]');
                     if (!targetNode) return;
+
+                    const verificadorDiv = document.createElement(\"div\");
+                    verificadorDiv.id = \"verificador\";
+                    document.body.appendChild(verificadorDiv);
                 
                     const observer = new MutationObserver(function(mutationsList, observer) {
                         for (const mutation of mutationsList) {
@@ -184,7 +190,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                                     }
         
                                     criarPreferenciaDePagamento().then(newPreferenceID => {
-                                        console.log('Nova preferência criada:', newPreferenceID);
+                                        //console.log('Nova preferência criada:', newPreferenceID);
         
                                         const newButton = document.createElement('div');
                                         newButton.id = 'wallet_container';
