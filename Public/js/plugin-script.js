@@ -5,42 +5,51 @@ let showMP = true;
 
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
-        criarPreferenciaDePagamento()
-            .then(preferenceID => {
-                console.log('ID da preferência criada:', preferenceID);
-                preferenceID = preferenceID;
-                const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
-                const bricksBuilder = mp.bricks();
-                mp.bricks().create("wallet", "wallet_container", {
-                    initialization: {
-                        preferenceId: preferenceID,
-                        redirectMode: "blank"
-                    },
-                    customization: {
-                        texts: {
-                            valueProp: 'smart_option'
+        const tryRender = () => {
+            criarPreferenciaDePagamento()
+                .then(preferenceID => {
+                    console.log('ID da preferência criada:', preferenceID);
+                    preferenceID = preferenceID;
+                    const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                    const bricksBuilder = mp.bricks();
+                    mp.bricks().create("wallet", "wallet_container", {
+                        initialization: {
+                            preferenceId: preferenceID,
+                            redirectMode: "blank"
+                        },
+                        customization: {
+                            texts: {
+                                valueProp: 'smart_option'
+                            }
                         }
-                    }
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao criar preferência de pagamento:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Erro ao criar preferência de pagamento:', error);
-            });
 
-        if (OneLoad) {
-            // Chamando funções após os elementos terem sido renderizados
-            setTimeout(updateDonationAmount, 0);
-            setTimeout(checkInputs, 0);
+            if (OneLoad) {
+                setTimeout(updateDonationAmount, 0);
+                setTimeout(checkInputs, 0);
+                observeDonationChanges();
+                observeFormChanges();
+                observeMetodoChanges();
+                if (document.querySelector('.givewp-donation-form__steps-header-previous')) {
+                    observeButtonChanges();
+                }
+                OneLoad = false;
+            }
+            hasRenderedComponents = true;
+        };
 
-            // Observers
-            observeDonationChanges();
-            observeFormChanges();
-            observeMetodoChanges();
-
-            //hasRenderedComponentsCheck = false;
-            OneLoad = false;
-        }
-        hasRenderedComponents = true;
+        const interval = setInterval(() => {
+            if (document.readyState === 'complete') {
+                clearInterval(interval);
+                if (OneLoad || !hasRenderedComponents) {
+                    tryRender();
+                }
+            }
+        }, 100);
     }
 }
 
@@ -104,6 +113,33 @@ async function criarPreferenciaDePagamento() {
         throw error;
     }
 }
+
+function mutationBack() {
+    const button = document.querySelector('.givewp-donation-form__steps-header-previous-button');
+
+    if (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            location.reload();
+        });
+    }
+}
+
+function observeButtonChanges() {
+    const observer = new MutationObserver((mutationsList, observer) => {
+        mutationsList.forEach(mutation => {
+            if (mutation.type === 'childList') {
+                mutationBack();
+            }
+        });
+    });
+
+    const config = { childList: true, subtree: true };
+    const targetNode = document.body;
+    observer.observe(targetNode, config);
+    mutationBack();
+}
+
 function updateDonationAmount() {
     const fieldValueElement = document.querySelector('.givewp-elements-donationSummary__list__item__value');
     const donationAmountElement = document.querySelector('#donation-amount');
@@ -125,6 +161,7 @@ function observeMetodoChanges() {
             hasRenderedComponents = false;
         }
         updateDonationAmount();
+        checkInputs();
     };
 
     checkGateways();
@@ -300,6 +337,14 @@ const gateway = {
                 });
             } else {
                 renderComponentsOnce();
+            }
+        } else {
+            //observeButtonChanges já está cumprindo a função de recarregar o formulário
+            updateDonationAmount();
+
+            const oldButton = document.querySelector('#wallet_container');
+            if (oldButton) {
+                oldButton.remove();
             }
         }
 
