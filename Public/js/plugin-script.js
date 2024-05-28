@@ -225,15 +225,28 @@ function checkInputs() {
     const emailInput = document.querySelector('input[name="email"]');
     const walletContainer = document.querySelector('#wallet_container');
     let warningText = document.querySelector('#warning-text');
+
+    function isValidEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
+
     if (nomeInput && emailInput && walletContainer) {
-        if (nomeInput.value && emailInput.value) {
-            // Se ambos os campos de nome e e-mail estiverem preenchidos, habilitar o container
+        if (!nomeInput.value.trim()) {
+            walletContainer.style.display = 'none';
+            warningText.textContent = 'O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir.';
+        } else if (nomeInput.value.trim().length < 3) {
+            walletContainer.style.display = 'none';
+            warningText.textContent = 'O campo Nome deve ter no mínimo 3 letras.';
+        } else if (!emailInput.value.trim()) {
+            walletContainer.style.display = 'none';
+            warningText.textContent = 'O campo Email está vazio. Por favor, preencha este campo antes de prosseguir.';
+        } else if (!isValidEmail(emailInput.value)) {
+            walletContainer.style.display = 'none';
+            warningText.textContent = 'O campo Email está inválido. Por favor, insira um endereço de email válido.';
+        } else {
             walletContainer.style.display = 'block';
             warningText.textContent = '';
-        } else {
-            // Se algum campo estiver vazio, desabilitar o container e exibir a mensagem de aviso
-            walletContainer.style.display = 'none';
-            warningText.textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
         }
     }
 }

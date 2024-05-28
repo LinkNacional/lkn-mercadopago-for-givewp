@@ -59,7 +59,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
         $url_pagina = site_url();
-         
         $html = "
         <!DOCTYPE html>    
         <body>
@@ -88,7 +87,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
 
                 function checkSidebarExists() {
                     const sidebarDiv = document.getElementById('give-sidebar-left');
-                    //console.log(sidebarDiv); // Log para verificar a presença do elemento
                     return sidebarDiv !== null;
                 }
         
@@ -141,8 +139,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     }
                 }
                 if (document.querySelector('#wallet_container')) {
-                    const sidebarDiv = document.getElementById('give-sidebar-left'); //Diferencial do Legado Form
-                    //console.log(sidebarDiv)
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
                             console.log('ID da preferência criada:', preferenceID);
@@ -232,19 +228,32 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         
                 function checkInputs() {
                     const nomeInput = document.querySelector('input[name=\"give_first\"]');
+                    //console.log(nomeInput.value)
                     const emailInput = document.querySelector('input[name=\"give_email\"]');
                     const walletContainer = document.querySelector('#wallet_container');
                     let warningText = document.querySelector('#warning-text');
-                    //console.log(nomeInput.value)
-                    //console.log(emailInput.value)
 
-                    if (nomeInput && emailInput) {
-                        if (nomeInput.value && emailInput.value) {
+                    function isValidEmail(email) {
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return emailPattern.test(email);
+                    }
+                  
+                    if (nomeInput && emailInput && walletContainer) {
+                        if (!nomeInput.value.trim()) {
+                            walletContainer.style.display = 'none';
+                            warningText.textContent = 'O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir.';
+                        } else if (nomeInput.value.trim().length < 3) {
+                            walletContainer.style.display = 'none';
+                            warningText.textContent = 'O campo Nome deve ter no mínimo 3 letras.';
+                        } else if (!emailInput.value.trim()) {
+                            walletContainer.style.display = 'none';
+                            warningText.textContent = 'O campo Email está vazio. Por favor, preencha este campo antes de prosseguir.';
+                        } else if (!isValidEmail(emailInput.value)) {
+                            walletContainer.style.display = 'none';
+                            warningText.textContent = 'O campo Email está inválido. Por favor, insira um endereço de email válido.';
+                        } else {
                             walletContainer.style.display = 'block';
                             warningText.textContent = '';
-                        } else {
-                            walletContainer.style.display = 'none';
-                            warningText.textContent = 'Nome ou Email não foram preenchidos. Por favor, preencha todos os campos antes de prosseguir.';
                         }
                     }
                 }
