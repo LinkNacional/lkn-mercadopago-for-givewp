@@ -107,31 +107,6 @@ final class LknMercadopagoForGiveWP {
      * @access   private
      */
     private function load_dependencies(): void {
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
-        require_once plugin_dir_path(__DIR__) . 'includes/LknMercadoPagoForGiveWPLoader.php';
-
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
-        require_once plugin_dir_path(__DIR__) . 'includes/LknMercadoPagoForGiveWPi18n.php';
-
-        /**
-         * The class responsible for defining all actions that occur in the admin area.
-         */
-        require_once plugin_dir_path(__DIR__) . 'admin/LknMercadoPagoForGiveWPAdmin.php';
-
-        /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
-         */
-        require_once plugin_dir_path(__DIR__) . 'public/LknMercadoPagoForGiveWPPublic.php';
-
-        require_once plugin_dir_path(__DIR__) . 'public/LknMercadoPagoForGiveWPGateway.php';
-
         $this->loader = new LknMercadoPagoForGiveWPLoader();
     }
 
@@ -164,6 +139,8 @@ final class LknMercadopagoForGiveWP {
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
         $this->loader->add_action('rest_api_init', $this, 'register_payment_routes');
         $this->loader->add_action('rest_api_init', $this, 'register_rest_route');
+        $this->loader->add_filter('give_get_settings_gateways', $plugin_admin, 'add_setting_into_new_section');
+        $this->loader->add_filter('give_get_sections_gateways', $plugin_admin, 'new_setting_section');
     }
 
     /**
