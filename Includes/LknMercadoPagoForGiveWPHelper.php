@@ -122,29 +122,6 @@ abstract class LknMercadoPagoForGiveWPHelper {
     } 
 
     /**
-     * Notice for No Core Activation
-     *
-     * @since 1.0.0
-     */
-    final public static function inactive_notice(): void {
-        // Admin notice.
-        $message = sprintf(
-            '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s.</p></div>',
-            'Erro de Ativação:',
-            'give-getnet',
-            'Você deve ter',
-            'give-getnet',
-            'https://givewp.com',
-            'Give',
-            'give-getnet',
-            ' plugin instalado e ativado para o plugin Give Getnet ser ativado',
-            'give-getnet'
-        );
-
-        echo esc_html($message);
-    }
-
-    /**
      * Plugin row meta links.
      *
      * @since 1.0.0
@@ -162,5 +139,19 @@ abstract class LknMercadoPagoForGiveWPHelper {
         );
 
         return array_merge($plugin_meta, $new_meta_links);
+    }
+
+    final public static function get_configs() {
+        $configs = array();
+
+        $configs['token'] = give_get_option('mercado_pago_token');
+        $configs['key'] = give_get_option('mercado_pago_key');
+        $configs['tittle'] = give_get_option('mercado_pago_tittle');
+        $configs['description'] = give_get_option('mercado_pago_description');
+        $configs['ambiente'] = give_get_option('mercado_pago_ambiente');
+        $configs['debug'] = give_get_option('mercado_pago_debug');
+        $configs['advDebug'] = give_get_option('mercado_pago_advanced_debug');
+
+        return $configs;
     }
 }

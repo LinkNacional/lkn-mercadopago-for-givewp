@@ -91,4 +91,100 @@ final class LknMercadoPagoForGiveWPAdmin {
          */
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lkn-mercadopago-for-givewp-admin.js', array('jquery'), $this->version, false );
     }
+
+    public function add_setting_into_new_section($settings) {
+        switch (give_get_current_setting_section()) {
+            case 'mercado_pago':
+
+                $settings[] = array(
+                    'type' => 'title',
+                    'id' => 'mercado_pago',
+                );
+
+                $settings[] = array(
+                    'name' => 'Token do Mercado Pago (Acess Token)',
+                    'id' => 'mercado_pago_token',
+                    'desc' => 'Código Token do Mercado Pago',
+                    'type' => 'text',
+                );
+
+                $settings[] = array(
+                    'name' => 'Chave Pública do Mercado Pago (Public Key)',
+                    'id' => 'mercado_pago_key',
+                    'desc' => 'Chave Pública do Mercado Pago',
+                    'type' => 'text',
+                );
+
+                $settings[] = array(
+                    'name' => 'Título no Mercado Pago',
+                    'id' => 'mercado_pago_tittle',
+                    'desc' => 'Esse título será utilizado durante o checkout no Mercado Pago',
+                    'type' => 'text',
+                );
+
+                $settings[] = array(
+                    'name' => 'Descrição no Mercado Pago',
+                    'id' => 'mercado_pago_description',
+                    'desc' => 'Essa descrição será utilizada durante o checkout no Mercado Pago',
+                    'type' => 'text',
+                );
+
+                $settings[] = array(
+                    'name' => 'Ambiente de desenvolvimento',
+                    'id' => 'mercado_pago_ambiente',
+                    'desc' => 'Habilite o ambiente de desenvolvimento desejado: Sandbox ou Produção.',
+                    'type' => 'radio',
+                    'default' => 'producao',
+                    'options' => array(
+                        'producao' => 'Produção',
+                        'sandbox' => 'Sandbox',
+                    ),
+                );
+
+                $settings[] = array(
+                    'name' => 'Depuração',
+                    'id' => 'mercado_pago_debug',
+                    'desc' => 'Habilitar ambiente para Debug.',
+                    'type' => 'radio',
+                    'default' => 'disabled',
+                    'options' => array(
+                        'enabled' => 'Habilitar',
+                        'disabled' => 'Desabilitar',
+                    ),
+                );
+                
+                $settings[] = array(
+                    'name' => 'Modo de Depuração avançada',
+                    'id' => 'mercado_pago_advanced_debug',
+                    'desc' => 'Habilitar ambiente para Debug avançado. Atenção habilitar essa opção deixará seu site vulnerável.',
+                    'type' => 'radio',
+                    'default' => 'disabled',
+                    'options' => array(
+                        'enabled' => 'Habilitar',
+                        'disabled' => 'Desabilitar',
+                    ),
+                );
+
+                $settings[] = array(
+                    'id' => 'mercado_pago',
+                    'type' => 'sectionend',
+                );
+
+                break;
+        }// // End switch()
+
+        return $settings;
+    }
+
+    /**
+     * Add new section to "General" setting tab
+     *
+     * @param $sections
+     *
+     * @return array
+     */
+    public function new_setting_section($sections) {
+        $sections['mercado_pago'] = 'Mercado Pago';
+        return $sections;
+    }
 }

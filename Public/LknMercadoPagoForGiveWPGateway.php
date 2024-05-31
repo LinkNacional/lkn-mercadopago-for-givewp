@@ -7,11 +7,11 @@ use Give\Donations\Models\DonationNote;
 use Give\Donations\ValueObjects\DonationStatus;
 use Give\Framework\Exceptions\Primitives\Exception;
 use Give\Framework\PaymentGateways\Commands\GatewayCommand;
-use Give\Framework\PaymentGateways\Commands\PaymentComplete;
 use Give\Framework\PaymentGateways\Commands\PaymentPending;
 use Give\Framework\PaymentGateways\Commands\PaymentRefunded;
 use Give\Framework\PaymentGateways\Exceptions\PaymentGatewayException;
 use Give\Framework\PaymentGateways\PaymentGateway;
+use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPHelper;
 
 /**
  * @inheritDoc
@@ -362,5 +362,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         $url_pagina = site_url();
         wp_localize_script(self::id(), 'urlPag', $url_pagina);
         wp_localize_script(self::id(), 'idUnique', uniqid());
+
+        $configs = LknMercadoPagoForGiveWPHelper::get_configs();
+
+        wp_localize_script(self::id(), 'configData', $configs);
     }
 }
