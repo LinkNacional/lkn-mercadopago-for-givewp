@@ -1,114 +1,77 @@
 === Link Nacional MercadoPago for GiveWP ===
 Contributors: linknacional
-Donate link: https://https://www.linknacional.com.br/wordpress/givewp//
-Tags: comments, spam
+Donate link: https://https://www.linknacional.com.br/wordpress/givewp/
+Tags: givewp, payment, mercadopago, card
 Requires at least: 3.0.1
 Tested up to: 1.0.0
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Link Nacional MercadoPago for GiveWP 
 
 == Description ==
 
-MercadoPago Payment Gateway for GiveWP donation plugin for WordPress
+The MercadoPago Payment Gateway for GiveWP seamlessly integrates MercadoPago with the GiveWP donation plugin for WordPress, providing a secure and efficient solution for receiving online donations. This plugin supports multiple payment methods, recurring donations, and customizable donation forms. Enhance your donor's experience with a trusted payment gateway, boost your fundraising efforts, and manage donations effortlessly with detailed reporting and a user-friendly interface.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+O [MercadoPago](https://www.mercadopago.com.br) is a leading online payment solution in Latin America, offering a comprehensive suite of services for secure and convenient financial transactions. As the fintech arm of Mercado Libre, one of the region’s largest e-commerce platforms, Mercado Pago provides a reliable and user-friendly payment gateway for businesses and individuals alike.
 
-A few notes about the sections above:
+**Dependencies**
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions… this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+Link Nacional MercadoPago for GiveWP plugin is dependent on GiveWP plugin, please make sure GiveWP is installed and properly configured before starting Link Nacional MercadoPago for GiveWP installation.
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes — as long as the trunk's `readme.txt` points to the correct stable tag.
+**User instructions**
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+1. Search the WordPress sidebar for 'Link Nacional MercadoPago for GiveWP'.
+
+2. Download and activate the plugin.
+   
+3. In the GiveWP, navigate to settings, then 'Payments Gateways', and activate 'Mercado Pago'.
+
+4. Save your settings.
+
+You have successfully configured the MercadoPago National Link for GiveWP and allowed your customers to choose to pay for donations with Mercado Pago.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+1. Look in the sidebar for the WordPress plugins area;
 
-e.g.
+2. In installed plugins look for the 'add new' option in the header;
 
-1. Upload `lkn-mercadopago-for-givewp.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+3. Click on the 'submit plugin' option in the page title and upload the link-nacional-mercadoPago-for-givewp.zip plugin;
+
+4. Click on the 'install now' button and then activate the installed plugin;
+
+The Link Nacional MercadoPago for GiveWP plugin is now live and working.
+
+= Payments Settings =
+
+1. After installing the plugin, access the WordPress admin dashboard and navigate to the GiveWP settings.
+2. In the sidebar menu, click on "Donations" and then on "Settings".
+3. In the "Payments Gateways" tab, you'll see a list of available payment methods.
+4. Locate “Mercado Pago” in the list of payment methods and activate it.
+6. After activating the desired payment methods, or if you prefer to set them as default, remember to save the changes.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= What is the license of the plugin? =
 
-An answer to that question.
+* This plugin is released under a GPLv2 license.
 
-= What about foo bar? =
+= What do I need to use this plugin? =
 
-Answer to foo bar dilemma.
+* Have installed the GiveWP plugin.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Nothing yet.
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 1.0.0 = *2024/05/31*
+* Plugin launch.
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](https://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 1.0.0 =
+* Plugin launch.
