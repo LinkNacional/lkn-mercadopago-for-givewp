@@ -76,7 +76,7 @@ async function criarPreferenciaDePagamento() {
 
     const valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
-    console.log(valorNumerico)
+    //console.log(valorNumerico)
 
     const preference = {
         "back_urls": {
@@ -200,50 +200,48 @@ function observeDonationChanges() {
 
                 const nomeInput = document.querySelector('input[name="firstName"]');
                 const emailInput = document.querySelector('input[name="email"]');
-                if (nomeInput.value && emailInput.value) {
-                    const oldButton = document.querySelector('#wallet_container');
+                const oldButton = document.querySelector('#wallet_container');
 
-                    if (oldButton) {
-                        oldButton.remove();
-                        console.log('botao removido')
+                if (oldButton) {
+                    oldButton.remove();
+                    console.log('botao removido')
+                }
+
+                criarPreferenciaDePagamento().then(newPreferenceID => {
+
+                    console.log('Nova preferência criada:', newPreferenceID);
+
+                    preferenceID = newPreferenceID;
+
+                    const newButton = document.createElement('div');
+                    newButton.id = 'wallet_container';
+                    const fieldset = document.querySelector('.no-fields');
+
+                    if (showMP) {
+                        newButton.style.display = 'block';
+                    } else {
+                        newButton.style.display = 'none';
                     }
 
-                    criarPreferenciaDePagamento().then(newPreferenceID => {
+                    fieldset.appendChild(newButton);
 
-                        console.log('Nova preferência criada:', newPreferenceID);
-
-                        preferenceID = newPreferenceID;
-
-                        const newButton = document.createElement('div');
-                        newButton.id = 'wallet_container';
-                        const fieldset = document.querySelector('.no-fields');
-
-                        if (showMP) {
-                            newButton.style.display = 'block';
-                        } else {
-                            newButton.style.display = 'none';
-                        }
-
-                        fieldset.appendChild(newButton);
-
-                        const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
-                        const bricksBuilder = mp.bricks();
-                        mp.bricks().create("wallet", "wallet_container", {
-                            initialization: {
-                                preferenceId: preferenceID,
-                                redirectMode: "blank"
-                            },
-                            customization: {
-                                texts: {
-                                    valueProp: 'smart_option'
-                                }
+                    const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                    const bricksBuilder = mp.bricks();
+                    mp.bricks().create("wallet", "wallet_container", {
+                        initialization: {
+                            preferenceId: preferenceID,
+                            redirectMode: "blank"
+                        },
+                        customization: {
+                            texts: {
+                                valueProp: 'smart_option'
                             }
-                        });
-
-                    }).catch(error => {
-                        console.error('Erro ao criar nova preferência de pagamento:', error);
+                        }
                     });
-                }
+
+                }).catch(error => {
+                    console.error('Erro ao criar nova preferência de pagamento:', error);
+                });
             }
         }
     }, 500)); // Atraso de 500 milissegundos
