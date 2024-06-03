@@ -59,6 +59,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
         $url_pagina = site_url();
+        $configs = LknMercadoPagoForGiveWPHelper::get_configs();
+        
         $html = "
         <!DOCTYPE html>    
         <body>
@@ -100,7 +102,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     console.log(valor)
                     
                     const url = 'https://api.mercadopago.com/checkout/preferences';
-                    const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
                     const preference = {
                         \"back_urls\": {
                             \"success\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=1`,
@@ -108,9 +109,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             \"failure\": `${url_pagina}/wp-json/mercadopago/v1/payments/checkpayment?id={$this->idUnique}&statusFront=3`
                         },
                         \"items\": [{
-                            \"id\": \"Doação X\",
-                            \"title\": \"Doação via Mercado Pago\",
-                            \"description\": \"Sua doação foi de \",
+                            \"id\": \"{$this->idUnique}\",
+                            \"title\": \"{$configs['tittle']}\",
+                            \"description\": \"{$configs['description']}\",
                             \"quantity\": 1,
                             \"currency_id\": \"BRL\",
                             \"unit_price\": parseFloat(valor)
@@ -122,7 +123,8 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223`                            },
+                                'Authorization': `Bearer {$configs['token']}`
+                            },
                             body: JSON.stringify(preference)
                         });
                         if (!response.ok) {
@@ -139,7 +141,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
                             //console.log('ID da preferência criada:', preferenceID);
-                            const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                            const mp = new MercadoPago('{$configs['key']}');
                             const bricksBuilder = mp.bricks();
                             mp.bricks().create(\"wallet\", \"wallet_container\", {
                                 initialization: {
@@ -201,7 +203,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
 
                                         fieldset.appendChild(newButton);
         
-                                        const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                                        const mp = new MercadoPago('{$configs['key']}');
                                         const bricksBuilder = mp.bricks();
                                         mp.bricks().create(\"wallet\", \"wallet_container\", {
                                             initialization: {
