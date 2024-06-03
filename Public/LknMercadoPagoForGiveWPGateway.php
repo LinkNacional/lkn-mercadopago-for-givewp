@@ -95,11 +95,15 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         
                 async function criarPreferenciaDePagamento() {
                     const amountGive = document.getElementsByName('give-amount')[0];
-                    console.log(amountGive.value);
+                    if(\"{$configs['advDebug']}\" == 'enabled'){
+                        console.log(amountGive.value);
+                    }
         
                     let valor = amountGive.value;
-    
-                    console.log(valor)
+                    
+                    if(\"{$configs['advDebug']}\" == 'enabled'){
+                        console.log(valor)           
+                    }
                     
                     const url = 'https://api.mercadopago.com/checkout/preferences';
                     const preference = {
@@ -140,7 +144,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                 if (document.querySelector('#wallet_container')) {
                     criarPreferenciaDePagamento()
                         .then(preferenceID => {
-                            //console.log('ID da preferência criada:', preferenceID);
+                            if(\"{$configs['advDebug']}\" == 'enabled'){
+                                console.log('ID da preferência criada:', preferenceID);
+                            }
                             const mp = new MercadoPago('{$configs['key']}');
                             const bricksBuilder = mp.bricks();
                             mp.bricks().create(\"wallet\", \"wallet_container\", {
@@ -177,7 +183,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     const observer = new MutationObserver(function(mutationsList, observer) {
                         for (const mutation of mutationsList) {
                             if (mutation.type === 'attributes' && mutation.attributeName === 'data-amount') {
-                                console.log('Mudança no data-amount');
+                                if(\"{$configs['advDebug']}\" == 'enabled'){
+                                    console.log('Mudança no data-amount');
+                                }
         
                                 const nomeInput = document.querySelector('input[name=\"give_first\"]');
                                 const emailInput = document.querySelector('input[name=\"give_email\"]');
@@ -189,7 +197,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                                     }
         
                                     criarPreferenciaDePagamento().then(newPreferenceID => {
-                                        //console.log('Nova preferência criada:', newPreferenceID);
+                                        if(\"{$configs['advDebug']}\" == 'enabled'){
+                                            console.log('Nova preferência criada:', newPreferenceID);
+                                        }
         
                                         const newButton = document.createElement('div');
                                         newButton.id = 'wallet_container';
@@ -239,7 +249,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         
                 function checkInputs() {
                     const nomeInput = document.querySelector('input[name=\"give_first\"]');
-                    //console.log(nomeInput.value)
                     const emailInput = document.querySelector('input[name=\"give_email\"]');
                     const walletContainer = document.querySelector('#wallet_container');
                     let warningText = document.querySelector('#warning-text');
