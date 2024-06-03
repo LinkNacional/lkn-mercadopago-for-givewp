@@ -8,9 +8,12 @@ function renderComponentsOnce() {
         const tryRender = () => {
             criarPreferenciaDePagamento()
                 .then(preferenceID => {
-                    console.log('ID da preferência criada:', preferenceID);
+                    if (configData.advDebug == 'enabled') {
+                        console.log('ID da preferência criada:', preferenceID);
+                    }
                     preferenceID = preferenceID;
-                    const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                    const mp = new MercadoPago(configData.key);
+                    //TODO se houver erro 400, temos que retornar ao usuário??? 
                     const bricksBuilder = mp.bricks();
                     mp.bricks().create("wallet", "wallet_container", {
                         initialization: {
@@ -67,7 +70,6 @@ function sanitizeInput(input) {
 
 async function criarPreferenciaDePagamento() {
     const url = 'https://api.mercadopago.com/checkout/preferences';
-    const token = 'TEST-4103642140602972-050610-67d0c5a5cccd4907b1208fded2115f5c-1052089223';
 
     // Obter valores dos campos HTML
     const nome = sanitizeInput(document.querySelector('input[name="firstName"]').value);
@@ -76,7 +78,10 @@ async function criarPreferenciaDePagamento() {
 
     const valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
-    //console.log(valorNumerico)
+
+    if (configData.advDebug == 'enabled') {
+        console.log(valorNumerico)
+    }
 
     const preference = {
         "back_urls": {
@@ -86,9 +91,9 @@ async function criarPreferenciaDePagamento() {
         },
         "auto_return": "approved",
         "items": [{
-            "id": "Doação X",
-            "title": "Doação via Mercado Pago",
-            "description": "Sua doação foi de ",
+            "id": `Doação X ${idUnique}`,
+            "title": `${configData.tittle}`,
+            "description": `${configData.description}`,
             "quantity": 1,
             "currency_id": "BRL",
             "unit_price": valorNumerico
@@ -99,7 +104,7 @@ async function criarPreferenciaDePagamento() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${configData.token}`
             },
             body: JSON.stringify(preference)
         });
@@ -204,12 +209,16 @@ function observeDonationChanges() {
 
                 if (oldButton) {
                     oldButton.remove();
-                    console.log('botao removido')
+                    if (configData.advDebug == 'enabled') {
+                        console.log('botao removido')
+                    }
                 }
 
                 criarPreferenciaDePagamento().then(newPreferenceID => {
 
-                    console.log('Nova preferência criada:', newPreferenceID);
+                    if (configData.advDebug == 'enabled') {
+                        console.log('Nova preferência criada:', newPreferenceID);
+                    }
 
                     preferenceID = newPreferenceID;
 
@@ -225,7 +234,7 @@ function observeDonationChanges() {
 
                     fieldset.appendChild(newButton);
 
-                    const mp = new MercadoPago('TEST-c4abbb26-f793-4baf-a4a4-7e132e2350cb');
+                    const mp = new MercadoPago(configData.key);
                     const bricksBuilder = mp.bricks();
                     mp.bricks().create("wallet", "wallet_container", {
                         initialization: {

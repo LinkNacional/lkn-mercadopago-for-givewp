@@ -156,7 +156,7 @@ final class LknMercadoPagoForGiveWPAdmin {
                 $settings[] = array(
                     'name' => 'Modo de Depuração avançada',
                     'id' => 'mercado_pago_advanced_debug',
-                    'desc' => 'Habilitar ambiente para Debug avançado. Atenção habilitar essa opção deixará seu site vulnerável.',
+                    'desc' => 'Habilitar ambiente para Debug avançado (CONSOLE - JAVASCRIPT). Atenção habilitar essa opção deixará seu site vulnerável.',
                     'type' => 'radio',
                     'default' => 'disabled',
                     'options' => array(
