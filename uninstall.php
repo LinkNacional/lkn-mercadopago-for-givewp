@@ -27,5 +27,29 @@
 
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+    exit;
+}
+
+give_delete_option('mercado_pago_token');
+give_delete_option('mercado_pago_key');
+give_delete_option('mercado_pago_tittle');
+give_delete_option('mercado_pago_description');
+give_delete_option('mercado_pago_ambiente');
+give_delete_option('mercado_pago_debug');
+give_delete_option('mercado_pago_advanced_debug');
+
+$lkn_array_remove_options = give_get_settings();
+
+// Remove todos as options que possuem lkn_mercadopago_
+$lkn_array_remove_options = array_filter($lkn_array_remove_options, function ($key) {
+    return strpos($key, 'lkn_mercadopago_') === 0;
+}, \ARRAY_FILTER_USE_KEY);
+
+$lkn_array_remove_options = array_keys($lkn_array_remove_options);
+
+// Verifica se as chaves existem
+if ( ! empty($lkn_array_remove_options)) {
+    foreach ($lkn_array_remove_options as $option_key) {
+        give_delete_option($option_key);
+    }
 }

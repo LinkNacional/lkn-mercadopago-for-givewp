@@ -314,7 +314,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
             
             // return new PaymentComplete($response['transaction_id']);
             $idTeste = $gatewayData['gatewayId'];
-            add_option($idTeste, $donation->id);
+            add_option("lkn_mercadopago_" . $idTeste, $donation->id);
 
             return new PaymentPending();
         } catch (Exception $e) {

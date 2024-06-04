@@ -244,7 +244,7 @@ final class LknMercadopagoForGiveWP {
 
         switch ($statusFront) {
             case '1':
-                $donation_id = get_option($id);
+                $donation_id = get_option("lkn_mercadopago_" . $id);
                 if ( ! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
@@ -266,7 +266,7 @@ final class LknMercadopagoForGiveWP {
                 exit; 
                 break;
             case '2':
-                $donation_id = get_option($id);
+                $donation_id = get_option("lkn_mercadopago_" . $id);
                 if ( ! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
@@ -286,7 +286,7 @@ final class LknMercadopagoForGiveWP {
                 exit; 
                 break;
             case '3':
-                $donation_id = get_option($id);
+                $donation_id = get_option("lkn_mercadopago_" . $id);
                 if ( ! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
