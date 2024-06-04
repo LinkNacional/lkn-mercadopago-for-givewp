@@ -34,13 +34,13 @@ You have successfully configured the MercadoPago National Link for GiveWP and al
 
 == Installation ==
 
-1. Look in the sidebar for the WordPress plugins area;
+1. Access GiveWP settings from the WordPress admin dashboard.
 
-2. In installed plugins look for the 'add new' option in the header;
+2. Under "Payment Gateways", locate "Mercado Pago" and configure settings.
 
-3. Click on the 'submit plugin' option in the page title and upload the link-nacional-mercadoPago-for-givewp.zip plugin;
+3. Enter the necessary configuration information, such as Mercado Pago TOKEN and PUBLIC KEY. Additionally, also customize the title and description that will appear at checkout.
 
-4. Click on the 'install now' button and then activate the installed plugin;
+4. Save  your settings.
 
 The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 
@@ -49,8 +49,8 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 1. After installing the plugin, access the WordPress admin dashboard and navigate to the GiveWP settings.
 2. In the sidebar menu, click on "Donations" and then on "Settings".
 3. In the "Payments Gateways" tab, you'll see a list of available payment methods.
-4. Locate “Mercado Pago” in the list of payment methods and activate it.
-6. After activating the desired payment methods, or if you prefer to set them as default, remember to save the changes.
+4. Locate “Mercado Pago” in the list of payment methods and go to settings.
+5. Enter the necessary configuration information, such as Mercado Pago TOKEN and PUBLIC KEY. Additionally, also customize the title and description that will appear at checkout.
 
 == Frequently Asked Questions ==
 
@@ -61,6 +61,10 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 = What do I need to use this plugin? =
 
 * Have installed the GiveWP plugin.
+
+= Is it necessary to make settings? Which are they? =
+
+* Yes, it is necessary to configure the token and public key according to your Mercado Pago account.
 
 == Screenshots ==
 

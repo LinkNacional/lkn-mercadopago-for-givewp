@@ -23,11 +23,11 @@ Link Nacional MercadoPago for GiveWP is now active and ready to use.
 
 ### Payments Settings
 
-1) Search the WordPress sidebar for 'Link Nacional MercadoPago for GiveWP'.
+1) Access GiveWP settings from the WordPress admin dashboard.
 
-2) Download and activate the plugin.
-   
-3) In the GiveWP, navigate to settings, then 'Payments Gateways', and activate 'Mercado Pago'.
+2) Under "Payment Gateways", locate "Mercado Pago" and configure settings.
+
+3) Enter the necessary configuration information, such as Mercado Pago TOKEN and PUBLIC KEY. Additionally, also customize the title and description that will appear at checkout.
 
 4) Save your settings.
 
