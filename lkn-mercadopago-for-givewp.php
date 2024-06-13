@@ -33,14 +33,16 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'LKN_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.0.0' );
+if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_VERSION')) {
+    define( 'LKN_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.0.0' );
+}
 
 if ( ! defined('LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION')) {
     define('LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION', '3.0.0');
@@ -67,7 +69,6 @@ if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME')) {
  * This action is documented in includes/class-lkn-mercadopago-for-givewp-activator.php
  */
 function activate_lkn_mercadopago_for_givewp(): void {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWPActivator.php';
     LknMercadoPagoForGiveWPActivator::activate();
 }
 
@@ -76,7 +77,6 @@ function activate_lkn_mercadopago_for_givewp(): void {
  * This action is documented in includes/class-lkn-mercadopago-for-givewp-deactivator.php
  */
 function deactivate_lkn_mercadopago_for_givewp(): void {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWPDeactivator.php';
     LknMercadoPagoForGiveWPDeactivator::deactivate();
 }
 
@@ -87,7 +87,7 @@ register_deactivation_hook( __FILE__, 'deactivate_lkn_mercadopago_for_givewp' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWP.php';
+// require plugin_dir_path( __FILE__ ) . 'Includes/LknMercadoPagoForGiveWP.php';
 
 /**
  * Begins execution of the plugin.
@@ -100,6 +100,5 @@ require plugin_dir_path( __FILE__ ) . 'includes/LknMercadoPagoForGiveWP.php';
  */
 function run_lkn_mercadopago_for_givewp(): void {
     $plugin = new LknMercadoPagoForGivewp();
-    $plugin->run();
 }
 run_lkn_mercadopago_for_givewp();

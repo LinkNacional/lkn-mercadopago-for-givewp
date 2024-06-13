@@ -44,16 +44,6 @@ abstract class LknMercadoPagoForGiveWPActions {
         $configs['debugAdvanced'] = give_get_option('lkn_getnet_debug_advanced');
         $configs['env'] = give_get_option('lkn_getnet_env_details');
     
-        if ('production' === $configs['env']) {
-            $configs['urlQuery'] = 'https://api.getnet.com.br/';
-            $configs['urlPost'] = 'https://api.getnet.com.br/';
-            $configs['urlCheckout'] = 'https://checkout.getnet.com.br';
-        } else {
-            $configs['urlQuery'] = 'https://api-sandbox.getnet.com.br/';
-            $configs['urlPost'] = 'https://api-sandbox.getnet.com.br/';
-            $configs['urlCheckout'] = 'https://checkout-sandbox.getnet.com.br';
-        }
-    
         $configs['installments'] = self::get_installments();
         $configs['sellerId'] = trim(give_get_option('lkn_getnet_seller_id_setting_field'));
         $configs['clientId'] = trim(give_get_option('lkn_getnet_client_id_setting_field'));
