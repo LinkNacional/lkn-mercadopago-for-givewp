@@ -38,7 +38,7 @@ use WP_REST_Server;
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadopagoForGiveWP {
+final class LknMercadoPagoForGiveWP {
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
@@ -63,7 +63,7 @@ final class LknMercadopagoForGiveWP {
      *
      * @since    1.0.0
      * @access   protected
-     * @var      string    $version    The current version of the plugin.
+     * @var      string();ing    $version    The current version of the plugin.
      */
     protected $version;
 
@@ -84,10 +84,7 @@ final class LknMercadopagoForGiveWP {
         }
         $this->plugin_name = 'lkn-mercadopago-for-givewp';
 
-        $this->load_dependencies();
-        $this->set_locale();
-        $this->define_admin_hooks();
-        $this->define_public_hooks();
+        $this->init();
     }
 
     /**
@@ -109,6 +106,17 @@ final class LknMercadopagoForGiveWP {
     private function load_dependencies(): void {
         $this->loader = new LknMercadoPagoForGiveWPLoader();
     }
+
+    public function init(): void {
+        $dependency = LknMercadoPagoForGiveWPHelper::check_environment();
+        if ($dependency) {
+            $this->load_dependencies();
+            $this->set_locale();
+            $this->define_admin_hooks();
+            $this->define_public_hooks();
+            $this->run();
+        }
+    }    
 
     /**
      * Define the locale for this plugin for internationalization.

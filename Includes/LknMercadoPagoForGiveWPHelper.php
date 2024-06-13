@@ -108,18 +108,18 @@ abstract class LknMercadoPagoForGiveWPHelper {
     final public static function dependency_notice(): void {
         // Admin notice.
         $message = sprintf(
-            '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a>  %5$s %6$s+ %7$s.</div>',
-            'Erro de ativação:',
-            'Você precisa ter o',
-            'https://givewp.com',
-            'Give',
-            'instalado e ativo versão',
-            LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION,
-            'para o plugin Give Getnet ativar.'
+            '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s %6$s+ %7$s.</p></div>',
+            esc_html('Erro de ativação:'),
+            esc_html('Você precisa ter o'),
+            esc_url('https://givewp.com'),
+            esc_html('Give'),
+            esc_html('instalado e ativo versão'),
+            esc_html(LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION),
+            esc_html('para o plugin Mercado Pago para GiveWP ativar')
         );
-
-        echo esc_html($message);
-    } 
+    
+        echo $message;
+    }    
 
     /**
      * Plugin row meta links.
@@ -153,5 +153,38 @@ abstract class LknMercadoPagoForGiveWPHelper {
         $configs['advDebug'] = give_get_option('mercado_pago_advanced_debug');
 
         return $configs;
+    }
+
+    final public static function check_environment() {
+        // Load plugin helper functions.
+        if ( ! function_exists('deactivate_plugins') || ! function_exists('is_plugin_active')) {
+            require_once ABSPATH . '/wp-admin/includes/plugin.php';
+        }
+
+        // Flag to check whether deactivate plugin or not.
+        $is_deactivate_plugin = null;
+
+        $is_give_active = is_plugin_active('give/give.php');
+
+        // Verify if Free plugin is actived.
+        if ( ! $is_give_active) {
+            // Show admin notice.
+            self::dependency_notice();
+
+            $is_deactivate_plugin = true;
+        }
+
+        // Deactivate plugin.
+        if ($is_deactivate_plugin) {
+            deactivate_plugins(LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME);
+
+            if (isset($_GET['activate'])) {
+                unset($_GET['activate']);
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }
