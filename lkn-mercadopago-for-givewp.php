@@ -1,7 +1,7 @@
 <?php
+use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWP;
 use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPActivator;
 use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPDeactivator;
-use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGivewp;
 
 /**
  * The plugin bootstrap file
@@ -99,6 +99,6 @@ register_deactivation_hook( __FILE__, 'deactivate_lkn_mercadopago_for_givewp' );
  * @since    1.0.0
  */
 function run_lkn_mercadopago_for_givewp(): void {
-    $plugin = new LknMercadoPagoForGivewp();
+    $plugin = new LknMercadoPagoForGiveWP();
 }
 run_lkn_mercadopago_for_givewp();
