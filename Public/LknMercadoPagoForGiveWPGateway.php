@@ -41,14 +41,14 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
      * @inheritDoc
      */
     public function getName(): string {
-        return __('Mercado Pago', 'example-give');
+        return 'Mercado Pago';
     }
 
     /**
      * @inheritDoc
      */
     public function getPaymentMethodLabel(): string {
-        return __('Mercado Pago', 'example-give');
+        return 'Mercado Pago';
     }
 
     /**
@@ -328,17 +328,6 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 1: refund the donation with your gateway.
         // Step 2: return a command to complete the refund.
         return new PaymentRefunded();
-    }
-
-    /**
-     * Example request to gateway
-     */
-    private function exampleRequest(array $data): array {
-        return array_merge(array(
-            'success' => true,
-            'transaction_id' => '1234567890',
-            'subscription_id' => '0987654321',
-        ), $data);
     }
 
     /**
