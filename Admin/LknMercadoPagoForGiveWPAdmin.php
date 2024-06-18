@@ -105,14 +105,14 @@ final class LknMercadoPagoForGiveWPAdmin {
                     'name' => 'Token do Mercado Pago (Acess Token)',
                     'id' => 'mercado_pago_token',
                     'desc' => 'Código Token do Mercado Pago',
-                    'type' => 'text',
+                    'type' => 'password',
                 );
 
                 $settings[] = array(
                     'name' => 'Chave Pública do Mercado Pago (Public Key)',
                     'id' => 'mercado_pago_key',
                     'desc' => 'Chave Pública do Mercado Pago',
-                    'type' => 'text',
+                    'type' => 'password',
                 );
 
                 $settings[] = array(
