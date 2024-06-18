@@ -73,7 +73,7 @@ abstract class LknMercadoPagoForGiveWPHelper {
      * @return void
      */
     final public static function delete_old_logs(): void {
-        $configs = LknMercadoPagoForGiveWPActions::get_configs();
+        $configs = LknMercadoPagoForGiveWPHelper::get_configs();
         $logsPath = $configs['basePath'];
 
         foreach (scandir($logsPath) as $logFilename) {
@@ -133,9 +133,9 @@ abstract class LknMercadoPagoForGiveWPHelper {
     final public static function plugin_row_meta($plugin_meta) {
         $new_meta_links['setting'] = sprintf(
             '<a href="%1$s">%2$s</a>',
-            admin_url('edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=lkn_getnet'),
+            admin_url('edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago'),
             'Configurações',
-            'give-getnet'
+            'lkn-mercadopago-for-givewp'
         );
 
         return array_merge($plugin_meta, $new_meta_links);
@@ -143,6 +143,9 @@ abstract class LknMercadoPagoForGiveWPHelper {
 
     final public static function get_configs() {
         $configs = array();
+
+        $configs['basePath'] = LKN_MERCADOPAGO_FOR_GIVEWP_DIR . 'Includes/logs';
+        $configs['base'] = $configs['basePath'] . '/' . gmdate('d.m.Y-H.i.s') . '.log';
 
         $configs['token'] = give_get_option('mercado_pago_token');
         $configs['key'] = give_get_option('mercado_pago_key');

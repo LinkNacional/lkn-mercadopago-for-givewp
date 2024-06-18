@@ -142,6 +142,7 @@ final class LknMercadoPagoForGiveWP {
      */
     private function define_admin_hooks(): void {
         $plugin_admin = new LknMercadoPagoForGiveWPAdmin($this->get_plugin_name(), $this->get_version());
+        $this->loader->add_filter('plugin_action_links_' . LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME, 'Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPHelper', 'plugin_row_meta', 10, 2);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
