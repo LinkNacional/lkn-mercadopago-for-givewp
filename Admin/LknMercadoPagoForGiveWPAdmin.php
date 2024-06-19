@@ -100,68 +100,68 @@ final class LknMercadoPagoForGiveWPAdmin {
                     'type' => 'title',
                     'id' => 'mercado_pago',
                 );
-
+                
                 $settings[] = array(
-                    'name' => 'Token do Mercado Pago (Acess Token)',
+                    'name' => __('Mercado Pago Token', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_token',
-                    'desc' => 'Código Token do Mercado Pago',
+                    'desc' => __('Mercado Pago Token Code.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'password',
                 );
 
                 $settings[] = array(
-                    'name' => 'Chave Pública do Mercado Pago (Public Key)',
+                    'name' => __('Mercado Pago Public Key', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_key',
-                    'desc' => 'Chave Pública do Mercado Pago',
+                    'desc' => __('Mercado Pago Public Key.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'password',
                 );
 
                 $settings[] = array(
-                    'name' => 'Título no Mercado Pago',
+                    'name' => __('Title in Mercado Pago', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_tittle',
-                    'desc' => 'Esse título será utilizado durante o checkout no Mercado Pago',
+                    'desc' => __('This title will be used during checkout in Mercado Pago.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'text',
                 );
 
                 $settings[] = array(
-                    'name' => 'Descrição no Mercado Pago',
+                    'name' => __('Description in Mercado Pago', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_description',
-                    'desc' => 'Essa descrição será utilizada durante o checkout no Mercado Pago',
+                    'desc' => __('This description will be used during checkout in Mercado Pago.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'text',
                 );
 
                 $settings[] = array(
-                    'name' => 'Ambiente de desenvolvimento',
+                    'name' => __('Development Environment', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_ambiente',
-                    'desc' => 'Habilite o ambiente de desenvolvimento desejado: Sandbox ou Produção.',
+                    'desc' => __('Enable the desired development environment: Sandbox or Production.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'radio',
                     'default' => 'producao',
                     'options' => array(
-                        'producao' => 'Produção',
-                        'sandbox' => 'Sandbox',
+                        'producao' => __('Production', 'lkn-mercadopago-for-givewp'),
+                        'sandbox' => __('Sandbox', 'lkn-mercadopago-for-givewp'),
                     ),
                 );
 
                 $settings[] = array(
-                    'name' => 'Depuração',
+                    'name' => __('Debug', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_debug',
-                    'desc' => 'Habilitar ambiente para Debug.',
+                    'desc' => __('Enable Debug environment.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'radio',
                     'default' => 'disabled',
                     'options' => array(
-                        'enabled' => 'Habilitar',
-                        'disabled' => 'Desabilitar',
+                        'enabled' => __('Enable', 'lkn-mercadopago-for-givewp'),
+                        'disabled' => __('Disable', 'lkn-mercadopago-for-givewp'),
                     ),
                 );
                 
                 $settings[] = array(
-                    'name' => 'Modo de Depuração avançada',
+                    'name' => __('Advanced Debug Mode', 'lkn-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_advanced_debug',
-                    'desc' => 'Habilitar ambiente para Debug avançado (CONSOLE - JAVASCRIPT). Atenção habilitar essa opção deixará seu site vulnerável.',
+                    'desc' => __('Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'radio',
                     'default' => 'disabled',
                     'options' => array(
-                        'enabled' => 'Habilitar',
-                        'disabled' => 'Desabilitar',
+                        'enabled' => __('Enable', 'lkn-mercadopago-for-givewp'),
+                        'disabled' => __('Disable', 'lkn-mercadopago-for-givewp'),
                     ),
                 );
 

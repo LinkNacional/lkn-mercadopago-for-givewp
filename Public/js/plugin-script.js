@@ -285,20 +285,20 @@ function checkInputs() {
     if (nomeInput && emailInput && walletContainer) {
         if (!nomeInput.value.trim()) {
             walletContainer.style.display = 'none';
-            warningText.textContent = 'O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir.';
+            warningText.textContent = lknMercadoPagoGlobals.MenssageErrorNameEmpty;
             showMP = false;
         } else if (nomeInput.value.trim().length < 3) {
             walletContainer.style.display = 'none';
-            warningText.textContent = 'O campo Nome deve ter no mínimo 3 letras.';
+            warningText.textContent = lknMercadoPagoGlobals.MenssageErrorName;
             showMP = false;
         } else if (!emailInput.value.trim()) {
             walletContainer.style.display = 'none';
-            warningText.textContent = 'O campo Email está vazio. Por favor, preencha este campo antes de prosseguir.';
+            warningText.textContent = lknMercadoPagoGlobals.MenssageErrorEmailEmpty;
             showMP = false;
 
         } else if (!isValidEmail(emailInput.value)) {
             walletContainer.style.display = 'none';
-            warningText.textContent = 'O campo Email está inválido. Por favor, insira um endereço de email válido.';
+            warningText.textContent = lknMercadoPagoGlobals.MenssageErrorEmailInvalid;
             showMP = false;
         } else {
             walletContainer.style.display = 'block';
@@ -357,7 +357,7 @@ const gateway = {
 
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
             className: "no-fields"
-        }, /*#__PURE__*/React.createElement("h1", null, "Doa\xE7\xE3o de ", /*#__PURE__*/React.createElement("span", {
+        }, /*#__PURE__*/React.createElement("h1", null, lknMercadoPagoGlobals.MenssageDonation, /*#__PURE__*/React.createElement("span", {
             id: "donation-amount"
         })), /*#__PURE__*/React.createElement("h3", {
             id: "warning-text"

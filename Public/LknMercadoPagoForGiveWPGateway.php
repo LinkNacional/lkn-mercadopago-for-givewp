@@ -60,6 +60,10 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
 
         $url_pagina = site_url();
         $configs = LknMercadoPagoForGiveWPHelper::get_configs();
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lkn-mercadopago-for-givewp');
         
         $html = "
         <!DOCTYPE html>    
@@ -261,20 +265,20 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
                     if (nomeInput && emailInput && walletContainer) {
                         if (!nomeInput.value.trim()) {
                             walletContainer.style.display = 'none';
-                            warningText.textContent = 'O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir.';
+                            warningText.textContent = \"{$MenssageErrorNameEmpty}\";
                             showMP = false;
                         } else if (nomeInput.value.trim().length < 3) {
                             walletContainer.style.display = 'none';
-                            warningText.textContent = 'O campo Nome deve ter no mínimo 3 letras.';
+                            warningText.textContent = \"{$MenssageErrorName}\";
                             showMP = false;
                         } else if (!emailInput.value.trim()) {
                             walletContainer.style.display = 'none';
-                            warningText.textContent = 'O campo Email está vazio. Por favor, preencha este campo antes de prosseguir.';
+                            warningText.textContent = \"{$MenssageErrorEmailEmpty}\";
                             showMP = false;
                 
                         } else if (!isValidEmail(emailInput.value)) {
                             walletContainer.style.display = 'none';
-                            warningText.textContent = 'O campo Email está inválido. Por favor, insira um endereço de email válido.';
+                            warningText.textContent = \"{$MenssageErrorEmailInvalid}\";
                             showMP = false;
                         } else {
                             walletContainer.style.display = 'block';
@@ -314,7 +318,7 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
     
             DonationNote::create(array(
                 'donationId' => $donation->id,
-                'content' => sprintf(esc_html__('Donation failed. Reason: %s', 'example-give'), $errorMessage) // Translators: %s é um espaço reservado para a mensagem de erro
+                'content' => esc_html('Falha na doação. Razão: ' . $errorMessage) // Translators: %s é um espaço reservado para a mensagem de erro
             ));
     
             throw new PaymentGatewayException(esc_html($errorMessage));
@@ -354,5 +358,19 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         $configs = LknMercadoPagoForGiveWPHelper::get_configs();
 
         wp_localize_script(self::id(), 'configData', $configs);
+
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lkn-mercadopago-for-givewp');
+        $MenssageDonation = __('Donation of ', 'lkn-mercadopago-for-givewp');
+
+        wp_localize_script(self::id(), 'lknMercadoPagoGlobals', array(
+            'MenssageErrorNameEmpty' => $MenssageErrorNameEmpty,
+            'MenssageErrorName' => $MenssageErrorName,
+            'MenssageErrorEmailEmpty' => $MenssageErrorEmailEmpty,
+            'MenssageErrorEmailInvalid' => $MenssageErrorEmailInvalid,
+            'MenssageDonation' => $MenssageDonation,
+        ));
     }
 }
