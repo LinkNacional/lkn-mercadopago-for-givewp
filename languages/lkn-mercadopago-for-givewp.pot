@@ -1,0 +1,72 @@
+# Link Nacional MercadoPago for GiveWP
+msgid "Mercado Pago"
+msgstr ""
+
+msgid "Mercado Pago Token (Access Token)"
+msgstr ""
+
+msgid "Mercado Pago Token Code."
+msgstr ""
+
+msgid "Mercado Pago Public Key"
+msgstr ""
+
+msgid "Mercado Pago Public Key."
+msgstr ""
+
+msgid "Title in Mercado Pago"
+msgstr ""
+
+msgid "This title will be used during checkout in Mercado Pago."
+msgstr ""
+
+msgid "Description in Mercado Pago"
+msgstr ""
+
+msgid "This description will be used during checkout in Mercado Pago."
+msgstr ""
+
+msgid "Development Environment"
+msgstr ""
+
+msgid "Enable the desired development environment: Sandbox or Production."
+msgstr ""
+
+msgid "Production"
+msgstr ""
+
+msgid "Sandbox"
+msgstr ""
+
+msgid "Debug"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid "Advanced Debug Mode"
+msgstr ""
+
+msgid "Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable."
+msgstr ""
+
+msgid "Enable Debug environment."
+msgstr ""
+
+msgid "The Name field is empty. Please fill in this field before proceeding."
+msgstr ""
+
+msgid "The Name field must be at least 3 letters."
+msgstr ""
+
+msgid "The Email field is empty. Please fill in this field before proceeding."
+msgstr ""
+
+msgid "The Email field is invalid. Please enter a valid email address."
+msgstr ""
+
+msgid "Donation of "
+msgstr ""

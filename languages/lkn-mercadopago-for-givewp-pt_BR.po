@@ -1,0 +1,72 @@
+# Link Nacional MercadoPago for GiveWP
+msgid "Mercado Pago"
+msgstr "Mercado Pago"
+
+msgid "Mercado Pago Token (Access Token)"
+msgstr "Token do Mercado Pago (Acess Token)"
+
+msgid "Mercado Pago Token Code."
+msgstr "Código Token do Mercado Pago."
+
+msgid "Mercado Pago Public Key (Public Key)"
+msgstr "Chave Pública do Mercado Pago (Public Key)"
+
+msgid "Mercado Pago Public Key."
+msgstr "Chave Pública do Mercado Pago."
+
+msgid "Title in Mercado Pago"
+msgstr "Título no Mercado Pago"
+
+msgid "This title will be used during checkout in Mercado Pago."
+msgstr "Esse título será utilizado durante o checkout no Mercado Pago."
+
+msgid "Description in Mercado Pago"
+msgstr "Descrição no Mercado Pago"
+
+msgid "This description will be used during checkout in Mercado Pago."
+msgstr "Essa descrição será utilizada durante o checkout no Mercado Pago."
+
+msgid "Development Environment"
+msgstr "Ambiente de desenvolvimento"
+
+msgid "Enable the desired development environment: Sandbox or Production."
+msgstr "Habilite o ambiente de desenvolvimento desejado: Sandbox ou Produção."
+
+msgid "Production"
+msgstr "Produção"
+
+msgid "Sandbox"
+msgstr "Sandbox"
+
+msgid "Debug"
+msgstr "Depuração"
+
+msgid "Enable"
+msgstr "Habilitar"
+
+msgid "Disable"
+msgstr "Desabilitar"
+
+msgid "Advanced Debug Mode"
+msgstr "Modo de Depuração avançada"
+
+msgid "Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable."
+msgstr "Habilitar ambiente para Debug avançado (CONSOLE - JAVASCRIPT). Atenção habilitar essa opção deixará seu site vulnerável."
+
+msgid "Enable Debug environment."
+msgstr "Habilitar ambiente para Debug."
+
+msgid "The Name field is empty. Please fill in this field before proceeding."
+msgstr "O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir."
+
+msgid "The Name field must be at least 3 letters."
+msgstr "O campo Nome deve ter no mínimo 3 letras."
+
+msgid "The Email field is empty. Please fill in this field before proceeding."
+msgstr "O campo Email está vazio. Por favor, preencha este campo antes de prosseguir."
+
+msgid "The Email field is invalid. Please enter a valid email address."
+msgstr "O campo Email está inválido. Por favor, insira um endereço de email válido."
+
+msgid "Donation of "
+msgstr "Doação de "
