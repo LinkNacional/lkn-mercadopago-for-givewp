@@ -337,33 +337,47 @@ const LknMercadoPagoForGiveWP = {
     },
     // Função onde os campos HTML são criados
     Fields() {
-        if (!hasRenderedComponents) {
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function () {
-                    renderComponentsOnce();
-                });
-            } else {
-                renderComponentsOnce();
-            }
-        } else {
-            //observeButtonChanges já está cumprindo a função de recarregar o formulário
-            updateDonationAmount();
 
-            const oldButton = document.querySelector('#wallet_container');
-            if (oldButton) {
-                oldButton.remove();
-            }
+        function lknMercadoPagoprintFrontendNotice(title, message) {
+            return /*#__PURE__*/React.createElement("div", {
+                className: "error-notice"
+            }, /*#__PURE__*/React.createElement("strong", null, title), " ", message);
         }
 
-        return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
-            className: "no-fields"
-        }, /*#__PURE__*/React.createElement("h1", null, lknMercadoPagoGlobals.MenssageDonation, /*#__PURE__*/React.createElement("span", {
-            id: "donation-amount"
-        })), /*#__PURE__*/React.createElement("h3", {
-            id: "warning-text"
-        }), /*#__PURE__*/React.createElement("div", {
-            id: "wallet_container"
-        })));
+        if (lknMercadoPagoGlobals.token == 'false' ) {
+            return lknMercadoPagoprintFrontendNotice('Erro:', lknMercadoPagoGlobals.MenssageErrorToken);
+        } else if (lknMercadoPagoGlobals.publicKey == 'false' ) {
+            return lknMercadoPagoprintFrontendNotice('Erro:', lknMercadoPagoGlobals.MenssageErrorPublicKey);
+        } else {
+
+            if (!hasRenderedComponents) {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        renderComponentsOnce();
+                    });
+                } else {
+                    renderComponentsOnce();
+                }
+            } else {
+                //observeButtonChanges já está cumprindo a função de recarregar o formulário
+                updateDonationAmount();
+
+                const oldButton = document.querySelector('#wallet_container');
+                if (oldButton) {
+                    oldButton.remove();
+                }
+            }
+
+            return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
+                className: "no-fields"
+            }, /*#__PURE__*/React.createElement("h1", null, lknMercadoPagoGlobals.MenssageDonation, /*#__PURE__*/React.createElement("span", {
+                id: "donation-amount"
+            })), /*#__PURE__*/React.createElement("h3", {
+                id: "warning-text"
+            }), /*#__PURE__*/React.createElement("div", {
+                id: "wallet_container"
+            })));
+        }
     }
 };
 window.givewp.gateways.register(LknMercadoPagoForGiveWP);

@@ -64,7 +64,25 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lkn-mercadopago-for-givewp');
         $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
         $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lkn-mercadopago-for-givewp');
-        
+
+        if (empty($configs['token']) && strlen($configs['token']) <= 5) {
+            Give()->notices->print_frontend_notice(
+                sprintf(
+                    '%1$s %2$s',
+                    esc_html__('Erro:', 'give'),
+                    esc_html__('Mercado Pago Token was not provided or is invalid!', 'give')
+                )
+            );
+        } elseif (empty($configs['key']) && strlen($configs['token']) <= 5) {
+            Give()->notices->print_frontend_notice(
+                sprintf(
+                    '%1$s %2$s',
+                    esc_html__('Erro:', 'give'),
+                    esc_html__('Mercado Pago Public Key was not provided or is invalid!', 'give')
+                )
+            );
+        } 
+
         $html = "
         <!DOCTYPE html>    
         <body>
@@ -364,6 +382,11 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
         $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lkn-mercadopago-for-givewp');
         $MenssageDonation = __('Donation of ', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorToken =__('Mercado Pago Token was not provided or is invalid!');
+        $MenssageErrorPublicKey =__('Mercado Pago Public Key was not provided or is invalid!');
+
+        $hastoken = !empty($configs['token']) && strlen($configs['token']) > 5 ? 'true' : 'false';
+        $haspublicKey = !empty($configs['key']) && strlen($configs['key']) > 5 ? 'true' : 'false';
 
         wp_localize_script(self::id(), 'lknMercadoPagoGlobals', array(
             'MenssageErrorNameEmpty' => $MenssageErrorNameEmpty,
@@ -371,6 +394,10 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
             'MenssageErrorEmailEmpty' => $MenssageErrorEmailEmpty,
             'MenssageErrorEmailInvalid' => $MenssageErrorEmailInvalid,
             'MenssageDonation' => $MenssageDonation,
+            'MenssageErrorToken' => $MenssageErrorToken,
+            'MenssageErrorPublicKey' => $MenssageErrorPublicKey,
+            'token' => $hastoken,
+            'publicKey' => $haspublicKey
         ));
     }
 }
