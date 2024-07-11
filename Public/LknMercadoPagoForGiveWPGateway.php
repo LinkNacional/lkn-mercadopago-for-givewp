@@ -357,25 +357,9 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
      * @since 3.0.0
      */
     public function enqueueScript(int $formId): void {
-        // wp_enqueue_script(
-        //     self::id(),
-        //     LKN_MERCADOPAGO_FOR_GIVEWP_URL . 'Public/js/pluginScript.js',
-        //     array('wp-element', 'wp-i18n'),
-        //     LKN_MERCADOPAGO_FOR_GIVEWP_VERSION,
-        //     true
-        // );
-        
-        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, true );
-
-        wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, false);
-
-        $url_pagina = site_url();
-        wp_localize_script(self::id(), 'urlPag', $url_pagina);
-        wp_localize_script(self::id(), 'idUnique', uniqid());
 
         $configs = LknMercadoPagoForGiveWPHelper::get_configs();
-
-        wp_localize_script(self::id(), 'configData', $configs);
+        $url_pagina = site_url();
 
         $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
         $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lkn-mercadopago-for-givewp');
@@ -385,8 +369,21 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         $MenssageErrorToken =__('Mercado Pago Token was not provided or is invalid!');
         $MenssageErrorPublicKey =__('Mercado Pago Public Key was not provided or is invalid!');
 
-        $hastoken = !empty($configs['token']) && strlen($configs['token']) > 5 ? 'true' : 'false';
-        $haspublicKey = !empty($configs['key']) && strlen($configs['key']) > 5 ? 'true' : 'false';
+        $hastoken = !empty($configs['token']) && strlen($configs['token']) > 10 ? 'true' : 'false';
+        $haspublicKey = !empty($configs['key']) && strlen($configs['key']) > 10 ? 'true' : 'false';
+        
+        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, true );
+        wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKN_MERCADOPAGO_FOR_GIVEWP_VERSION, false);
+
+        wp_localize_script(self::id(), 'urlPag', $url_pagina);
+        wp_localize_script(self::id(), 'idUnique', uniqid());
+        wp_localize_script(self::id(), 'configData', array(
+            'advDebug' => $configs['advDebug'],
+            'key' => $configs['key'],
+            'tittle' => $configs['tittle'],
+            'description' => $configs['description'],
+            'token' => $configs['token']
+        ));
 
         wp_localize_script(self::id(), 'lknMercadoPagoGlobals', array(
             'MenssageErrorNameEmpty' => $MenssageErrorNameEmpty,

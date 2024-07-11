@@ -34,8 +34,6 @@ give_delete_option('mercado_pago_token');
 give_delete_option('mercado_pago_key');
 give_delete_option('mercado_pago_tittle');
 give_delete_option('mercado_pago_description');
-give_delete_option('mercado_pago_ambiente');
-give_delete_option('mercado_pago_debug');
 give_delete_option('mercado_pago_advanced_debug');
 
 $lkn_array_remove_options = give_get_settings();

@@ -102,16 +102,16 @@ final class LknMercadoPagoForGiveWPAdmin {
                 );
                 
                 $settings[] = array(
-                    'name' => __('Mercado Pago Token', 'lkn-mercadopago-for-givewp'),
-                    'id' => 'mercado_pago_token',
-                    'desc' => __('Mercado Pago Token Code.', 'lkn-mercadopago-for-givewp'),
+                    'name' => __('Mercado Pago Public Key', 'lkn-mercadopago-for-givewp'),
+                    'id' => 'mercado_pago_key',
+                    'desc' => __('Mercado Pago Public Key.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'password',
                 );
 
                 $settings[] = array(
-                    'name' => __('Mercado Pago Public Key', 'lkn-mercadopago-for-givewp'),
-                    'id' => 'mercado_pago_key',
-                    'desc' => __('Mercado Pago Public Key.', 'lkn-mercadopago-for-givewp'),
+                    'name' => __('Mercado Pago Token', 'lkn-mercadopago-for-givewp'),
+                    'id' => 'mercado_pago_token',
+                    'desc' => __('Mercado Pago Token Code.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'password',
                 );
 
@@ -127,30 +127,6 @@ final class LknMercadoPagoForGiveWPAdmin {
                     'id' => 'mercado_pago_description',
                     'desc' => __('This description will be used during checkout in Mercado Pago.', 'lkn-mercadopago-for-givewp'),
                     'type' => 'text',
-                );
-
-                $settings[] = array(
-                    'name' => __('Development Environment', 'lkn-mercadopago-for-givewp'),
-                    'id' => 'mercado_pago_ambiente',
-                    'desc' => __('Enable the desired development environment: Sandbox or Production.', 'lkn-mercadopago-for-givewp'),
-                    'type' => 'radio',
-                    'default' => 'producao',
-                    'options' => array(
-                        'producao' => __('Production', 'lkn-mercadopago-for-givewp'),
-                        'sandbox' => __('Sandbox', 'lkn-mercadopago-for-givewp'),
-                    ),
-                );
-
-                $settings[] = array(
-                    'name' => __('Debug', 'lkn-mercadopago-for-givewp'),
-                    'id' => 'mercado_pago_debug',
-                    'desc' => __('Enable Debug environment.', 'lkn-mercadopago-for-givewp'),
-                    'type' => 'radio',
-                    'default' => 'disabled',
-                    'options' => array(
-                        'enabled' => __('Enable', 'lkn-mercadopago-for-givewp'),
-                        'disabled' => __('Disable', 'lkn-mercadopago-for-givewp'),
-                    ),
                 );
                 
                 $settings[] = array(

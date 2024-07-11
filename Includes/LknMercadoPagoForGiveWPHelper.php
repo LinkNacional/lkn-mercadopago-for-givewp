@@ -151,8 +151,6 @@ abstract class LknMercadoPagoForGiveWPHelper {
         $configs['key'] = give_get_option('mercado_pago_key');
         $configs['tittle'] = give_get_option('mercado_pago_tittle');
         $configs['description'] = give_get_option('mercado_pago_description');
-        $configs['ambiente'] = give_get_option('mercado_pago_ambiente');
-        $configs['debug'] = give_get_option('mercado_pago_debug');
         $configs['advDebug'] = give_get_option('mercado_pago_advanced_debug');
 
         return $configs;
