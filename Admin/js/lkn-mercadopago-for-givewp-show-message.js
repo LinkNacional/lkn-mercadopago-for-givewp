@@ -1,5 +1,3 @@
-console.log("teste");
-
 document.addEventListener("DOMContentLoaded", () => {
     if (window.location.href === varsPhp.admin_url) {
         initialize();
@@ -8,9 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initialize() {
     const input = document.querySelector("#mercado_pago_token");
-    if (input) {
+    const input2 = document.querySelector("#mercado_pago_key");
+
+    if (input && input2) {
         const text = formatValue(input.value);
+        const text2 = formatValue(input2.value);
         input.parentElement.insertAdjacentHTML("beforeend", `<div><strong>${text}</strong></div>`);
+        input2.parentElement.insertAdjacentHTML("beforeend", `<div><strong>${text2}</strong></div>`);
     }
 }
 
