@@ -12,7 +12,7 @@ use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPDeactivator;
  * that starts the plugin.
  *
  * @link              https://https://www.linknacional.com.br/wordpress/givewp/
- * @since             1.0.0
+ * @since             1.0.1
  * @package           Lkn_Mercadopago_For_Givewp
  *
  * @wordpress-plugin
@@ -41,7 +41,7 @@ require_once 'vendor/autoload.php';
  * Rename this for your plugin and update it as you release new versions.
  */
 if ( ! defined('LKN_MERCADOPAGO_FOR_GIVEWP_VERSION')) {
-    define( 'LKN_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.0.0' );
+    define( 'LKN_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.0.1' );
 }
 
 if ( ! defined('LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION')) {
@@ -87,7 +87,6 @@ register_deactivation_hook( __FILE__, 'deactivate_lkn_mercadopago_for_givewp' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-// require plugin_dir_path( __FILE__ ) . 'Includes/LknMercadoPagoForGiveWP.php';
 
 /**
  * Begins execution of the plugin.
