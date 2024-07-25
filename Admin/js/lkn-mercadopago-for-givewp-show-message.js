@@ -17,7 +17,7 @@ function initialize() {
 function formatValue(value) {
     const formatedValue = value.split("-");
     switch (formatedValue[0].toUpperCase()) {
-        case "APP":
+        case "APP_USR":
             return "Ambiente Produção";
         case "TEST":
             return "Ambiente Sandbox";
