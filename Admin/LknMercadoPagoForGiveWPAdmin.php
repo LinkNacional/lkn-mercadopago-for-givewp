@@ -77,7 +77,7 @@ final class LknMercadoPagoForGiveWPAdmin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts(): void {
+    public function enqueue_scripts($hook): void {
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -89,7 +89,11 @@ final class LknMercadoPagoForGiveWPAdmin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lkn-mercadopago-for-givewp-admin.js', array('jquery'), $this->version, false );
+        wp_enqueue_script("lkn-mercadopago-givewp-show-message.js", plugin_dir_url(__FILE__) . 'js/lkn-mercadopago-for-givewp-show-message.js', null, $this->version, false );
+
+        wp_localize_script("lkn-mercadopago-givewp-show-message.js", "varsPhp", array(
+            "admin_url" => admin_url("edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago")
+        ));
     }
 
     public function add_setting_into_new_section($settings) {
