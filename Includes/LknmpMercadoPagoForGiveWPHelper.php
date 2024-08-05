@@ -1,6 +1,6 @@
 <?php
 
-namespace Lkn\LknMercadoPagoForGiveWp\Includes;
+namespace Lknmp\MercadoPagoForGiveWp\Includes;
 use DateTime;
 
 /**
@@ -23,7 +23,7 @@ use DateTime;
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-abstract class LknMercadoPagoForGiveWPHelper {
+abstract class LknmpMercadoPagoForGiveWPHelper {
     /**
      * @since 1.0.0
      *
@@ -73,7 +73,7 @@ abstract class LknMercadoPagoForGiveWPHelper {
      * @return void
      */
     final public static function delete_old_logs(): void {
-        $configs = LknMercadoPagoForGiveWPHelper::get_configs();
+        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
         $logsPath = $configs['basePath'];
 
         foreach (scandir($logsPath) as $logFilename) {
@@ -135,7 +135,7 @@ abstract class LknMercadoPagoForGiveWPHelper {
             '<a href="%1$s">%2$s</a>',
             admin_url('edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago'),
             'Configurações',
-            'lkn-mercadopago-for-givewp'
+            'lknmp-mercadopago-for-givewp'
         );
 
         return array_merge($plugin_meta, $new_meta_links);

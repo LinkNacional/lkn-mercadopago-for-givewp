@@ -1,9 +1,9 @@
 <?php
 
-namespace Lkn\LknMercadoPagoForGiveWp\Includes;
+namespace Lknmp\MercadoPagoForGiveWp\Includes;
 
 /**
- * Fired during plugin activation
+ * Fired during plugin deactivation
  *
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
@@ -13,16 +13,16 @@ namespace Lkn\LknMercadoPagoForGiveWp\Includes;
  */
 
 /**
- * Fired during plugin activation.
+ * Fired during plugin deactivation.
  *
- * This class defines all code necessary to run during the plugin's activation.
+ * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
  * @package    Lkn_Mercadopago_For_Givewp
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadoPagoForGiveWPActivator {
+final class LknmpMercadoPagoForGiveWPDeactivator {
     /**
      * Short Description. (use period)
      *
@@ -30,6 +30,6 @@ final class LknMercadoPagoForGiveWPActivator {
      *
      * @since    1.0.0
      */
-    public static function activate(): void {
+    public static function deactivate(): void {
     }
 }

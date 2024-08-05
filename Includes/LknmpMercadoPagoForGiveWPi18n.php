@@ -1,6 +1,6 @@
 <?php
 
-namespace Lkn\LknMercadoPagoForGiveWp\Includes;
+namespace Lknmp\MercadoPagoForGiveWp\Includes;
 /**
  * Define the internationalization functionality
  *
@@ -25,7 +25,7 @@ namespace Lkn\LknMercadoPagoForGiveWp\Includes;
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadoPagoForGiveWPi18n {
+final class LknmpMercadoPagoForGiveWPi18n {
     /**
      * Load the plugin text domain for translation.
      *
@@ -33,7 +33,7 @@ final class LknMercadoPagoForGiveWPi18n {
      */
     public function load_plugin_textdomain(): void {
         load_plugin_textdomain(
-            'lkn-mercadopago-for-givewp',
+            'lknmp-mercadopago-for-givewp',
             false,
             dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
         );

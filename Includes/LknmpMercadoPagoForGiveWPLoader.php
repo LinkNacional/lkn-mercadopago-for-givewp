@@ -1,6 +1,6 @@
 <?php
 
-namespace Lkn\LknMercadoPagoForGiveWp\Includes;
+namespace Lknmp\MercadoPagoForGiveWp\Includes;
 /**
  * Register all actions and filters for the plugin
  *
@@ -22,7 +22,7 @@ namespace Lkn\LknMercadoPagoForGiveWp\Includes;
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadoPagoForGiveWPLoader {
+final class LknmpMercadoPagoForGiveWPLoader {
     /**
      * The array of actions registered with WordPress.
      *

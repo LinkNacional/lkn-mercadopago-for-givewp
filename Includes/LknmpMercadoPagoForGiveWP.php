@@ -1,11 +1,11 @@
 <?php
 
-namespace Lkn\LknMercadoPagoForGiveWp\Includes;
+namespace Lknmp\MercadoPagoForGiveWp\Includes;
 
 use Give\Donations\Models\Donation;
 use Give\Donations\ValueObjects\DonationStatus;
-use Lkn\LknMercadoPagoForGiveWp\Admin\LknMercadoPagoForGiveWPAdmin;
-use Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPPublic;
+use Lknmp\MercadoPagoForGiveWp\Admin\LknmpMercadoPagoForGiveWPAdmin;
+use Lknmp\MercadoPagoForGiveWp\PublicView\LknmpMercadoPagoForGiveWPPublic;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -38,14 +38,14 @@ use WP_REST_Server;
  * @subpackage Lkn_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadoPagoForGiveWP {
+final class LknmpMercadoPagoForGiveWP {
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
      *
      * @since    1.0.0
      * @access   protected
-     * @var      LknMercadoPagoForGiveWPLoader    $loader    Maintains and registers all hooks for the plugin.
+     * @var      LknmpMercadoPagoForGiveWPLoader    $loader    Maintains and registers all hooks for the plugin.
      */
     protected $loader;
 
@@ -82,7 +82,7 @@ final class LknMercadoPagoForGiveWP {
         } else {
             $this->version = '1.0.0';
         }
-        $this->plugin_name = 'lkn-mercadopago-for-givewp';
+        $this->plugin_name = 'lknmp-mercadopago-for-givewp';
 
         $this->init();
     }
@@ -104,11 +104,11 @@ final class LknMercadoPagoForGiveWP {
      * @access   private
      */
     private function load_dependencies(): void {
-        $this->loader = new LknMercadoPagoForGiveWPLoader();
+        $this->loader = new LknmpMercadoPagoForGiveWPLoader();
     }
 
     public function init(): void {
-        $dependency = LknMercadoPagoForGiveWPHelper::check_environment();
+        $dependency = LknmpMercadoPagoForGiveWPHelper::check_environment();
         if ($dependency) {
             $this->load_dependencies();
             $this->set_locale();
@@ -128,7 +128,7 @@ final class LknMercadoPagoForGiveWP {
      * @access   private
      */
     private function set_locale(): void {
-        $plugin_i18n = new LknMercadoPagoForGiveWPi18n();
+        $plugin_i18n = new LknmpMercadoPagoForGiveWPi18n();
 
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
     }
@@ -141,8 +141,8 @@ final class LknMercadoPagoForGiveWP {
      * @access   private
      */
     private function define_admin_hooks(): void {
-        $plugin_admin = new LknMercadoPagoForGiveWPAdmin($this->get_plugin_name(), $this->get_version());
-        $this->loader->add_filter('plugin_action_links_' . LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME, 'Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPHelper', 'plugin_row_meta', 10, 2);
+        $plugin_admin = new LknmpMercadoPagoForGiveWPAdmin($this->get_plugin_name(), $this->get_version());
+        $this->loader->add_filter('plugin_action_links_' . LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME, 'Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper', 'plugin_row_meta', 10, 2);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
@@ -160,7 +160,7 @@ final class LknMercadoPagoForGiveWP {
      * @access   private
      */
     private function define_public_hooks(): void {
-        $plugin_public = new LknMercadoPagoForGiveWPPublic($this->get_plugin_name(), $this->get_version());
+        $plugin_public = new LknmpMercadoPagoForGiveWPPublic($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
@@ -191,7 +191,7 @@ final class LknMercadoPagoForGiveWP {
      * The reference to the class that orchestrates the hooks with the plugin.
      *
      * @since     1.0.0
-     * @return    LknMercadoPagoForGiveWPLoader    Orchestrates the hooks of the plugin.
+     * @return    LknmpMercadoPagoForGiveWPLoader    Orchestrates the hooks of the plugin.
      */
     public function get_loader() {
         return $this->loader;
@@ -217,7 +217,7 @@ final class LknMercadoPagoForGiveWP {
      * @return void
      */ 
     public function new_gateway_register($paymentGatewayRegister) :void {
-        $paymentGatewayRegister->registerGateway('Lkn\LknMercadoPagoForGiveWp\PublicView\LknMercadoPagoForGiveWPGateway');
+        $paymentGatewayRegister->registerGateway('Lknmp\MercadoPagoForGiveWp\PublicView\LknmpMercadoPagoForGiveWPGateway');
     }
 
     final public function mercadopago_get_endpoint_payments() {

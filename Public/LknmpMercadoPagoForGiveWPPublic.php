@@ -1,5 +1,5 @@
 <?php
-namespace Lkn\LknMercadoPagoForGiveWp\PublicView;
+namespace Lknmp\MercadoPagoForGiveWp\PublicView;
 
 /**
  * The public-facing functionality of the plugin.
@@ -21,7 +21,7 @@ namespace Lkn\LknMercadoPagoForGiveWp\PublicView;
  * @subpackage Lkn_Mercadopago_For_Givewp/public
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadoPagoForGiveWPPublic {
+final class LknmpMercadoPagoForGiveWPPublic {
     /**
      * The ID of this plugin.
      *
@@ -69,7 +69,7 @@ final class LknMercadoPagoForGiveWPPublic {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lkn-mercadopago-for-givewp-public.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-mercadopago-for-givewp-public.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -89,7 +89,7 @@ final class LknMercadoPagoForGiveWPPublic {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lkn-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
 
         wp_enqueue_script( $this->plugin_name . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), $this->version, false);
     }

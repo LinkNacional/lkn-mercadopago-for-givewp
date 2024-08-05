@@ -1,6 +1,6 @@
 <?php
 
-namespace Lkn\LknMercadoPagoForGiveWp\PublicView;
+namespace Lknmp\MercadoPagoForGiveWp\PublicView;
 
 use Give\Donations\Models\Donation;
 use Give\Donations\Models\DonationNote;
@@ -11,12 +11,12 @@ use Give\Framework\PaymentGateways\Commands\PaymentPending;
 use Give\Framework\PaymentGateways\Commands\PaymentRefunded;
 use Give\Framework\PaymentGateways\Exceptions\PaymentGatewayException;
 use Give\Framework\PaymentGateways\PaymentGateway;
-use Lkn\LknMercadoPagoForGiveWp\Includes\LknMercadoPagoForGiveWPHelper;
+use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
 
 /**
  * @inheritDoc
  */
-final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
+final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
     public $idUnique;
 
     public function __construct() {
@@ -59,11 +59,11 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
         $url_pagina = site_url();
-        $configs = LknMercadoPagoForGiveWPHelper::get_configs();
-        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
-        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lkn-mercadopago-for-givewp');
-        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
-        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lkn-mercadopago-for-givewp');
+        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-mercadopago-for-givewp');
 
         if (empty($configs['token']) && strlen($configs['token']) <= 5) {
             Give()->notices->print_frontend_notice(
@@ -358,14 +358,14 @@ final class LknMercadoPagoForGiveWPGateway extends PaymentGateway {
      */
     public function enqueueScript(int $formId): void {
 
-        $configs = LknMercadoPagoForGiveWPHelper::get_configs();
+        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
         $url_pagina = site_url();
 
-        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
-        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lkn-mercadopago-for-givewp');
-        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lkn-mercadopago-for-givewp');
-        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lkn-mercadopago-for-givewp');
-        $MenssageDonation = __('Donation of ', 'lkn-mercadopago-for-givewp');
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-mercadopago-for-givewp');
+        $MenssageDonation = __('Donation of ', 'lknmp-mercadopago-for-givewp');
         $MenssageErrorToken =__('Mercado Pago Token was not provided or is invalid!');
         $MenssageErrorPublicKey =__('Mercado Pago Public Key was not provided or is invalid!');
 
