@@ -5,20 +5,24 @@ Tags: givewp, payment, mercadopago, card
 Requires at least: 3.0.1
 Tested up to: 1.0.0
 Stable tag: 1.0.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 7.4
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Link Nacional MercadoPago for GiveWP 
 
 == Description ==
 
-The MercadoPago Payment Gateway for GiveWP seamlessly integrates MercadoPago with the GiveWP donation plugin for WordPress, providing a secure and efficient solution for receiving online donations. This plugin supports multiple payment methods, recurring donations, and customizable donation forms. Enhance your donor's experience with a trusted payment gateway, boost your fundraising efforts, and manage donations effortlessly with detailed reporting and a user-friendly interface.
+The [MercadoPago Payment Gateway for GiveWP](https://www.linknacional.com.br/wordpress/givewp/) seamlessly integrates MercadoPago with the GiveWP donation plugin for WordPress, providing a secure and efficient solution for receiving online donations. This plugin supports multiple payment methods, recurring donations, and customizable donation forms. Enhance your donor's experience with a trusted payment gateway, boost your fundraising efforts, and manage donations effortlessly with detailed reporting and a user-friendly interface.
 
-O [MercadoPago](https://www.mercadopago.com.br) is a leading online payment solution in Latin America, offering a comprehensive suite of services for secure and convenient financial transactions. As the fintech arm of Mercado Libre, one of the region’s largest e-commerce platforms, Mercado Pago provides a reliable and user-friendly payment gateway for businesses and individuals alike.
+[MercadoPago](https://www.mercadopago.com.br) is a leading online payment solution in Latin America, offering a comprehensive suite of services for secure and convenient financial transactions. As the fintech arm of Mercado Libre, one of the region’s largest e-commerce platforms, Mercado Pago provides a reliable and user-friendly payment gateway for businesses and individuals alike.
 
 **Dependencies**
 
-Link Nacional MercadoPago for GiveWP plugin is dependent on GiveWP plugin, please make sure GiveWP is installed and properly configured before starting Link Nacional MercadoPago for GiveWP installation.
+[GiveWP](https://wordpress.org/plugins/give/) is needed for the plugin to work.
+
+JS Libraries used:
+[MercadoPago sdk-js](https://github.com/mercadopago/sdk-js)
 
 **User instructions**
 
@@ -56,13 +60,13 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 
 = What is the license of the plugin? =
 
-* This plugin is released under a GPLv2 license.
+* This plugin is released under a GPLv3 license.
 
 = What do I need to use this plugin? =
 
 * Have installed the GiveWP plugin.
 
-= Is it necessary to make settings? Which are they? =
+= Is it necessary to edit the settings? Which are they? =
 
 * Yes, it is necessary to configure the token and public key according to your Mercado Pago account.
 
