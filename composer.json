@@ -1,12 +1,12 @@
 {
-    "name": "lkn/lkn-mercadopago-for-givewp",
+    "name": "lknmp/mercadopago-for-givewp",
     "type": "project",
     "license": "Proprietary",
     "autoload": {
         "psr-4": {
-            "Lkn\\LknMercadoPagoForGiveWp\\Includes\\": "Includes/",
-            "Lkn\\LknMercadoPagoForGiveWp\\Admin\\": "Admin/",
-            "Lkn\\LknMercadoPagoForGiveWp\\PublicView\\": "Public/"
+            "Lknmp\\MercadoPagoForGiveWp\\Includes\\": "Includes/",
+            "Lknmp\\MercadoPagoForGiveWp\\Admin\\": "Admin/",
+            "Lknmp\\MercadoPagoForGiveWp\\PublicView\\": "Public/"
         }
     },
     "authors": [
