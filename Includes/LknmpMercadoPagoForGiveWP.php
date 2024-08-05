@@ -17,7 +17,7 @@ use WP_REST_Server;
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://https://www.linknacional.com.br/wordpress/givewp/
+ * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
  * @package    Lknmp_Mercadopago_For_Givewp

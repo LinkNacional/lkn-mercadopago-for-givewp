@@ -4,7 +4,7 @@ namespace Lknmp\MercadoPagoForGiveWp\Admin;
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://https://www.linknacional.com.br/wordpress/givewp/
+ * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
  * @package    Lknmp_Mercadopago_For_Givewp
