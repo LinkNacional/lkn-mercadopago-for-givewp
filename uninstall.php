@@ -22,7 +22,7 @@
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
+ * @package    Lknmp_Mercadopago_For_Givewp
  */
 
 // If uninstall not called from WordPress, then exit.

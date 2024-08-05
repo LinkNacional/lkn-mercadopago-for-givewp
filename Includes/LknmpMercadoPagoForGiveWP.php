@@ -20,8 +20,8 @@ use WP_REST_Server;
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/includes
  */
 
 /**
@@ -34,8 +34,8 @@ use WP_REST_Server;
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
 final class LknmpMercadoPagoForGiveWP {
@@ -77,8 +77,8 @@ final class LknmpMercadoPagoForGiveWP {
      * @since    1.0.0
      */
     public function __construct() {
-        if (defined('LKN_MERCADOPAGO_FOR_GIVEWP_VERSION')) {
-            $this->version = LKN_MERCADOPAGO_FOR_GIVEWP_VERSION;
+        if (defined('LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION')) {
+            $this->version = LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION;
         } else {
             $this->version = '1.0.0';
         }
@@ -92,10 +92,10 @@ final class LknmpMercadoPagoForGiveWP {
      *
      * Include the following files that make up the plugin:
      *
-     * - Lkn_Mercadopago_For_Givewp_Loader. Orchestrates the hooks of the plugin.
-     * - Lkn_Mercadopago_For_Givewp_i18n. Defines internationalization functionality.
-     * - Lkn_Mercadopago_For_Givewp_Admin. Defines all hooks for the admin area.
-     * - Lkn_Mercadopago_For_Givewp_Public. Defines all hooks for the public side of the site.
+     * - Lknmp_Mercadopago_For_Givewp_Loader. Orchestrates the hooks of the plugin.
+     * - Lknmp_Mercadopago_For_Givewp_i18n. Defines internationalization functionality.
+     * - Lknmp_Mercadopago_For_Givewp_Admin. Defines all hooks for the admin area.
+     * - Lknmp_Mercadopago_For_Givewp_Public. Defines all hooks for the public side of the site.
      *
      * Create an instance of the loader which will be used to register the hooks
      * with WordPress.
@@ -116,12 +116,12 @@ final class LknmpMercadoPagoForGiveWP {
             $this->define_public_hooks();
             $this->run();
         }
-    }    
+    }
 
     /**
      * Define the locale for this plugin for internationalization.
      *
-     * Uses the Lkn_Mercadopago_For_Givewp_i18n class in order to set the domain and to register the hook
+     * Uses the Lknmp_Mercadopago_For_Givewp_i18n class in order to set the domain and to register the hook
      * with WordPress.
      *
      * @since    1.0.0
@@ -142,7 +142,7 @@ final class LknmpMercadoPagoForGiveWP {
      */
     private function define_admin_hooks(): void {
         $plugin_admin = new LknmpMercadoPagoForGiveWPAdmin($this->get_plugin_name(), $this->get_version());
-        $this->loader->add_filter('plugin_action_links_' . LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME, 'Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper', 'plugin_row_meta', 10, 2);
+        $this->loader->add_filter('plugin_action_links_' . LKNMP_MERCADOPAGO_FOR_GIVEWP_BASENAME, 'Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper', 'plugin_row_meta', 10, 2);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
@@ -212,10 +212,10 @@ final class LknmpMercadoPagoForGiveWP {
      *
      * @since 3.0.0
      *
-     * @param  PaymentGatewayRegister $paymentGatewayRegister 
+     * @param  PaymentGatewayRegister $paymentGatewayRegister
      *
      * @return void
-     */ 
+     */
     public function new_gateway_register($paymentGatewayRegister) :void {
         $paymentGatewayRegister->registerGateway('Lknmp\MercadoPagoForGiveWp\PublicView\LknmpMercadoPagoForGiveWPGateway');
     }
@@ -224,7 +224,7 @@ final class LknmpMercadoPagoForGiveWP {
         // rest_ensure_response() wraps the data we want to return into a WP_REST_Response, and ensures it will be properly returned.
         return rest_ensure_response( 'Hello World, this is the WordPress REST API' );
     }
-    
+
     /**
      * This function is where we register our routes for our example endpoint.
      */
@@ -257,22 +257,22 @@ final class LknmpMercadoPagoForGiveWP {
                 if ( ! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
-                
+
                 $donation = Donation::find($donation_id);
                 if ( ! $donation) {
                     return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
                 }
-                
+
                 $donation->status = DonationStatus::COMPLETE();
                 $donation->save();
                 if ( ! $donation) {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
-                
+
                 $url_pagina = give_get_success_page_uri();
 
                 header("Location: $url_pagina", true, 302);
-                exit; 
+                exit;
                 break;
             case '2':
                 $donation_id = get_option("lkn_mercadopago_" . $id);
@@ -288,11 +288,11 @@ final class LknmpMercadoPagoForGiveWP {
                 if ( ! $donation) {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
-            
+
                 $url_pagina = give_get_success_page_uri();
 
                 header("Location: $url_pagina", true, 302);
-                exit; 
+                exit;
                 break;
             case '3':
                 $donation_id = get_option("lkn_mercadopago_" . $id);
@@ -303,22 +303,22 @@ final class LknmpMercadoPagoForGiveWP {
                 if ( ! $donation) {
                     return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
                 }
-                
+
                 $donation->status = DonationStatus::FAILED();
                 $donation->save();
                 if ( ! $donation) {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
-            
+
                 $response_data = array(
                     'id' => $id,
                     'donation_id' => $donation_id,
                 );
-            
+
                 $url_pagina = give_get_failed_transaction_uri();
 
                 header("Location: $url_pagina", true, 302);
-                exit; 
+                exit;
                 break;
             default:
                 return new WP_REST_Response(array('message' => 'Houve erro no pagamento'), 200);

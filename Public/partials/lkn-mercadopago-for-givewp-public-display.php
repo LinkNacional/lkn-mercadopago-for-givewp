@@ -8,8 +8,8 @@
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/public/partials
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/public/partials
  */
 ?>
 

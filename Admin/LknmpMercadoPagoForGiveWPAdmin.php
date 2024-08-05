@@ -7,8 +7,8 @@ namespace Lknmp\MercadoPagoForGiveWp\Admin;
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/admin
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/admin
  */
 
 /**
@@ -17,8 +17,8 @@ namespace Lknmp\MercadoPagoForGiveWp\Admin;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/admin
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/admin
  * @author     Link Nacional <contato@linknacional>
  */
 final class LknmpMercadoPagoForGiveWPAdmin {
@@ -62,10 +62,10 @@ final class LknmpMercadoPagoForGiveWPAdmin {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lkn_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lkn_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
@@ -82,10 +82,10 @@ final class LknmpMercadoPagoForGiveWPAdmin {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lkn_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lkn_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
@@ -104,7 +104,7 @@ final class LknmpMercadoPagoForGiveWPAdmin {
                     'type' => 'title',
                     'id' => 'mercado_pago',
                 );
-                
+
                 $settings[] = array(
                     'name' => __('Mercado Pago Public Key', 'lknmp-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_key',
@@ -132,7 +132,7 @@ final class LknmpMercadoPagoForGiveWPAdmin {
                     'desc' => __('This description will be used during checkout in Mercado Pago.', 'lknmp-mercadopago-for-givewp'),
                     'type' => 'text',
                 );
-                
+
                 $settings[] = array(
                     'name' => __('Advanced Debug Mode', 'lknmp-mercadopago-for-givewp'),
                     'id' => 'mercado_pago_advanced_debug',

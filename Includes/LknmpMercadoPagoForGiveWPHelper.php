@@ -9,8 +9,8 @@ use DateTime;
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/includes
  */
 
 /**
@@ -19,8 +19,8 @@ use DateTime;
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
 abstract class LknmpMercadoPagoForGiveWPHelper {
@@ -31,7 +31,7 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
      * @subpackage Lkn_Give_Getnet/includes
      */
 
-    // Exit, if accessed directly.        
+    // Exit, if accessed directly.
 
     /**
      *
@@ -50,14 +50,14 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
         if ( ! $wp_filesystem ) {
             return;
         }
-    
+
         if ($advanced && 'enabled' === $configs['debugAdvanced']) {
             $log = true;
-        } 
+        }
         if ($advanced && 'enabled' === $configs['debug']) {
             $log = true;
         }
-        
+
         if ($log) {
             $jsonMsg = wp_json_encode($message, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
 
@@ -98,8 +98,8 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
                 }
             }
         }
-    }    
-    
+    }
+
     /**
      * Show plugin dependency notice
      *
@@ -114,12 +114,12 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
             esc_url('https://givewp.com'),
             esc_html('Give'),
             esc_html('instalado e ativo versão'),
-            esc_html(LKN_GIVE_MERCADOPAGO_MIN_GIVE_VERSION),
+            esc_html(LKNMP_MERCADOPAGO_MIN_GIVE_VERSION),
             esc_html('para o plugin Mercado Pago para GiveWP ativar')
         );
-    
+
         echo $message;
-    }    
+    }
 
     /**
      * Plugin row meta links.
@@ -144,7 +144,7 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
     final public static function get_configs() {
         $configs = array();
 
-        $configs['basePath'] = LKN_MERCADOPAGO_FOR_GIVEWP_DIR . 'Includes/logs';
+        $configs['basePath'] = LKNMP_MERCADOPAGO_FOR_GIVEWP_DIR . 'Includes/logs';
         $configs['base'] = $configs['basePath'] . '/' . gmdate('d.m.Y-H.i.s') . '.log';
 
         $configs['token'] = give_get_option('mercado_pago_token');
@@ -177,7 +177,7 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
 
         // Deactivate plugin.
         if ($is_deactivate_plugin) {
-            deactivate_plugins(LKN_MERCADOPAGO_FOR_GIVEWP_BASENAME);
+            deactivate_plugins(LKNMP_MERCADOPAGO_FOR_GIVEWP_BASENAME);
 
             if (isset($_GET['activate'])) {
                 unset($_GET['activate']);

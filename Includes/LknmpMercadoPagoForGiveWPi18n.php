@@ -10,8 +10,8 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
  * @link       https://https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/includes
  */
 
 /**
@@ -21,8 +21,8 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
 final class LknmpMercadoPagoForGiveWPi18n {
