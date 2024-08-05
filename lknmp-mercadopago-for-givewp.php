@@ -13,9 +13,10 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Link Nacional MercadoPago for GiveWP
+ * Requires Plugins: give
  * Plugin URI:        https://https://www.linknacional.com.br/wordpress/givewp/
  * Description:       MercadoPago Payment Gateway for GiveWP donation plugin for WordPress.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Link Nacional
  * Author URI:        https://https://www.linknacional.com.br/wordpress/givewp//
  * License:           GPL-3.0+
