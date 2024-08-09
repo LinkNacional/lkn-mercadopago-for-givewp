@@ -1,34 +1,6 @@
 (function ($) {
 	'use strict';
 
-	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
-
 	function initializeMercadoPago() {
 		let showMP = true;
 		document.querySelector('input[type=\"submit\"]').disabled = true;
@@ -241,10 +213,45 @@
 		}
 	}
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initializeMercadoPago);
-	} else {
-		initializeMercadoPago();
-	}
+	function waitForWalletContainer(callback) {
+        const observer = new MutationObserver(function(mutationsList, observer) {
+            // Verifica se o elemento #wallet_container foi adicionado ao DOM
+            if (document.querySelector('#wallet_container')) {
+                observer.disconnect(); // Para o observador após encontrar o elemento
+                callback();
+            }
+        });
+
+        // Começa a observar mudanças no corpo do documento
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+	$(function() {
+        // Carregue o SDK do MercadoPago
+        var script = document.createElement('script');
+        script.src = 'https://sdk.mercadopago.com/js/v2';
+        script.async = true;
+        document.head.appendChild(script);
+
+        // Inicialize o MercadoPago após carregar o SDK e esperar pelo #wallet_container
+        script.onload = function() {
+            waitForWalletContainer(function() {
+                initializeMercadoPago();
+            });
+        };
+
+        script.onerror = function() {
+            console.error('Failed to load the MercadoPago SDK.');
+        };
+    });
+
+	// if (document.readyState === 'loading') {
+	// 	document.addEventListener('DOMContentLoaded', initializeMercadoPago);
+	// } else {
+	// 	initializeMercadoPago();
+	// }
 
 })(jQuery);
