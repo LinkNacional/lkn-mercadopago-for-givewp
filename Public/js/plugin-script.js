@@ -307,7 +307,7 @@ function checkInputs() {
         }
     }
 }
-const LknMercadoPagoForGiveWP = {
+const LknmpMercadoPagoForGiveWP = {
     id: 'lnk-mercadopago-forgivewp',
     async initialize() {
         // Aqui vai todas as funções necessárias ao carregar a página de pagamento
@@ -380,4 +380,4 @@ const LknMercadoPagoForGiveWP = {
         }
     }
 };
-window.givewp.gateways.register(LknMercadoPagoForGiveWP);
+window.givewp.gateways.register(LknmpMercadoPagoForGiveWP);

@@ -1,14 +1,14 @@
 <?php
-namespace Lkn\LknMercadoPagoForGiveWp\PublicView;
+namespace Lknmp\MercadoPagoForGiveWp\PublicView;
 
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://https://www.linknacional.com.br/wordpress/givewp/
+ * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/public
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/public
  */
 
 /**
@@ -17,11 +17,11 @@ namespace Lkn\LknMercadoPagoForGiveWp\PublicView;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Lkn_Mercadopago_For_Givewp
- * @subpackage Lkn_Mercadopago_For_Givewp/public
+ * @package    Lknmp_Mercadopago_For_Givewp
+ * @subpackage Lknmp_Mercadopago_For_Givewp/public
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknMercadoPagoForGiveWPPublic {
+final class LknmpMercadoPagoForGiveWPPublic {
     /**
      * The ID of this plugin.
      *
@@ -62,14 +62,14 @@ final class LknMercadoPagoForGiveWPPublic {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lkn_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lkn_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lkn-mercadopago-for-givewp-public.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-mercadopago-for-givewp-public.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -82,14 +82,14 @@ final class LknMercadoPagoForGiveWPPublic {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lkn_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lkn_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lkn-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
 
         wp_enqueue_script( $this->plugin_name . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), $this->version, false);
     }
