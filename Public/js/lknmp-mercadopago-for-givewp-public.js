@@ -2,6 +2,7 @@
 	'use strict';
 
 	function initializeMercadoPago() {
+
 		let showMP = true;
 		document.querySelector('input[type=\"submit\"]').disabled = true;
 
@@ -11,7 +12,7 @@
 		hiddenInput.name = 'gatewayData[gatewayId]';
 		hiddenInput.value = lknmpGlobals.idUnique;
 
-		const fieldset = document.querySelector('fieldset.no-fields'); // Seleciona o fieldset onde o input será adicionado
+		const fieldset = document.querySelector('fieldset.no-fields-lknmp'); // Seleciona o fieldset onde o input será adicionado
 		if (fieldset) {
 			fieldset.appendChild(hiddenInput);
 		}
@@ -81,7 +82,7 @@
 		}
 
 		function criarBotaoWallet(preferenceID) {
-			const fieldset = document.querySelector('.no-fields');
+			const fieldset = document.querySelector('.no-fields-lknmp');
 
 			// Remova o botão antigo se existir
 			const oldButton = document.querySelector('#wallet_container');
@@ -290,7 +291,7 @@
 		// Inicialize o MercadoPago após carregar o SDK e esperar pelo fieldset
 		script.onload = function () {
 			function initializeIfFieldsetExists() {
-				const fieldset = document.querySelector('fieldset.no-fields');
+				const fieldset = document.querySelector('fieldset.no-fields-lknmp');
 				if (fieldset) {
 					initializeMercadoPago();
 				}
@@ -307,7 +308,7 @@
 			// Observa o elemento <li> que contém o input com valor "lnk-mercadopago-forgivewp"
 			observeClassChange('li:has(input[value="lnk-mercadopago-forgivewp"])', 'give-gateway-option-selected', function () {
 				console.log('Classe give-gateway-option-selected adicionada, inicializando MercadoPago novamente.');
-				waitForElement('fieldset.no-fields', function () {
+				waitForElement('fieldset.no-fields-lknmp', function () {
 					initializeMercadoPago();
 				});
 			});

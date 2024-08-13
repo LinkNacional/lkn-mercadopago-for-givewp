@@ -73,7 +73,7 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
         }
 
         $html = "
-            <fieldset class=\"no-fields\">
+            <fieldset class=\"no-fields-lknmp\">
                 <h3 id=\"warning-text\"></h3>
                 <div id=\"wallet_container\"></div>
             </fieldset>";
