@@ -54,6 +54,14 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
 
         $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
 
+        Give()->notices->print_frontend_notice(
+            sprintf(
+                '%1$s %2$s',
+                esc_html__('Notice:', 'give'),
+                esc_html__('Mercado Pago não está habilitado para o formulário clássico!', 'give'),
+            )
+        );
+
         if (empty($configs['token']) && strlen($configs['token']) <= 5) {
             Give()->notices->print_frontend_notice(
                 sprintf(
