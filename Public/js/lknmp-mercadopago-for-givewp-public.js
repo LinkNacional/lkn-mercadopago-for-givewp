@@ -79,6 +79,45 @@
 				throw error;
 			}
 		}
+
+		function criarBotaoWallet(preferenceID) {
+			const fieldset = document.querySelector('.no-fields');
+
+			// Remova o botão antigo se existir
+			const oldButton = document.querySelector('#wallet_container');
+			if (oldButton) {
+				oldButton.remove();
+			}
+
+			// Crie o novo botão
+			const newButton = document.createElement('div');
+			newButton.id = 'wallet_container';
+
+			if (showMP) {
+				newButton.style.display = 'block';
+			} else {
+				newButton.style.display = 'none';
+			}
+
+			fieldset.appendChild(newButton);
+
+			const mp = new MercadoPago(lknmpGlobals.key);
+			const bricksBuilder = mp.bricks();
+			bricksBuilder.create('wallet', 'wallet_container', {
+				initialization: {
+					preferenceId: preferenceID,
+					redirectMode: checkSidebarExists() ? 'self' : 'blank'
+				},
+				customization: {
+					texts: {
+						valueProp: 'smart_option'
+					}
+				}
+			});
+
+			document.querySelector('input[type="submit"]').disabled = true; // Reabilita o botão de submit
+		}
+
 		if (document.querySelector('#wallet_container')) {
 			criarPreferenciaDePagamento()
 				.then(preferenceID => {
@@ -134,37 +173,11 @@
 							oldButton.remove();
 						}
 
-						criarPreferenciaDePagamento().then(newPreferenceID => {
-							if (lknmpGlobals.advDebug == 'enabled') {
-								console.log('Nova preferência criada:', newPreferenceID);
-							}
-
-							const newButton = document.createElement('div');
-							newButton.id = 'wallet_container';
-							const fieldset = document.querySelector('.no-fields');
-
-							if (showMP) {
-								newButton.style.display = 'block';
-							} else {
-								newButton.style.display = 'none';
-							}
-
-							fieldset.appendChild(newButton);
-
-							const mp = new MercadoPago(lknmpGlobals.key);
-							const bricksBuilder = mp.bricks();
-							mp.bricks().create('wallet', 'wallet_container', {
-								initialization: {
-									preferenceId: newPreferenceID,
-									redirectMode: 'blank'
-								},
-								customization: {
-									texts: {
-										valueProp: 'smart_option'
-									}
-								}
-							});
-						}).catch(error => {
+						criarPreferenciaDePagamento()
+						.then(preferenceID => {
+							criarBotaoWallet(preferenceID);
+						})
+						.catch(error => {
 							console.error('Erro ao criar nova preferência de pagamento:', error);
 						});
 					}
@@ -238,6 +251,7 @@
 			subtree: true
 		});
 	}
+
 	$(function () {
 		// Função para esperar até que um elemento esteja presente no DOM
 		function waitForElement(selector, callback) {
@@ -250,6 +264,23 @@
 			}, 100); // Verifica a cada 100 ms
 		}
 
+		function observeClassChange(selector, targetClass, callback) {
+			const targetNode = document.querySelector(selector);
+			if (!targetNode) return;
+	
+			const observer = new MutationObserver(function (mutationsList) {
+				for (let mutation of mutationsList) {
+					if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+						if (targetNode.classList.contains(targetClass)) {
+							callback();
+						}
+					}
+				}
+			});
+	
+			observer.observe(targetNode, { attributes: true });
+		}
+
 		// Carregue o SDK do MercadoPago
 		var script = document.createElement('script');
 		script.src = 'https://sdk.mercadopago.com/js/v2';
@@ -258,22 +289,28 @@
 
 		// Inicialize o MercadoPago após carregar o SDK e esperar pelo fieldset
 		script.onload = function () {
+			function initializeIfFieldsetExists() {
+				const fieldset = document.querySelector('fieldset.no-fields');
+				if (fieldset) {
+					initializeMercadoPago();
+				}
+			}
 			// Verifique o estado do documento
 			if (document.readyState === 'complete' || document.readyState !== 'loading') {
 				console.log('Documento carregado ou não está carregando');
-				// Espere pelo fieldset no DOM
+				initializeIfFieldsetExists();
+			} else {
+				console.log('Documento ainda carregando');
+				document.addEventListener('DOMContentLoaded', initializeIfFieldsetExists);
+			}
+	
+			// Observa o elemento <li> que contém o input com valor "lnk-mercadopago-forgivewp"
+			observeClassChange('li:has(input[value="lnk-mercadopago-forgivewp"])', 'give-gateway-option-selected', function () {
+				console.log('Classe give-gateway-option-selected adicionada, inicializando MercadoPago novamente.');
 				waitForElement('fieldset.no-fields', function () {
 					initializeMercadoPago();
 				});
-			} else {
-				console.log('Documento ainda carregando');
-				document.addEventListener('DOMContentLoaded', function () {
-					// Espere pelo fieldset no DOM
-					waitForElement('fieldset.no-fields', function () {
-						initializeMercadoPago();
-					});
-				});
-			}
+			});
 		};
 
 		script.onerror = function () {
