@@ -1,42 +1,25 @@
 (function ($) {
 	'use strict';
 
-	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
-
 	function initializeMercadoPago() {
+
 		let showMP = true;
 		document.querySelector('input[type=\"submit\"]').disabled = true;
 
+		// Criar o input hidden após inicializar o MercadoPago para armazenar o idUniqueE
+		const hiddenInput = document.createElement('input');
+		hiddenInput.type = 'hidden';
+		hiddenInput.name = 'gatewayData[gatewayId]';
+		hiddenInput.value = lknmpGlobals.idUnique;
+
+		const fieldset = document.querySelector('fieldset.no-fields-lknmp'); // Seleciona o fieldset onde o input será adicionado
+		if (fieldset) {
+			fieldset.appendChild(hiddenInput);
+		}
 		//Enter não aciona wallet
 		const walletButton = document.querySelector('#wallet_container');
 		if (walletButton) {
-			walletButton.addEventListener('keydown', function(event) {
+			walletButton.addEventListener('keydown', function (event) {
 				if (event.key === 'Enter') {
 					event.preventDefault();
 					event.stopPropagation();
@@ -51,13 +34,13 @@
 
 		async function criarPreferenciaDePagamento() {
 			const amountGive = document.getElementsByName('give-amount')[0];
-			if(lknmpGlobals.advDebug == 'enabled'){
+			if (lknmpGlobals.advDebug == 'enabled') {
 				console.log(amountGive.value);
 			}
 
 			let amount = amountGive.value;
 
-			if(lknmpGlobals.advDebug == 'enabled'){
+			if (lknmpGlobals.advDebug == 'enabled') {
 				console.log(amount)
 			}
 
@@ -97,10 +80,49 @@
 				throw error;
 			}
 		}
+
+		function criarBotaoWallet(preferenceID) {
+			const fieldset = document.querySelector('.no-fields-lknmp');
+
+			// Remova o botão antigo se existir
+			const oldButton = document.querySelector('#wallet_container');
+			if (oldButton) {
+				oldButton.remove();
+			}
+
+			// Crie o novo botão
+			const newButton = document.createElement('div');
+			newButton.id = 'wallet_container';
+
+			if (showMP) {
+				newButton.style.display = 'block';
+			} else {
+				newButton.style.display = 'none';
+			}
+
+			fieldset.appendChild(newButton);
+
+			const mp = new MercadoPago(lknmpGlobals.key);
+			const bricksBuilder = mp.bricks();
+			bricksBuilder.create('wallet', 'wallet_container', {
+				initialization: {
+					preferenceId: preferenceID,
+					redirectMode: checkSidebarExists() ? 'self' : 'blank'
+				},
+				customization: {
+					texts: {
+						valueProp: 'smart_option'
+					}
+				}
+			});
+
+			document.querySelector('input[type="submit"]').disabled = true; // Reabilita o botão de submit
+		}
+
 		if (document.querySelector('#wallet_container')) {
 			criarPreferenciaDePagamento()
 				.then(preferenceID => {
-					if(lknmpGlobals.advDebug == 'enabled'){
+					if (lknmpGlobals.advDebug == 'enabled') {
 						console.log('ID da preferência criada:', preferenceID);
 					}
 					const mp = new MercadoPago(lknmpGlobals.key);
@@ -121,11 +143,11 @@
 					console.error('Erro ao criar preferência de pagamento:', error);
 				});
 
-				checkInputs();
-				if(!document.querySelector('#verificador')){
-					observeDonationChanges();
-				}
-				observeFormChanges();
+			checkInputs();
+			if (!document.querySelector('#verificador')) {
+				observeDonationChanges();
+			}
+			observeFormChanges();
 		}
 
 		function observeDonationChanges() {
@@ -136,55 +158,29 @@
 			verificadorDiv.id = 'verificador';
 			document.body.appendChild(verificadorDiv);
 
-			const observer = new MutationObserver(function(mutationsList, observer) {
+			const observer = new MutationObserver(function (mutationsList, observer) {
 				for (const mutation of mutationsList) {
 					if (mutation.type === 'attributes' && mutation.attributeName === 'data-amount') {
-						if(lknmpGlobals.advDebug == 'enabled'){
+						if (lknmpGlobals.advDebug == 'enabled') {
 							console.log('Mudança no data-amount');
 						}
 
 						const nomeInput = document.querySelector('input[name=\"give_first\"]');
 						const emailInput = document.querySelector('input[name=\"give_email\"]');
 
-							const oldButton = document.querySelector('#wallet_container');
+						const oldButton = document.querySelector('#wallet_container');
 
-							if (oldButton) {
-								oldButton.remove();
-							}
+						if (oldButton) {
+							oldButton.remove();
+						}
 
-							criarPreferenciaDePagamento().then(newPreferenceID => {
-								if(lknmpGlobals.advDebug == 'enabled'){
-									console.log('Nova preferência criada:', newPreferenceID);
-								}
-
-								const newButton = document.createElement('div');
-								newButton.id = 'wallet_container';
-								const fieldset = document.querySelector('.no-fields');
-
-								if (showMP) {
-									newButton.style.display = 'block';
-								} else {
-									newButton.style.display = 'none';
-								}
-
-								fieldset.appendChild(newButton);
-
-								const mp = new MercadoPago(lknmpGlobals.key);
-								const bricksBuilder = mp.bricks();
-								mp.bricks().create('wallet', 'wallet_container', {
-									initialization: {
-										preferenceId: newPreferenceID,
-										redirectMode: 'blank'
-									},
-									customization: {
-										texts: {
-											valueProp: 'smart_option'
-										}
-									}
-								});
-							}).catch(error => {
-								console.error('Erro ao criar nova preferência de pagamento:', error);
-							});
+						criarPreferenciaDePagamento()
+						.then(preferenceID => {
+							criarBotaoWallet(preferenceID);
+						})
+						.catch(error => {
+							console.error('Erro ao criar nova preferência de pagamento:', error);
+						});
 					}
 				}
 			});
@@ -241,10 +237,85 @@
 		}
 	}
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initializeMercadoPago);
-	} else {
-		initializeMercadoPago();
+	function waitForWalletContainer(callback) {
+		const observer = new MutationObserver(function (mutationsList, observer) {
+			// Verifica se o elemento #wallet_container foi adicionado ao DOM
+			if (document.querySelector('#wallet_container')) {
+				observer.disconnect(); // Para o observador após encontrar o elemento
+				callback();
+			}
+		});
+
+		// Começa a observar mudanças no corpo do documento
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true
+		});
 	}
 
+	$(function () {
+		// Função para esperar até que um elemento esteja presente no DOM
+		function waitForElement(selector, callback) {
+			const interval = setInterval(() => {
+				const element = document.querySelector(selector);
+				if (element) {
+					clearInterval(interval);
+					callback(element);
+				}
+			}, 100); // Verifica a cada 100 ms
+		}
+
+		function observeClassChange(selector, targetClass, callback) {
+			const targetNode = document.querySelector(selector);
+			if (!targetNode) return;
+	
+			const observer = new MutationObserver(function (mutationsList) {
+				for (let mutation of mutationsList) {
+					if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+						if (targetNode.classList.contains(targetClass)) {
+							callback();
+						}
+					}
+				}
+			});
+	
+			observer.observe(targetNode, { attributes: true });
+		}
+
+		// Carregue o SDK do MercadoPago
+		var script = document.createElement('script');
+		script.src = 'https://sdk.mercadopago.com/js/v2';
+		script.async = true;
+		document.head.appendChild(script);
+
+		// Inicialize o MercadoPago após carregar o SDK e esperar pelo fieldset
+		script.onload = function () {
+			function initializeIfFieldsetExists() {
+				const fieldset = document.querySelector('fieldset.no-fields-lknmp');
+				if (fieldset) {
+					initializeMercadoPago();
+				}
+			}
+			// Verifique o estado do documento
+			if (document.readyState === 'complete' || document.readyState !== 'loading') {
+				console.log('Documento carregado ou não está carregando');
+				initializeIfFieldsetExists();
+			} else {
+				console.log('Documento ainda carregando');
+				document.addEventListener('DOMContentLoaded', initializeIfFieldsetExists);
+			}
+	
+			// Observa o elemento <li> que contém o input com valor "lnk-mercadopago-forgivewp"
+			observeClassChange('li:has(input[value="lnk-mercadopago-forgivewp"])', 'give-gateway-option-selected', function () {
+				console.log('Classe give-gateway-option-selected adicionada, inicializando MercadoPago novamente.');
+				waitForElement('fieldset.no-fields-lknmp', function () {
+					initializeMercadoPago();
+				});
+			});
+		};
+
+		script.onerror = function () {
+            console.error('Failed to load the MercadoPago SDK.');
+		};
+	});
 })(jQuery);

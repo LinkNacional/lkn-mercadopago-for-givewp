@@ -17,12 +17,6 @@ use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
  * @inheritDoc
  */
 final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
-    public $idUnique;
-
-    public function __construct() {
-        $this->idUnique = uniqid();
-    }
-
     /**
      * @inheritDoc
      */
@@ -58,12 +52,7 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
         // Step 1: add any gateway fields to the form using html.  In order to retrieve this data later the name of the input must be inside the key gatewayData (name='gatewayData[input_name]').
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
 
-        $url_pagina = site_url();
         $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
-        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-mercadopago-for-givewp');
 
         if (empty($configs['token']) && strlen($configs['token']) <= 5) {
             Give()->notices->print_frontend_notice(
@@ -84,10 +73,9 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
         }
 
         $html = "
-            <fieldset class=\"no-fields\">
+            <fieldset class=\"no-fields-lknmp\">
                 <h3 id=\"warning-text\"></h3>
                 <div id=\"wallet_container\"></div>
-                <input type=\"hidden\" name=\"gatewayData[gatewayId]\" value=\"$this->idUnique\"></input>
             </fieldset>";
 
         return $html;
