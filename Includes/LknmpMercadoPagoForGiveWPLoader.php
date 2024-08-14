@@ -4,7 +4,7 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
 /**
  * Register all actions and filters for the plugin
  *
- * @link       https://https://www.linknacional.com.br/wordpress/givewp/
+ * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
  * @package    Lknmp_Mercadopago_For_Givewp

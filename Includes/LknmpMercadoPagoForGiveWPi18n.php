@@ -7,7 +7,7 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       https://https://www.linknacional.com.br/wordpress/givewp/
+ * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
  * @package    Lknmp_Mercadopago_For_Givewp

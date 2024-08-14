@@ -1,6 +1,6 @@
 === Link Nacional MercadoPago for GiveWP ===
 Contributors: linknacional
-Donate link: https://https://www.linknacional.com.br/wordpress/givewp/
+Donate link: https://www.linknacional.com.br/wordpress/givewp/
 Tags: givewp, payment, mercadopago, card
 Requires at least: 5.7
 Tested up to: 6.6
