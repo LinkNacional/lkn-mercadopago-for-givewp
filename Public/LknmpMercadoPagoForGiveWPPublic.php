@@ -106,7 +106,7 @@ final class LknmpMercadoPagoForGiveWPPublic {
             'key' => $configs['key'], 
             'token' => $configs['token'],
             'pageUrl' => $url_pagina,
-            'idUnique' => $idUnique, // Substitua com o valor apropriado
+            'idUnique' => $idUnique,
             'tittle' => $configs['tittle'],
             'description' => $configs['description'],
             'advDebug' => $configs['advDebug'],

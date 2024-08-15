@@ -118,7 +118,7 @@ abstract class LknmpMercadoPagoForGiveWPHelper {
             esc_html('para o plugin Mercado Pago para GiveWP ativar')
         );
 
-        echo $message;
+        echo wp_kses_post($message);
     }
 
     /**
