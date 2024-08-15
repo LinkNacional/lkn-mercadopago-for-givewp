@@ -70,3 +70,6 @@ msgstr ""
 
 msgid "Donation of "
 msgstr ""
+
+msgid "Mercado Pago is not enabled for the classic and multistep form!"
+msgstr ""
