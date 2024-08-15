@@ -3,6 +3,15 @@
 
 	function initializeMercadoPago() {
 
+		//A notícia que o Mercado Pago não funciona para formulário classico é removida
+		const errorDiv = document.querySelector('div.give_notices.give_errors');
+		if (errorDiv) {
+			errorDiv.remove();
+			if (lknmpGlobals.advDebug == 'enabled') {
+				console.log('Div com a classe "give_notices give_errors" removida.');
+			}
+		}
+
 		let showMP = true;
 		document.querySelector('input[type=\"submit\"]').disabled = true;
 

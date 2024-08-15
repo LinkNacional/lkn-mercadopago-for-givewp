@@ -58,7 +58,7 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
             sprintf(
                 '%1$s %2$s',
                 esc_html__('Notice:', 'give'),
-                esc_html__('Mercado Pago não está habilitado para o formulário clássico!', 'give'),
+                esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'give'),
             )
         );
 
