@@ -307,16 +307,16 @@
 			}
 			// Verifique o estado do documento
 			if (document.readyState === 'complete' || document.readyState !== 'loading') {
-				console.log('Documento carregado ou não está carregando');
 				initializeIfFieldsetExists();
 			} else {
-				console.log('Documento ainda carregando');
 				document.addEventListener('DOMContentLoaded', initializeIfFieldsetExists);
 			}
 	
 			// Observa o elemento <li> que contém o input com valor "lnk-mercadopago-forgivewp"
 			observeClassChange('li:has(input[value="lnk-mercadopago-forgivewp"])', 'give-gateway-option-selected', function () {
-				console.log('Classe give-gateway-option-selected adicionada, inicializando MercadoPago novamente.');
+				if (lknmpGlobals.advDebug == 'enabled') {
+					console.log('Classe give-gateway-option-selected adicionada, inicializando MercadoPago novamente.');
+				}
 				waitForElement('fieldset.no-fields-lknmp', function () {
 					initializeMercadoPago();
 				});
@@ -324,7 +324,9 @@
 		};
 
 		script.onerror = function () {
-            console.error('Failed to load the MercadoPago SDK.');
+			if (lknmpGlobals.advDebug == 'enabled') {
+				console.error('Failed to load the MercadoPago SDK.');
+			}
 		};
 	});
 })(jQuery);
