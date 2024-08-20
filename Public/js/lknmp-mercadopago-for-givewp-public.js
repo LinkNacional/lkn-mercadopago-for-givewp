@@ -3,15 +3,6 @@
 
 	function initializeMercadoPago() {
 
-		//A notícia que o Mercado Pago não funciona para formulário classico é removida
-		const errorDiv = document.querySelector('div.give_notices.give_errors');
-		if (errorDiv) {
-			errorDiv.remove();
-			if (lknmpGlobals.advDebug == 'enabled') {
-				console.log('Div com a classe "give_notices give_errors" removida.');
-			}
-		}
-
 		let showMP = true;
 		document.querySelector('input[type=\"submit\"]').disabled = true;
 
@@ -184,12 +175,12 @@
 						}
 
 						criarPreferenciaDePagamento()
-						.then(preferenceID => {
-							criarBotaoWallet(preferenceID);
-						})
-						.catch(error => {
-							console.error('Erro ao criar nova preferência de pagamento:', error);
-						});
+							.then(preferenceID => {
+								criarBotaoWallet(preferenceID);
+							})
+							.catch(error => {
+								console.error('Erro ao criar nova preferência de pagamento:', error);
+							});
 					}
 				}
 			});
@@ -277,7 +268,7 @@
 		function observeClassChange(selector, targetClass, callback) {
 			const targetNode = document.querySelector(selector);
 			if (!targetNode) return;
-	
+
 			const observer = new MutationObserver(function (mutationsList) {
 				for (let mutation of mutationsList) {
 					if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -287,7 +278,7 @@
 					}
 				}
 			});
-	
+
 			observer.observe(targetNode, { attributes: true });
 		}
 
@@ -311,7 +302,7 @@
 			} else {
 				document.addEventListener('DOMContentLoaded', initializeIfFieldsetExists);
 			}
-	
+
 			// Observa o elemento <li> que contém o input com valor "lnk-mercadopago-forgivewp"
 			observeClassChange('li:has(input[value="lnk-mercadopago-forgivewp"])', 'give-gateway-option-selected', function () {
 				if (lknmpGlobals.advDebug == 'enabled') {

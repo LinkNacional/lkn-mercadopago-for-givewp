@@ -11,6 +11,7 @@ use Give\Framework\PaymentGateways\Commands\PaymentPending;
 use Give\Framework\PaymentGateways\Commands\PaymentRefunded;
 use Give\Framework\PaymentGateways\Exceptions\PaymentGatewayException;
 use Give\Framework\PaymentGateways\PaymentGateway;
+use Give_DB_Form_Meta;
 use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
 
 /**
@@ -51,16 +52,23 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
     public function getLegacyFormFieldMarkup(int $formId, array $args): string {
         // Step 1: add any gateway fields to the form using html.  In order to retrieve this data later the name of the input must be inside the key gatewayData (name='gatewayData[input_name]').
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
+        $formTb = new Give_DB_Form_Meta();
+        $formTb->table_name = "wp_give_formmeta";
+        $resultForm = $formTb->get_results_by(array('form_id' => $formId, 'meta_key' => '_give_form_template'));
 
+        if ('legacy' != $resultForm[0]->meta_value) {
+            $html = '
+            <div class="donation-errors">
+                <div class="give-notice give-notice-error" id="give_error_warning"> 
+                    <p class="give_notice give_warning">
+                    <strong>' . esc_html__('Notice:', 'give') . '</strong>
+                    ' . esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'give') . '</p>
+                </div>
+            </div>';
+            return $html;
+        }
+        
         $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
-
-        Give()->notices->print_frontend_notice(
-            sprintf(
-                '%1$s %2$s',
-                esc_html__('Notice:', 'give'),
-                esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'give'),
-            )
-        );
 
         if (empty($configs['token']) && strlen($configs['token']) <= 5) {
             Give()->notices->print_frontend_notice(
