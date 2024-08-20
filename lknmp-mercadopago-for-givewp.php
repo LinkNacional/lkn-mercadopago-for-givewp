@@ -8,7 +8,7 @@
  * that starts the plugin.
  *
  * @link              https://www.linknacional.com.br/wordpress/givewp/
- * @since             1.0.1
+ * @since             1.2.0
  * @package           LKNMP_Mercadopago_For_Givewp
  *
  * @wordpress-plugin
@@ -16,7 +16,7 @@
  * Requires Plugins: give
  * Plugin URI:        https://www.linknacional.com.br/wordpress/givewp/
  * Description:       MercadoPago Payment Gateway for GiveWP donation plugin for WordPress.
- * Version:           1.0.1
+ * Version:           1.2.0
  * Author:            Link Nacional
  * Author URI:        https://www.linknacional.com.br/wordpress/givewp//
  * License:           GPL-3.0+
@@ -42,7 +42,7 @@ use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPDeactivator;
  * Rename this for your plugin and update it as you release new versions.
  */
 if ( ! defined('LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION')) {
-    define( 'LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.0.1' );
+    define( 'LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION', '1.2.0' );
 }
 
 if ( ! defined('LKNMP_MERCADOPAGO_MIN_GIVE_VERSION')) {

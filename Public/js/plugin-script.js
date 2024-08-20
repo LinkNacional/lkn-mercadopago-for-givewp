@@ -224,7 +224,7 @@ function observeDonationChanges() {
 
                     const newButton = document.createElement('div');
                     newButton.id = 'wallet_container';
-                    const fieldset = document.querySelector('.no-fields');
+                    const fieldset = document.querySelector('.no-fields-lknmp');
 
                     if (showMP) {
                         newButton.style.display = 'block';
@@ -369,7 +369,7 @@ const LknmpMercadoPagoForGiveWP = {
             }
 
             return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("fieldset", {
-                className: "no-fields"
+                className: "no-fields-lknmp"
             }, /*#__PURE__*/React.createElement("h1", null, lknMercadoPagoGlobals.MenssageDonation, /*#__PURE__*/React.createElement("span", {
                 id: "donation-amount"
             })), /*#__PURE__*/React.createElement("h3", {

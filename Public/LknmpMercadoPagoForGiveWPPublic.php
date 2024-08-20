@@ -1,6 +1,8 @@
 <?php
 namespace Lknmp\MercadoPagoForGiveWp\PublicView;
 
+use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -90,6 +92,33 @@ final class LknmpMercadoPagoForGiveWPPublic {
          * class.
          */
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
+
+        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
+        $url_pagina = site_url();
+        $idUnique = uniqid();
+
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-mercadopago-for-givewp');
+
+        $lknmp_globals = array(
+            'key' => $configs['key'], 
+            'token' => $configs['token'],
+            'pageUrl' => $url_pagina,
+            'idUnique' => $idUnique,
+            'tittle' => $configs['tittle'],
+            'description' => $configs['description'],
+            'advDebug' => $configs['advDebug'],
+            'translation' => array(
+                'MenssageErrorNameEmpty' => $MenssageErrorNameEmpty,
+                'MenssageErrorName' => $MenssageErrorName,
+                'MenssageErrorEmailEmpty' => $MenssageErrorEmailEmpty,
+                'MenssageErrorEmailInvalid' => $$MenssageErrorEmailInvalid,
+            ),
+        );
+
+        wp_localize_script($this->plugin_name, 'lknmpGlobals', $lknmp_globals);
 
         wp_enqueue_script( $this->plugin_name . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), $this->version, false);
     }
