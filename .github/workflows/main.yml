@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  PLUGIN_NAME: lknmp-mercadopago-for-givewp
+  PLUGIN_NAME: lknmp-gateway-givewp
   PHP_VERSION: "7.4"
 
 jobs:

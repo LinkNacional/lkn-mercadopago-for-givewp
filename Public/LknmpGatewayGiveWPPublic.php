@@ -1,7 +1,7 @@
 <?php
-namespace Lknmp\MercadoPagoForGiveWp\PublicView;
+namespace Lknmp\Gateway\PublicView;
 
-use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
+use Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper;
 
 /**
  * The public-facing functionality of the plugin.
@@ -9,8 +9,8 @@ use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
  * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/public
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/public
  */
 
 /**
@@ -19,11 +19,11 @@ use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/public
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/public
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpMercadoPagoForGiveWPPublic {
+final class LknmpGatewayGiveWPPublic {
     /**
      * The ID of this plugin.
      *
@@ -64,14 +64,14 @@ final class LknmpMercadoPagoForGiveWPPublic {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Gateway_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Gateway_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-mercadopago-for-givewp-public.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-gateway-givewp-public.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -84,23 +84,23 @@ final class LknmpMercadoPagoForGiveWPPublic {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Gateway_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Gateway_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-mercadopago-for-givewp-public.js', array('jquery'), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-gateway-givewp-public.js', array('jquery'), $this->version, false );
 
-        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
+        $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();
         $idUnique = uniqid();
 
-        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-gateway-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-gateway-givewp');
 
         $lknmp_globals = array(
             'key' => $configs['key'], 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lknmp\MercadoPagoForGiveWp\Includes;
+namespace Lknmp\Gateway\Includes;
 
 /**
  * Fired during plugin deactivation
@@ -8,8 +8,8 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
  * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/includes
  */
 
 /**
@@ -18,11 +18,11 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpMercadoPagoForGiveWPDeactivator {
+final class LknmpGatewayGiveWPDeactivator {
     /**
      * Short Description. (use period)
      *

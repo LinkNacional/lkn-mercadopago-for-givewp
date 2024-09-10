@@ -1,6 +1,6 @@
 <?php
 
-namespace Lknmp\MercadoPagoForGiveWp\PublicView;
+namespace Lknmp\Gateway\PublicView;
 
 use Give\Donations\Models\Donation;
 use Give\Donations\Models\DonationNote;
@@ -12,17 +12,17 @@ use Give\Framework\PaymentGateways\Commands\PaymentRefunded;
 use Give\Framework\PaymentGateways\Exceptions\PaymentGatewayException;
 use Give\Framework\PaymentGateways\PaymentGateway;
 use Give_DB_Form_Meta;
-use Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper;
+use Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper;
 
 /**
  * @inheritDoc
  */
-final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
+final class LknmpGatewayGiveWPGateway extends PaymentGateway {
     /**
      * @inheritDoc
      */
     public static function id(): string {
-        return 'lnk-mercadopago-forgivewp';
+        return 'lknmp-gateway-givewp';
     }
 
     /**
@@ -36,14 +36,14 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
      * @inheritDoc
      */
     public function getName(): string {
-        return 'Mercado Pago';
+        return 'Link Nacional Mercado Pago Checkout';
     }
 
     /**
      * @inheritDoc
      */
     public function getPaymentMethodLabel(): string {
-        return 'Mercado Pago';
+        return 'Mercado Pago Checkout';
     }
 
     /**
@@ -59,7 +59,7 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
         if ('legacy' != $resultForm[0]->meta_value) {
             $html = '
             <div class="donation-errors">
-                <div class="give-notice give-notice-error" id="give_error_warning"> 
+                <div class="give-notice give-notice-error" id="give_error_warning">
                     <p class="give_notice give_warning">
                     <strong>' . esc_html__('Notice:', 'give') . '</strong>
                     ' . esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'give') . '</p>
@@ -67,8 +67,8 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
             </div>';
             return $html;
         }
-        
-        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
+
+        $configs = LknmpGatewayGiveWPHelper::get_configs();
 
         if (empty($configs['token']) && strlen($configs['token']) <= 5) {
             Give()->notices->print_frontend_notice(
@@ -135,22 +135,22 @@ final class LknmpMercadoPagoForGiveWPGateway extends PaymentGateway {
      * @since 3.0.0
      */
     public function enqueueScript(int $formId): void {
-        $configs = LknmpMercadoPagoForGiveWPHelper::get_configs();
+        $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();
 
-        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-mercadopago-for-givewp');
-        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-mercadopago-for-givewp');
-        $MenssageDonation = __('Donation of ', 'lknmp-mercadopago-for-givewp');
+        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-gateway-givewp');
+        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-gateway-givewp');
+        $MenssageDonation = __('Donation of ', 'lknmp-gateway-givewp');
         $MenssageErrorToken = __('Mercado Pago Token was not provided or is invalid!');
         $MenssageErrorPublicKey = __('Mercado Pago Public Key was not provided or is invalid!');
 
         $hastoken = ! empty($configs['token']) && strlen($configs['token']) > 10 ? 'true' : 'false';
         $haspublicKey = ! empty($configs['key']) && strlen($configs['key']) > 10 ? 'true' : 'false';
 
-        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION, true );
-        wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION, false);
+        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKNMP_GATEWAY_GIVEWP_VERSION, true );
+        wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKNMP_GATEWAY_GIVEWP_VERSION, false);
 
         wp_localize_script(self::id(), 'urlPag', $url_pagina);
         wp_localize_script(self::id(), 'idUnique', uniqid());

@@ -1,3 +1,6 @@
+# 1.2.1 - 10/09/2024
+* Refatoração de plugin com slug e nome do plugin sugeridos pela equipe do WordPress.
+
 # 1.2.0 - 15/08/2024
 * Renderização do plugin corrigida
 * Correção de alteração de método de pagamento

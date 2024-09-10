@@ -13,7 +13,7 @@ function renderComponentsOnce() {
                     }
                     preferenceID = preferenceID;
                     const mp = new MercadoPago(configData.key);
-                    //TODO se houver erro 400, temos que retornar ao usuário??? 
+                    //TODO se houver erro 400, temos que retornar ao usuário???
                     const bricksBuilder = mp.bricks();
                     mp.bricks().create("wallet", "wallet_container", {
                         initialization: {
@@ -85,9 +85,9 @@ async function criarPreferenciaDePagamento() {
 
     const preference = {
         "back_urls": {
-            "success": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
-            "pending": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
-            "failure": `${urlPag}/wp-json/mercadopago/v1/payments/checkpayment?id=${idUnique}&statusFront=3` //ALTERAR AQUI DEPOIS!!!
+            "success": `${urlPag}/wp-json/lknmp/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
+            "pending": `${urlPag}/wp-json/lknmp/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
+            "failure": `${urlPag}/wp-json/lknmp/v1/payments/checkpayment?id=${idUnique}&statusFront=3` //ALTERAR AQUI DEPOIS!!!
         },
         "auto_return": "approved",
         "items": [{
@@ -156,7 +156,7 @@ function updateDonationAmount() {
 
 function observeMetodoChanges() {
     const checkGateways = () => {
-        const myGateway = document.querySelector('.givewp-fields-gateways__gateway.givewp-fields-gateways__gateway--lnk-mercadopago-forgivewp.givewp-fields-gateways__gateway--active');
+        const myGateway = document.querySelector('.givewp-fields-gateways__gateway.givewp-fields-gateways__gateway--lknmp-gateway-givewp.givewp-fields-gateways__gateway--active');
 
         // Se ele estiver ativo, habilita o botão Donate Now
         if (myGateway) {
@@ -307,8 +307,8 @@ function checkInputs() {
         }
     }
 }
-const LknmpMercadoPagoForGiveWP = {
-    id: 'lnk-mercadopago-forgivewp',
+const LknmpGatewayGiveWP = {
+    id: 'lknmp-gateway-givewp',
     async initialize() {
         // Aqui vai todas as funções necessárias ao carregar a página de pagamento
     },
@@ -344,9 +344,9 @@ const LknmpMercadoPagoForGiveWP = {
             }, /*#__PURE__*/React.createElement("strong", null, title), " ", message);
         }
 
-        if (lknMercadoPagoGlobals.token == 'false' ) {
+        if (lknMercadoPagoGlobals.token == 'false') {
             return lknMercadoPagoprintFrontendNotice('Erro:', lknMercadoPagoGlobals.MenssageErrorToken);
-        } else if (lknMercadoPagoGlobals.publicKey == 'false' ) {
+        } else if (lknMercadoPagoGlobals.publicKey == 'false') {
             return lknMercadoPagoprintFrontendNotice('Erro:', lknMercadoPagoGlobals.MenssageErrorPublicKey);
         } else {
 
@@ -380,4 +380,4 @@ const LknmpMercadoPagoForGiveWP = {
         }
     }
 };
-window.givewp.gateways.register(LknmpMercadoPagoForGiveWP);
+window.givewp.gateways.register(LknmpGatewayGiveWP);

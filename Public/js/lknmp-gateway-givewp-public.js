@@ -47,9 +47,9 @@
 			const url = 'https://api.mercadopago.com/checkout/preferences';
 			const preference = {
 				"back_urls": {
-					"success": `${lknmpGlobals.pageUrl}/wp-json/mercadopago/v1/payments/checkpayment?id=${lknmpGlobals.idUnique}&statusFront=1`,
-					"pending": `${lknmpGlobals.pageUrl}/wp-json/mercadopago/v1/payments/checkpayment?id=${lknmpGlobals.idUnique}&statusFront=2`,
-					"failure": `${lknmpGlobals.pageUrl}/wp-json/mercadopago/v1/payments/checkpayment?id=${lknmpGlobals.idUnique}&statusFront=3`
+					"success": `${lknmpGlobals.pageUrl}/wp-json/lknmp/v1/payments/checkpayment?id=${lknmpGlobals.idUnique}&statusFront=1`,
+					"pending": `${lknmpGlobals.pageUrl}/wp-json/lknmp/v1/payments/checkpayment?id=${lknmpGlobals.idUnique}&statusFront=2`,
+					"failure": `${lknmpGlobals.pageUrl}/wp-json/lknmp/v1/payments/checkpayment?id=${lknmpGlobals.idUnique}&statusFront=3`
 				},
 				"items": [{
 					"id": `${lknmpGlobals.idUnique}`,
@@ -303,8 +303,8 @@
 				document.addEventListener('DOMContentLoaded', initializeIfFieldsetExists);
 			}
 
-			// Observa o elemento <li> que contém o input com valor "lnk-mercadopago-forgivewp"
-			observeClassChange('li:has(input[value="lnk-mercadopago-forgivewp"])', 'give-gateway-option-selected', function () {
+			// Observa o elemento <li> que contém o input com valor "lknmp-gateway-givewp"
+			observeClassChange('li:has(input[value="lknmp-gateway-givewp"])', 'give-gateway-option-selected', function () {
 				if (lknmpGlobals.advDebug == 'enabled') {
 					console.log('Classe give-gateway-option-selected adicionada, inicializando MercadoPago novamente.');
 				}
