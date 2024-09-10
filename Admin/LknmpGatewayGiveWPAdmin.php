@@ -1,5 +1,5 @@
 <?php
-namespace Lknmp\MercadoPagoForGiveWp\Admin;
+namespace Lknmp\Gateway\Admin;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -7,8 +7,8 @@ namespace Lknmp\MercadoPagoForGiveWp\Admin;
  * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/admin
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/admin
  */
 
 /**
@@ -17,11 +17,11 @@ namespace Lknmp\MercadoPagoForGiveWp\Admin;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/admin
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/admin
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpMercadoPagoForGiveWPAdmin {
+final class LknmpGatewayGiveWPAdmin {
     /**
      * The ID of this plugin.
      *
@@ -62,14 +62,14 @@ final class LknmpMercadoPagoForGiveWPAdmin {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Gateway_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Gateway_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-mercadopago-for-givewp-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-gateway-givewp-admin.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -82,14 +82,14 @@ final class LknmpMercadoPagoForGiveWPAdmin {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Lknmp_Mercadopago_For_Givewp_Loader as all of the hooks are defined
+         * defined in Lknmp_Gateway_Givewp_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Lknmp_Mercadopago_For_Givewp_Loader will then create the relationship
+         * The Lknmp_Gateway_Givewp_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script("lkn-mercadopago-givewp-show-message.js", plugin_dir_url(__FILE__) . 'js/lknmp-mercadopago-for-givewp-show-message.js', null, $this->version, false );
+        wp_enqueue_script("lkn-mercadopago-givewp-show-message.js", plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-show-message.js', null, $this->version, false );
 
         wp_localize_script("lkn-mercadopago-givewp-show-message.js", "varsPhp", array(
             "admin_url" => admin_url("edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago")
@@ -106,42 +106,42 @@ final class LknmpMercadoPagoForGiveWPAdmin {
                 );
 
                 $settings[] = array(
-                    'name' => __('Mercado Pago Public Key', 'lknmp-mercadopago-for-givewp'),
+                    'name' => __('Mercado Pago Public Key', 'lknmp-gateway-givewp'),
                     'id' => 'mercado_pago_key',
-                    'desc' => __('Mercado Pago Public Key.', 'lknmp-mercadopago-for-givewp'),
+                    'desc' => __('Mercado Pago Public Key.', 'lknmp-gateway-givewp'),
                     'type' => 'password',
                 );
 
                 $settings[] = array(
-                    'name' => __('Mercado Pago Token', 'lknmp-mercadopago-for-givewp'),
+                    'name' => __('Mercado Pago Token', 'lknmp-gateway-givewp'),
                     'id' => 'mercado_pago_token',
-                    'desc' => __('Mercado Pago Token Code.', 'lknmp-mercadopago-for-givewp'),
+                    'desc' => __('Mercado Pago Token Code.', 'lknmp-gateway-givewp'),
                     'type' => 'password',
                 );
 
                 $settings[] = array(
-                    'name' => __('Title in Mercado Pago', 'lknmp-mercadopago-for-givewp'),
+                    'name' => __('Title in Mercado Pago', 'lknmp-gateway-givewp'),
                     'id' => 'mercado_pago_tittle',
-                    'desc' => __('This title will be used during checkout in Mercado Pago.', 'lknmp-mercadopago-for-givewp'),
+                    'desc' => __('This title will be used during checkout in Mercado Pago.', 'lknmp-gateway-givewp'),
                     'type' => 'text',
                 );
 
                 $settings[] = array(
-                    'name' => __('Description in Mercado Pago', 'lknmp-mercadopago-for-givewp'),
+                    'name' => __('Description in Mercado Pago', 'lknmp-gateway-givewp'),
                     'id' => 'mercado_pago_description',
-                    'desc' => __('This description will be used during checkout in Mercado Pago.', 'lknmp-mercadopago-for-givewp'),
+                    'desc' => __('This description will be used during checkout in Mercado Pago.', 'lknmp-gateway-givewp'),
                     'type' => 'text',
                 );
 
                 $settings[] = array(
-                    'name' => __('Advanced Debug Mode', 'lknmp-mercadopago-for-givewp'),
+                    'name' => __('Advanced Debug Mode', 'lknmp-gateway-givewp'),
                     'id' => 'mercado_pago_advanced_debug',
-                    'desc' => __('Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable.', 'lknmp-mercadopago-for-givewp'),
+                    'desc' => __('Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable.', 'lknmp-gateway-givewp'),
                     'type' => 'radio',
                     'default' => 'disabled',
                     'options' => array(
-                        'enabled' => __('Enable', 'lknmp-mercadopago-for-givewp'),
-                        'disabled' => __('Disable', 'lknmp-mercadopago-for-givewp'),
+                        'enabled' => __('Enable', 'lknmp-gateway-givewp'),
+                        'disabled' => __('Disable', 'lknmp-gateway-givewp'),
                     ),
                 );
 

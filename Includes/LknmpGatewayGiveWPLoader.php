@@ -1,14 +1,14 @@
 <?php
 
-namespace Lknmp\MercadoPagoForGiveWp\Includes;
+namespace Lknmp\Gateway\Includes;
 /**
  * Register all actions and filters for the plugin
  *
  * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/includes
  */
 
 /**
@@ -18,11 +18,11 @@ namespace Lknmp\MercadoPagoForGiveWp\Includes;
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpMercadoPagoForGiveWPLoader {
+final class LknmpGatewayGiveWPLoader {
     /**
      * The array of actions registered with WordPress.
      *

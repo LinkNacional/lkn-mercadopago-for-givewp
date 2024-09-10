@@ -1,11 +1,11 @@
 <?php
 
-namespace Lknmp\MercadoPagoForGiveWp\Includes;
+namespace Lknmp\Gateway\Includes;
 
 use Give\Donations\Models\Donation;
 use Give\Donations\ValueObjects\DonationStatus;
-use Lknmp\MercadoPagoForGiveWp\Admin\LknmpMercadoPagoForGiveWPAdmin;
-use Lknmp\MercadoPagoForGiveWp\PublicView\LknmpMercadoPagoForGiveWPPublic;
+use Lknmp\Gateway\Admin\LknmpGatewayGiveWPAdmin;
+use Lknmp\Gateway\PublicView\LknmpGatewayGiveWPPublic;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -20,8 +20,8 @@ use WP_REST_Server;
  * @link       https://www.linknacional.com.br/wordpress/givewp/
  * @since      1.0.0
  *
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/includes
  */
 
 /**
@@ -34,18 +34,18 @@ use WP_REST_Server;
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Lknmp_Mercadopago_For_Givewp
- * @subpackage Lknmp_Mercadopago_For_Givewp/includes
+ * @package    Lknmp_Gateway_Givewp
+ * @subpackage Lknmp_Gateway_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpMercadoPagoForGiveWP {
+final class LknmpGatewayGiveWP {
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
      *
      * @since    1.0.0
      * @access   protected
-     * @var      LknmpMercadoPagoForGiveWPLoader    $loader    Maintains and registers all hooks for the plugin.
+     * @var      LknmpGatewayGiveWPLoader    $loader    Maintains and registers all hooks for the plugin.
      */
     protected $loader;
 
@@ -77,14 +77,18 @@ final class LknmpMercadoPagoForGiveWP {
      * @since    1.0.0
      */
     public function __construct() {
-        if (defined('LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION')) {
-            $this->version = LKNMP_MERCADOPAGO_FOR_GIVEWP_VERSION;
+        if (defined('LKNMP_GATEWAY_GIVEWP_VERSION')) {
+            $this->version = LKNMP_GATEWAY_GIVEWP_VERSION;
         } else {
             $this->version = '1.0.0';
         }
-        $this->plugin_name = 'lknmp-mercadopago-for-givewp';
+        $this->plugin_name = 'lknmp-gateway-givewp';
 
-        $this->init();
+        $this->load_dependencies();
+        $this->set_locale();
+        $this->define_admin_hooks();
+        $this->define_public_hooks();
+        $this->run();
     }
 
     /**
@@ -92,10 +96,10 @@ final class LknmpMercadoPagoForGiveWP {
      *
      * Include the following files that make up the plugin:
      *
-     * - Lknmp_Mercadopago_For_Givewp_Loader. Orchestrates the hooks of the plugin.
-     * - Lknmp_Mercadopago_For_Givewp_i18n. Defines internationalization functionality.
-     * - Lknmp_Mercadopago_For_Givewp_Admin. Defines all hooks for the admin area.
-     * - Lknmp_Mercadopago_For_Givewp_Public. Defines all hooks for the public side of the site.
+     * - Lknmp_Gateway_Givewp_Loader. Orchestrates the hooks of the plugin.
+     * - Lknmp_Gateway_Givewp_i18n. Defines internationalization functionality.
+     * - Lknmp_Gateway_Givewp_Admin. Defines all hooks for the admin area.
+     * - Lknmp_Gateway_Givewp_Public. Defines all hooks for the public side of the site.
      *
      * Create an instance of the loader which will be used to register the hooks
      * with WordPress.
@@ -104,31 +108,20 @@ final class LknmpMercadoPagoForGiveWP {
      * @access   private
      */
     private function load_dependencies(): void {
-        $this->loader = new LknmpMercadoPagoForGiveWPLoader();
-    }
-
-    public function init(): void {
-        $dependency = LknmpMercadoPagoForGiveWPHelper::check_environment();
-        if ($dependency) {
-            $this->load_dependencies();
-            $this->set_locale();
-            $this->define_admin_hooks();
-            $this->define_public_hooks();
-            $this->run();
-        }
+        $this->loader = new LknmpGatewayGiveWPLoader();
     }
 
     /**
      * Define the locale for this plugin for internationalization.
      *
-     * Uses the Lknmp_Mercadopago_For_Givewp_i18n class in order to set the domain and to register the hook
+     * Uses the Lknmp_Gateway_Givewp_i18n class in order to set the domain and to register the hook
      * with WordPress.
      *
      * @since    1.0.0
      * @access   private
      */
     private function set_locale(): void {
-        $plugin_i18n = new LknmpMercadoPagoForGiveWPi18n();
+        $plugin_i18n = new LknmpGatewayGiveWPi18n();
 
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
     }
@@ -141,8 +134,8 @@ final class LknmpMercadoPagoForGiveWP {
      * @access   private
      */
     private function define_admin_hooks(): void {
-        $plugin_admin = new LknmpMercadoPagoForGiveWPAdmin($this->get_plugin_name(), $this->get_version());
-        $this->loader->add_filter('plugin_action_links_' . LKNMP_MERCADOPAGO_FOR_GIVEWP_BASENAME, 'Lknmp\MercadoPagoForGiveWp\Includes\LknmpMercadoPagoForGiveWPHelper', 'plugin_row_meta', 10, 2);
+        $plugin_admin = new LknmpGatewayGiveWPAdmin($this->get_plugin_name(), $this->get_version());
+        $this->loader->add_filter('plugin_action_links_' . LKNMP_GATEWAY_GIVEWP_BASENAME, 'Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper', 'plugin_row_meta', 10, 2);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
@@ -160,7 +153,7 @@ final class LknmpMercadoPagoForGiveWP {
      * @access   private
      */
     private function define_public_hooks(): void {
-        $plugin_public = new LknmpMercadoPagoForGiveWPPublic($this->get_plugin_name(), $this->get_version());
+        $plugin_public = new LknmpGatewayGiveWPPublic($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
@@ -191,7 +184,7 @@ final class LknmpMercadoPagoForGiveWP {
      * The reference to the class that orchestrates the hooks with the plugin.
      *
      * @since     1.0.0
-     * @return    LknmpMercadoPagoForGiveWPLoader    Orchestrates the hooks of the plugin.
+     * @return    LknmpGatewayGiveWPLoader    Orchestrates the hooks of the plugin.
      */
     public function get_loader() {
         return $this->loader;
@@ -217,7 +210,7 @@ final class LknmpMercadoPagoForGiveWP {
      * @return void
      */
     public function new_gateway_register($paymentGatewayRegister) :void {
-        $paymentGatewayRegister->registerGateway('Lknmp\MercadoPagoForGiveWp\PublicView\LknmpMercadoPagoForGiveWPGateway');
+        $paymentGatewayRegister->registerGateway('Lknmp\Gateway\PublicView\LknmpGatewayGiveWPGateway');
     }
 
     final public function mercadopago_get_endpoint_payments() {
@@ -230,14 +223,14 @@ final class LknmpMercadoPagoForGiveWP {
      */
     final public function register_payment_routes(): void {
         // register_rest_route() handles more arguments but we are going to stick to the basics for now.
-        register_rest_route('mercadopago/v1', '/payments', array(
+        register_rest_route('lknmp/v1', '/payments', array(
             'methods' => WP_REST_Server::READABLE,
             'callback' => array($this, 'mercadopago_get_endpoint_payments'),
         ) );
     }
 
     public function register_rest_route(): void {
-        register_rest_route( 'mercadopago/v1', '/payments/checkpayment', array(
+        register_rest_route( 'lknmp/v1', '/payments/checkpayment', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_handle_custom_payment_route'),
             'permission_callback' => '__return_true',

@@ -4,9 +4,9 @@
     "license": "Proprietary",
     "autoload": {
         "psr-4": {
-            "Lknmp\\MercadoPagoForGiveWp\\Includes\\": "Includes/",
-            "Lknmp\\MercadoPagoForGiveWp\\Admin\\": "Admin/",
-            "Lknmp\\MercadoPagoForGiveWp\\PublicView\\": "Public/"
+            "Lknmp\\Gateway\\Includes\\": "Includes/",
+            "Lknmp\\Gateway\\Admin\\": "Admin/",
+            "Lknmp\\Gateway\\PublicView\\": "Public/"
         }
     },
     "authors": [

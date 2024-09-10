@@ -130,7 +130,7 @@ function checkInputs() {
 }
 
 const gateway = {
-    id: 'lnk-mercadopago-forgivewp',
+    id: 'lknmp-gateway-givewp',
     async initialize() {
         // Aqui vai todas as funções necessárias ao carregar a página de pagamento
     },

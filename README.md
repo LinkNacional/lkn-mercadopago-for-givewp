@@ -1,4 +1,4 @@
-# lknmp-mercadopago-for-givewp
+# lknmp-gateway-givewp
 
 [Link Nacional MercadoPago for GiveWP](https://www.linknacional.com/wordpress/plugins/) is a plugin designed to seamlessly integrate Mercado Pago with your GiveWP donations, allowing your customers to make payments using credit cards, debit cards and a multitude of Mercado Pago options.
 
