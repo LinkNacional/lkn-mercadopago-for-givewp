@@ -61,8 +61,8 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
             <div class="donation-errors">
                 <div class="give-notice give-notice-error" id="give_error_warning">
                     <p class="give_notice give_warning">
-                    <strong>' . esc_html__('Notice:', 'give') . '</strong>
-                    ' . esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'give') . '</p>
+                    <strong>' . esc_html__('Notice:', 'lknmp-gateway-givewp') . '</strong>
+                    ' . esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'lknmp-gateway-givewp') . '</p>
                 </div>
             </div>';
             return $html;
@@ -74,16 +74,16 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
             Give()->notices->print_frontend_notice(
                 sprintf(
                     '%1$s %2$s',
-                    esc_html__('Erro:', 'give'),
-                    esc_html__('Mercado Pago Token was not provided or is invalid!', 'give')
+                    esc_html__('Erro:', 'lknmp-gateway-givewp'),
+                    esc_html__('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp')
                 )
             );
         } elseif (empty($configs['key']) && strlen($configs['token']) <= 5) {
             Give()->notices->print_frontend_notice(
                 sprintf(
                     '%1$s %2$s',
-                    esc_html__('Erro:', 'give'),
-                    esc_html__('Mercado Pago Public Key was not provided or is invalid!', 'give')
+                    esc_html__('Erro:', 'lknmp-gateway-givewp'),
+                    esc_html__('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp')
                 )
             );
         }
@@ -103,7 +103,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
     public function createPayment(Donation $donation, $gatewayData): GatewayCommand {
         try {
             $idTeste = $gatewayData['gatewayId'];
-            add_option("lkn_mercadopago_" . $idTeste, $donation->id);
+            add_option("lknmp_gateway_" . $idTeste, $donation->id);
 
             return new PaymentPending();
         } catch (Exception $e) {
@@ -143,8 +143,8 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
         $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
         $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-gateway-givewp');
         $MenssageDonation = __('Donation of ', 'lknmp-gateway-givewp');
-        $MenssageErrorToken = __('Mercado Pago Token was not provided or is invalid!');
-        $MenssageErrorPublicKey = __('Mercado Pago Public Key was not provided or is invalid!');
+        $MenssageErrorToken = __('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp');
+        $MenssageErrorPublicKey = __('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp');
 
         $hastoken = ! empty($configs['token']) && strlen($configs['token']) > 10 ? 'true' : 'false';
         $haspublicKey = ! empty($configs['key']) && strlen($configs['key']) > 10 ? 'true' : 'false';

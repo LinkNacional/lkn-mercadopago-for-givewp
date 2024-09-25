@@ -38,9 +38,9 @@ give_delete_option('mercado_pago_advanced_debug');
 
 $lkn_array_remove_options = give_get_settings();
 
-// Remove todos as options que possuem lkn_mercadopago_
+// Remove todos as options que possuem lknmp_gateway_
 $lkn_array_remove_options = array_filter($lkn_array_remove_options, function ($key) {
-    return strpos($key, 'lkn_mercadopago_') === 0;
+    return strpos($key, 'lknmp_gateway_') === 0;
 }, \ARRAY_FILTER_USE_KEY);
 
 $lkn_array_remove_options = array_keys($lkn_array_remove_options);

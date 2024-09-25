@@ -4,7 +4,7 @@ Donate link: https://www.linknacional.com.br/wordpress/givewp/
 Tags: givewp, payment, mercadopago, card
 Requires at least: 5.7
 Tested up to: 6.6
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -22,7 +22,11 @@ The [MercadoPago Payment Gateway for GiveWP](https://www.linknacional.com.br/wor
 [GiveWP](https://wordpress.org/plugins/give/) is needed for the plugin to work.
 
 JS Libraries used:
-[MercadoPago sdk-js](https://github.com/mercadopago/sdk-js)
+The [MercadoPago sdk-js](https://github.com/mercadopago/sdk-js) is needed for the plugin to work. [Learn more](https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/integrate-checkout-pro/web).
+
+As a Payment Gateway this plugin contacts these external resources to complete the payment:
+[Mercado Pago Checkout API](https://api.mercadopago.com/checkout/preferences)
+[Mercado Pago Checkout JS SDK](https://sdk.mercadopago.com/js/v2)
 
 **User instructions**
 
@@ -75,6 +79,11 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 1. Nothing yet.
 
 == Changelog ==
+
+= 1.2.2 = *2024/09/25*
+* Update documentation;
+* Fix translation mismatch issues;
+* Change option names to avoid collisions.
 
 = 1.2.1 = *2024/09/10*
 * Refactor with requested name and slug changes.
