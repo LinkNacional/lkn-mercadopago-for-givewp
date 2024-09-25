@@ -1,3 +1,8 @@
+# 1.2.2 - 25/09/2024
+* Atualização de documentação;
+* Correção de slug de tradução no formato incorreto;
+* Mudança na nomenclatura das configurações para evitar colisões.
+
 # 1.2.1 - 10/09/2024
 * Refatoração de plugin com slug e nome do plugin sugeridos pela equipe do WordPress.
 
