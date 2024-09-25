@@ -24,6 +24,10 @@ The [MercadoPago Payment Gateway for GiveWP](https://www.linknacional.com.br/wor
 JS Libraries used:
 The [MercadoPago sdk-js](https://github.com/mercadopago/sdk-js) is needed for the plugin to work. [Learn more](https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/integrate-checkout-pro/web).
 
+As a Payment Gateway this plugin contacts these external resources to complete the payment:
+[Mercado Pago Checkout API](https://api.mercadopago.com/checkout/preferences)
+[Mercado Pago Checkout JS SDK](https://sdk.mercadopago.com/js/v2)
+
 **User instructions**
 
 1. Search the WordPress sidebar for 'Link Nacional MercadoPago for GiveWP'.
