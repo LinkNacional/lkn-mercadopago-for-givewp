@@ -103,7 +103,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
     public function createPayment(Donation $donation, $gatewayData): GatewayCommand {
         try {
             $idTeste = $gatewayData['gatewayId'];
-            add_option("lkn_mercadopago_" . $idTeste, $donation->id);
+            add_option("lknmp_gateway_" . $idTeste, $donation->id);
 
             return new PaymentPending();
         } catch (Exception $e) {
