@@ -387,4 +387,10 @@ const LknmpGatewayGiveWP = {
         }
     }
 };
+var script = document.createElement('script');
+script.src = 'https://sdk.mercadopago.com/js/v2';
+script.async = true;
+document.head.appendChild(script);
+
 window.givewp.gateways.register(LknmpGatewayGiveWP);
+

@@ -149,8 +149,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
         $hastoken = ! empty($configs['token']) && strlen($configs['token']) > 10 ? 'true' : 'false';
         $haspublicKey = ! empty($configs['key']) && strlen($configs['key']) > 10 ? 'true' : 'false';
 
-        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery', self::id() . 'MercadoPago'), LKNMP_GATEWAY_GIVEWP_VERSION, true );
-        wp_enqueue_script( self::id() . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), LKNMP_GATEWAY_GIVEWP_VERSION, false);
+        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery'), LKNMP_GATEWAY_GIVEWP_VERSION, true );
 
         wp_localize_script(self::id(), 'urlPag', $url_pagina);
         wp_localize_script(self::id(), 'idUnique', uniqid());
