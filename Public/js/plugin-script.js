@@ -76,7 +76,14 @@ async function criarPreferenciaDePagamento() {
     const sobrenome = sanitizeInput(document.querySelector('input[name="lastName"]').value);
     const email = sanitizeInput(document.querySelector('input[name="email"]').value);
 
-    const valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
+    let valorText
+    const proAmount = document.querySelector('input[name="custom_amount"]');
+    if(proAmount) {
+        valorText = proAmount.value
+    } else {
+        valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
+    }
+
     const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
 
     if (configData.advDebug == 'enabled') {
@@ -380,4 +387,10 @@ const LknmpGatewayGiveWP = {
         }
     }
 };
+var script = document.createElement('script');
+script.src = 'https://sdk.mercadopago.com/js/v2';
+script.async = true;
+document.head.appendChild(script);
+
 window.givewp.gateways.register(LknmpGatewayGiveWP);
+

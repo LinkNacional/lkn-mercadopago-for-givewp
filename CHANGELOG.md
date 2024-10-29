@@ -1,3 +1,6 @@
+# 1.2.3 - 27/09/2024
+* Correção de problema no script do SDK do Mercado Pago.
+
 # 1.2.2 - 25/09/2024
 * Atualização de documentação;
 * Correção de slug de tradução no formato incorreto;

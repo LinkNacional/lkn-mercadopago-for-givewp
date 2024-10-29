@@ -33,12 +33,22 @@
 		}
 
 		async function criarPreferenciaDePagamento() {
-			const amountGive = document.getElementsByName('give-amount')[0];
-			if (lknmpGlobals.advDebug == 'enabled') {
-				console.log(amountGive.value);
+			let valorText
+			const proAmount = document.querySelector('input[name="custom_amount"]')
+			if(proAmount) {
+					valorText = proAmount.value
+			} else {
+					valorText = document.getElementsByName('give-amount')
+					if(valorText[0]){
+						valorText = valorText[0].value
+					}
 			}
 
-			let amount = amountGive.value;
+			if (lknmpGlobals.advDebug == 'enabled') {
+				console.log(valorText);
+			}
+
+			let amount = valorText
 
 			if (lknmpGlobals.advDebug == 'enabled') {
 				console.log(amount)
