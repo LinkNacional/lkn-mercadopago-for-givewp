@@ -262,7 +262,7 @@ final class LknmpGatewayGiveWP {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
 
-                $url_pagina = give_get_success_page_uri();
+                $url_pagina = give_get_success_page_uri() . '?donation_id=' . $donation_id;
 
                 header("Location: $url_pagina", true, 302);
                 exit;
@@ -282,7 +282,7 @@ final class LknmpGatewayGiveWP {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
 
-                $url_pagina = give_get_success_page_uri();
+                $url_pagina = give_get_success_page_uri() . '?donation_id=' . $donation_id;
 
                 header("Location: $url_pagina", true, 302);
                 exit;
