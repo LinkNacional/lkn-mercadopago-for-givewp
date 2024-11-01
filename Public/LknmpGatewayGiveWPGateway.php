@@ -17,39 +17,45 @@ use Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper;
 /**
  * @inheritDoc
  */
-final class LknmpGatewayGiveWPGateway extends PaymentGateway {
+final class LknmpGatewayGiveWPGateway extends PaymentGateway
+{
     /**
      * @inheritDoc
      */
-    public static function id(): string {
+    public static function id(): string
+    {
         return 'lknmp-gateway-givewp';
     }
 
     /**
      * @inheritDoc
      */
-    public function getId(): string {
+    public function getId(): string
+    {
         return self::id();
     }
 
     /**
      * @inheritDoc
      */
-    public function getName(): string {
+    public function getName(): string
+    {
         return 'Link Nacional Mercado Pago Checkout';
     }
 
     /**
      * @inheritDoc
      */
-    public function getPaymentMethodLabel(): string {
+    public function getPaymentMethodLabel(): string
+    {
         return 'Mercado Pago Checkout';
     }
 
     /**
      * @inheritDoc
      */
-    public function getLegacyFormFieldMarkup(int $formId, array $args): string {
+    public function getLegacyFormFieldMarkup(int $formId, array $args): string
+    {
         // Step 1: add any gateway fields to the form using html.  In order to retrieve this data later the name of the input must be inside the key gatewayData (name='gatewayData[input_name]').
         // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
         $formTb = new Give_DB_Form_Meta();
@@ -100,12 +106,18 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
     /**
      * @inheritDoc
      */
-    public function createPayment(Donation $donation, $gatewayData): GatewayCommand {
+    public function createPayment(Donation $donation, $gatewayData)
+    {
         try {
             $idTeste = $gatewayData['gatewayId'];
             add_option("lknmp_gateway_" . $idTeste, $donation->id);
 
-            return new PaymentPending();
+            $donation->status = DonationStatus::PENDING();
+            $donation->save();
+
+            //return new PaymentPending();
+            return wp_send_json_success(['status' => 'pending', 'message' => 'Pagamento está pendente.']);
+            // return new GatewayCommand();
         } catch (Exception $e) {
             $errorMessage = $e->getMessage();
 
@@ -124,7 +136,8 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
     /**
      * @inerhitDoc
      */
-    public function refundDonation(Donation $donation): PaymentRefunded {
+    public function refundDonation(Donation $donation): PaymentRefunded
+    {
         // Step 1: refund the donation with your gateway.
         // Step 2: return a command to complete the refund.
         return new PaymentRefunded();
@@ -134,7 +147,8 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
      * // TO DO needs this function to appear in v3 forms
      * @since 3.0.0
      */
-    public function enqueueScript(int $formId): void {
+    public function enqueueScript(int $formId): void
+    {
         $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();
 
@@ -145,11 +159,13 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
         $MenssageDonation = __('Donation of ', 'lknmp-gateway-givewp');
         $MenssageErrorToken = __('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp');
         $MenssageErrorPublicKey = __('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp');
+        $MenssageSuccess = __('Payment in process, please close the current tab and follow the payment procedure in the other tab.', 'lknmp-gateway-givewp');
+        // Pagamento em processo, feche a guia atual e siga o procedimento de pagamento na outra aba.
 
         $hastoken = ! empty($configs['token']) && strlen($configs['token']) > 10 ? 'true' : 'false';
         $haspublicKey = ! empty($configs['key']) && strlen($configs['key']) > 10 ? 'true' : 'false';
 
-        wp_enqueue_script( self::id(), plugin_dir_url( __FILE__ ) . 'js/plugin-script.js', array('jquery'), LKNMP_GATEWAY_GIVEWP_VERSION, true );
+        wp_enqueue_script(self::id(), plugin_dir_url(__FILE__) . 'js/plugin-script.js', array('jquery'), LKNMP_GATEWAY_GIVEWP_VERSION, true);
 
         wp_localize_script(self::id(), 'urlPag', $url_pagina);
         wp_localize_script(self::id(), 'idUnique', uniqid());
@@ -167,6 +183,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway {
             'MenssageErrorEmailEmpty' => $MenssageErrorEmailEmpty,
             'MenssageErrorEmailInvalid' => $MenssageErrorEmailInvalid,
             'MenssageDonation' => $MenssageDonation,
+            'MenssageSuccess' => $MenssageSuccess,
             'MenssageErrorToken' => $MenssageErrorToken,
             'MenssageErrorPublicKey' => $MenssageErrorPublicKey,
             'token' => $hastoken,

@@ -38,7 +38,8 @@ use WP_REST_Server;
  * @subpackage Lknmp_Gateway_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpGatewayGiveWP {
+final class LknmpGatewayGiveWP
+{
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
@@ -76,7 +77,8 @@ final class LknmpGatewayGiveWP {
      *
      * @since    1.0.0
      */
-    public function __construct() {
+    public function __construct()
+    {
         if (defined('LKNMP_GATEWAY_GIVEWP_VERSION')) {
             $this->version = LKNMP_GATEWAY_GIVEWP_VERSION;
         } else {
@@ -107,7 +109,8 @@ final class LknmpGatewayGiveWP {
      * @since    1.0.0
      * @access   private
      */
-    private function load_dependencies(): void {
+    private function load_dependencies(): void
+    {
         $this->loader = new LknmpGatewayGiveWPLoader();
     }
 
@@ -120,7 +123,8 @@ final class LknmpGatewayGiveWP {
      * @since    1.0.0
      * @access   private
      */
-    private function set_locale(): void {
+    private function set_locale(): void
+    {
         $plugin_i18n = new LknmpGatewayGiveWPi18n();
 
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
@@ -133,7 +137,8 @@ final class LknmpGatewayGiveWP {
      * @since    1.0.0
      * @access   private
      */
-    private function define_admin_hooks(): void {
+    private function define_admin_hooks(): void
+    {
         $plugin_admin = new LknmpGatewayGiveWPAdmin($this->get_plugin_name(), $this->get_version());
         $this->loader->add_filter('plugin_action_links_' . LKNMP_GATEWAY_GIVEWP_BASENAME, 'Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper', 'plugin_row_meta', 10, 2);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
@@ -152,7 +157,8 @@ final class LknmpGatewayGiveWP {
      * @since    1.0.0
      * @access   private
      */
-    private function define_public_hooks(): void {
+    private function define_public_hooks(): void
+    {
         $plugin_public = new LknmpGatewayGiveWPPublic($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
@@ -165,7 +171,8 @@ final class LknmpGatewayGiveWP {
      *
      * @since    1.0.0
      */
-    public function run(): void {
+    public function run(): void
+    {
         $this->loader->run();
     }
 
@@ -176,7 +183,8 @@ final class LknmpGatewayGiveWP {
      * @since     1.0.0
      * @return    string    The name of the plugin.
      */
-    public function get_plugin_name() {
+    public function get_plugin_name()
+    {
         return $this->plugin_name;
     }
 
@@ -186,7 +194,8 @@ final class LknmpGatewayGiveWP {
      * @since     1.0.0
      * @return    LknmpGatewayGiveWPLoader    Orchestrates the hooks of the plugin.
      */
-    public function get_loader() {
+    public function get_loader()
+    {
         return $this->loader;
     }
 
@@ -196,7 +205,8 @@ final class LknmpGatewayGiveWP {
      * @since     1.0.0
      * @return    string    The version number of the plugin.
      */
-    public function get_version() {
+    public function get_version()
+    {
         return $this->version;
     }
 
@@ -209,35 +219,40 @@ final class LknmpGatewayGiveWP {
      *
      * @return void
      */
-    public function new_gateway_register($paymentGatewayRegister) :void {
+    public function new_gateway_register($paymentGatewayRegister): void
+    {
         $paymentGatewayRegister->registerGateway('Lknmp\Gateway\PublicView\LknmpGatewayGiveWPGateway');
     }
 
-    final public function mercadopago_get_endpoint_payments() {
+    final public function mercadopago_get_endpoint_payments()
+    {
         // rest_ensure_response() wraps the data we want to return into a WP_REST_Response, and ensures it will be properly returned.
-        return rest_ensure_response( 'Hello World, this is the WordPress REST API' );
+        return rest_ensure_response('Hello World, this is the WordPress REST API');
     }
 
     /**
      * This function is where we register our routes for our example endpoint.
      */
-    final public function register_payment_routes(): void {
+    final public function register_payment_routes(): void
+    {
         // register_rest_route() handles more arguments but we are going to stick to the basics for now.
         register_rest_route('lknmp/v1', '/payments', array(
             'methods' => WP_REST_Server::READABLE,
             'callback' => array($this, 'mercadopago_get_endpoint_payments'),
-        ) );
+        ));
     }
 
-    public function register_rest_route(): void {
-        register_rest_route( 'lknmp/v1', '/payments/checkpayment', array(
+    public function register_rest_route(): void
+    {
+        register_rest_route('lknmp/v1', '/payments/checkpayment', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_handle_custom_payment_route'),
             'permission_callback' => '__return_true',
-        ) );
+        ));
     }
 
-    public function get_handle_custom_payment_route($request) {
+    public function get_handle_custom_payment_route($request)
+    {
         $id = $request->get_param('id');
         $statusFront = $request->get_param('statusFront');
         if (empty($id)) {
@@ -247,59 +262,60 @@ final class LknmpGatewayGiveWP {
         switch ($statusFront) {
             case '1':
                 $donation_id = get_option("lknmp_gateway_" . $id);
-                if ( ! $donation_id) {
+                if (! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
 
                 $donation = Donation::find($donation_id);
-                if ( ! $donation) {
+                if (! $donation) {
                     return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
                 }
 
                 $donation->status = DonationStatus::COMPLETE();
                 $donation->save();
-                if ( ! $donation) {
+                if (! $donation) {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
 
-                $url_pagina = give_get_success_page_uri() . '?donation_id=' . $donation_id;
+                $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
+                $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
 
-                header("Location: $url_pagina", true, 302);
+                header("Location: $redirect_url", true, 302);
                 exit;
                 break;
             case '2':
                 $donation_id = get_option("lknmp_gateway_" . $id);
-                if ( ! $donation_id) {
+                if (! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
                 $donation = Donation::find($donation_id);
-                if ( ! $donation) {
+                if (! $donation) {
                     return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
                 }
                 $donation->status = DonationStatus::PENDING();
                 $donation->save();
-                if ( ! $donation) {
+                if (! $donation) {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
+                $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
+                $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
 
-                $url_pagina = give_get_success_page_uri() . '?donation_id=' . $donation_id;
-
-                header("Location: $url_pagina", true, 302);
+                header("Location: $redirect_url", true, 302);
                 exit;
                 break;
             case '3':
                 $donation_id = get_option("lknmp_gateway_" . $id);
-                if ( ! $donation_id) {
+                if (! $donation_id) {
                     return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
                 }
                 $donation = Donation::find($donation_id);
-                if ( ! $donation) {
+                if (! $donation) {
                     return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
                 }
 
                 $donation->status = DonationStatus::FAILED();
                 $donation->save();
-                if ( ! $donation) {
+                if (! $donation) {
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
 

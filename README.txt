@@ -82,6 +82,7 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 
 = 1.2.4 = *2024/10/29*
 * Fixed redirect URL.
+* Improved payment flow.
 
 = 1.2.3 = *2024/09/27*
 * Fixed bug on Mercado Pago SDK load.

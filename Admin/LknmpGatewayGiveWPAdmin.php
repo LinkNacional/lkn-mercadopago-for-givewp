@@ -1,4 +1,5 @@
 <?php
+
 namespace Lknmp\Gateway\Admin;
 
 /**
@@ -21,7 +22,8 @@ namespace Lknmp\Gateway\Admin;
  * @subpackage Lknmp_Gateway_Givewp/admin
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpGatewayGiveWPAdmin {
+final class LknmpGatewayGiveWPAdmin
+{
     /**
      * The ID of this plugin.
      *
@@ -47,7 +49,8 @@ final class LknmpGatewayGiveWPAdmin {
      * @param      string    $plugin_name       The name of this plugin.
      * @param      string    $version    The version of this plugin.
      */
-    public function __construct( $plugin_name, $version ) {
+    public function __construct($plugin_name, $version)
+    {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
     }
@@ -57,7 +60,8 @@ final class LknmpGatewayGiveWPAdmin {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles(): void {
+    public function enqueue_styles(): void
+    {
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -69,7 +73,7 @@ final class LknmpGatewayGiveWPAdmin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-gateway-givewp-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/lknmp-gateway-givewp-admin.css', array(), $this->version, 'all');
     }
 
     /**
@@ -77,7 +81,8 @@ final class LknmpGatewayGiveWPAdmin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts($hook): void {
+    public function enqueue_scripts($hook): void
+    {
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -89,14 +94,15 @@ final class LknmpGatewayGiveWPAdmin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script("lkn-mercadopago-givewp-show-message.js", plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-show-message.js', null, $this->version, false );
+        wp_enqueue_script("lkn-mercadopago-givewp-show-message.js", plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-show-message.js', null, $this->version, false);
 
         wp_localize_script("lkn-mercadopago-givewp-show-message.js", "varsPhp", array(
             "admin_url" => admin_url("edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago")
         ));
     }
 
-    public function add_setting_into_new_section($settings) {
+    public function add_setting_into_new_section($settings)
+    {
         switch (give_get_current_setting_section()) {
             case 'mercado_pago':
 
@@ -163,7 +169,8 @@ final class LknmpGatewayGiveWPAdmin {
      *
      * @return array
      */
-    public function new_setting_section($sections) {
+    public function new_setting_section($sections)
+    {
         $sections['mercado_pago'] = 'Mercado Pago';
         return $sections;
     }

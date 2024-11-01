@@ -26,7 +26,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     die;
 }
 
@@ -41,27 +41,27 @@ use Lknmp\Gateway\Includes\LknmpGatewayGiveWPDeactivator;
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-if ( ! defined('LKNMP_GATEWAY_GIVEWP_VERSION')) {
-    define( 'LKNMP_GATEWAY_GIVEWP_VERSION', '1.2.4' );
+if (! defined('LKNMP_GATEWAY_GIVEWP_VERSION')) {
+    define('LKNMP_GATEWAY_GIVEWP_VERSION', '1.2.4');
 }
 
-if ( ! defined('LKNMP_GATEWAY_MIN_GIVE_VERSION')) {
+if (! defined('LKNMP_GATEWAY_MIN_GIVE_VERSION')) {
     define('LKNMP_GATEWAY_MIN_GIVE_VERSION', '3.0.0');
 }
 
-if ( ! defined('LKNMP_GATEWAY_GIVEWP_FILE')) {
+if (! defined('LKNMP_GATEWAY_GIVEWP_FILE')) {
     define('LKNMP_GATEWAY_GIVEWP_FILE', __FILE__);
 }
 
-if ( ! defined('LKNMP_GATEWAY_GIVEWP_DIR')) {
+if (! defined('LKNMP_GATEWAY_GIVEWP_DIR')) {
     define('LKNMP_GATEWAY_GIVEWP_DIR', plugin_dir_path(LKNMP_GATEWAY_GIVEWP_FILE));
 }
 
-if ( ! defined('LKNMP_GATEWAY_GIVEWP_URL')) {
+if (! defined('LKNMP_GATEWAY_GIVEWP_URL')) {
     define('LKNMP_GATEWAY_GIVEWP_URL', plugin_dir_url(LKNMP_GATEWAY_GIVEWP_FILE));
 }
 
-if ( ! defined('LKNMP_GATEWAY_GIVEWP_BASENAME')) {
+if (! defined('LKNMP_GATEWAY_GIVEWP_BASENAME')) {
     define('LKNMP_GATEWAY_GIVEWP_BASENAME', plugin_basename(LKNMP_GATEWAY_GIVEWP_FILE));
 }
 
@@ -69,7 +69,8 @@ if ( ! defined('LKNMP_GATEWAY_GIVEWP_BASENAME')) {
  * The code that runs during plugin activation.
  * This action is documented in includes/class-lknmp-gateway-givewp-activator.php
  */
-function lknmp_gateway_givewp_activate(): void {
+function lknmp_gateway_givewp_activate(): void
+{
     LknmpGatewayGiveWPActivator::activate();
 }
 
@@ -77,12 +78,13 @@ function lknmp_gateway_givewp_activate(): void {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-lknmp-gateway-givewp-deactivator.php
  */
-function lknmp_gateway_givewp_deactivate(): void {
+function lknmp_gateway_givewp_deactivate(): void
+{
     LknmpGatewayGiveWPDeactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'lknmp_gateway_givewp_activate' );
-register_deactivation_hook( __FILE__, 'lknmp_gateway_givewp_deactivate' );
+register_activation_hook(__FILE__, 'lknmp_gateway_givewp_activate');
+register_deactivation_hook(__FILE__, 'lknmp_gateway_givewp_deactivate');
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -98,7 +100,8 @@ register_deactivation_hook( __FILE__, 'lknmp_gateway_givewp_deactivate' );
  *
  * @since    1.0.0
  */
-function lknmp_gateway_givewp_run(): void {
+function lknmp_gateway_givewp_run(): void
+{
     $plugin = new LknmpGatewayGiveWP();
 }
 lknmp_gateway_givewp_run();
