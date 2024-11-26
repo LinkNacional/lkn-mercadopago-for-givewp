@@ -71,5 +71,8 @@ msgstr "O campo Email está inválido. Por favor, insira um endereço de email v
 msgid "Donation of "
 msgstr "Doação de "
 
+msgid "Payment in process, please close the current tab and follow the payment procedure in the other tab."
+msgstr "Pagamento em processo, feche a guia atual e siga o procedimento de pagamento na outra aba."
+
 msgid "Mercado Pago is not enabled for the classic and multistep form!"
 msgstr "Mercado Pago não está habilitado para o formulário clássico e multistep!"

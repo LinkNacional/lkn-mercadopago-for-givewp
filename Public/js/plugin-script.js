@@ -2,6 +2,7 @@ let preferenceID = null;
 let hasRenderedComponents = false;
 let OneLoad = true;
 let showMP = true;
+let confirmPayment = false
 
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
@@ -18,7 +19,7 @@ function renderComponentsOnce() {
                     mp.bricks().create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
-                            redirectMode: "blank"
+                            redirectMode: 'blank'
                         },
                         customization: {
                             texts: {
@@ -78,7 +79,7 @@ async function criarPreferenciaDePagamento() {
 
     let valorText
     const proAmount = document.querySelector('input[name="custom_amount"]');
-    if(proAmount) {
+    if (proAmount) {
         valorText = proAmount.value
     } else {
         valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
@@ -246,7 +247,7 @@ function observeDonationChanges() {
                     mp.bricks().create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
-                            redirectMode: "blank"
+                            redirectMode: 'blank'
                         },
                         customization: {
                             texts: {
@@ -254,7 +255,6 @@ function observeDonationChanges() {
                             }
                         }
                     });
-
                 }).catch(error => {
                     console.error('Erro ao criar nova preferência de pagamento:', error);
                 });
@@ -290,6 +290,35 @@ function checkInputs() {
     }
 
     if (nomeInput && emailInput && walletContainer) {
+        const mercadoPagoButton = document.querySelector('.svelte-h6o0kp');
+        const handleClick = function () {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = lknMercadoPagoGlobals.MenssageSuccess;
+            messageElement.style.color = 'green';
+            messageElement.style.marginBottom = '14px';
+
+            const donationForm = document.querySelector('.no-fields-lknmp');
+            if (donationForm) {
+                donationForm.innerHTML = '';
+                donationForm.appendChild(messageElement);
+            }
+
+            const submitDonationButton = document.querySelector('.givewp-layouts-section button[type="submit"]');
+            if (submitDonationButton) {
+
+                if (!confirmPayment) {
+                    submitDonationButton.removeAttribute('disabled');
+                    submitDonationButton.click();
+                    confirmPayment = true
+                }
+            }
+
+            mercadoPagoButton.removeEventListener('click', handleClick);
+        };
+
+        if (mercadoPagoButton) {
+            mercadoPagoButton.addEventListener('click', handleClick);
+        }
         if (!nomeInput.value.trim()) {
             walletContainer.style.display = 'none';
             warningText.textContent = lknMercadoPagoGlobals.MenssageErrorNameEmpty;
@@ -344,7 +373,6 @@ const LknmpGatewayGiveWP = {
     },
     // Função onde os campos HTML são criados
     Fields() {
-
         function lknMercadoPagoprintFrontendNotice(title, message) {
             return /*#__PURE__*/React.createElement("div", {
                 className: "error-notice"
@@ -356,7 +384,6 @@ const LknmpGatewayGiveWP = {
         } else if (lknMercadoPagoGlobals.publicKey == 'false') {
             return lknMercadoPagoprintFrontendNotice('Erro:', lknMercadoPagoGlobals.MenssageErrorPublicKey);
         } else {
-
             if (!hasRenderedComponents) {
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', function () {

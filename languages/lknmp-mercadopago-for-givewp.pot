@@ -71,5 +71,8 @@ msgstr ""
 msgid "Donation of "
 msgstr ""
 
+msgid "Payment in process, please close the current tab and follow the payment procedure in the other tab."
+msgstr ""
+
 msgid "Mercado Pago is not enabled for the classic and multistep form!"
 msgstr ""

@@ -92,7 +92,8 @@ final class LknmpGatewayGiveWPPublic {
          * class.
          */
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-gateway-givewp-public.js', array('jquery'), $this->version, false );
-
+    
+    
         $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();
         $idUnique = uniqid();
@@ -119,7 +120,5 @@ final class LknmpGatewayGiveWPPublic {
         );
 
         wp_localize_script($this->plugin_name, 'lknmpGlobals', $lknmp_globals);
-
-        wp_enqueue_script( $this->plugin_name . 'MercadoPago', plugin_dir_url( __FILE__ ) . 'js/MercadoPago.js', array(), $this->version, false);
     }
 }

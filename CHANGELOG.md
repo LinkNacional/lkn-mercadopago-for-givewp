@@ -1,3 +1,7 @@
+# 1.2.4 - 26/11/2024
+* Correção em url de redirecionamento.
+* Melhoria no fluxo de pagamento.
+
 # 1.2.3 - 27/09/2024
 * Correção de problema no script do SDK do Mercado Pago.
 

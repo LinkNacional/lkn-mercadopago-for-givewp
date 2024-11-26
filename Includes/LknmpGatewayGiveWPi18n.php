@@ -1,6 +1,7 @@
 <?php
 
 namespace Lknmp\Gateway\Includes;
+
 /**
  * Define the internationalization functionality
  *
@@ -25,13 +26,15 @@ namespace Lknmp\Gateway\Includes;
  * @subpackage Lknmp_Gateway_Givewp/includes
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpGatewayGiveWPi18n {
+final class LknmpGatewayGiveWPi18n
+{
     /**
      * Load the plugin text domain for translation.
      *
      * @since    1.0.0
      */
-    public function load_plugin_textdomain(): void {
+    public function load_plugin_textdomain(): void
+    {
         load_plugin_textdomain(
             'lknmp-gateway-givewp',
             false,

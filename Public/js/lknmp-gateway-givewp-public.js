@@ -35,13 +35,13 @@
 		async function criarPreferenciaDePagamento() {
 			let valorText
 			const proAmount = document.querySelector('input[name="custom_amount"]')
-			if(proAmount) {
-					valorText = proAmount.value
+			if (proAmount) {
+				valorText = proAmount.value
 			} else {
-					valorText = document.getElementsByName('give-amount')
-					if(valorText[0]){
-						valorText = valorText[0].value
-					}
+				valorText = document.getElementsByName('give-amount')
+				if (valorText[0]) {
+					valorText = valorText[0].value
+				}
 			}
 
 			if (lknmpGlobals.advDebug == 'enabled') {
@@ -117,7 +117,7 @@
 			bricksBuilder.create('wallet', 'wallet_container', {
 				initialization: {
 					preferenceId: preferenceID,
-					redirectMode: checkSidebarExists() ? 'self' : 'blank'
+					redirectMode: 'blank'
 				},
 				customization: {
 					texts: {
@@ -140,7 +140,7 @@
 					mp.bricks().create('wallet', 'wallet_container', {
 						initialization: {
 							preferenceId: preferenceID,
-							redirectMode: checkSidebarExists() ? 'self' : 'blank'
+							redirectMode: 'blank'
 						},
 						customization: {
 							texts: {
