@@ -19,6 +19,10 @@ The [MercadoPago Payment Gateway for GiveWP](https://www.linknacional.com.br/wor
 
 **Dependencies**
 
+This plugin adds Mercado Pago as a payment option for the GiveWP donation plugin. It uses the [Mercado Pago API](https://www.mercadopago.com.br/developers/pt/reference) to process transactions. To use this plugin, you must have an active Mercado Pago account.
+
+As a payment gateway, this plugin communicates with an external API to function properly. Specifically, it connects to the following endpoint: [https://api.mercadopago.com](https://api.mercadopago.com), which is used to process transactions securely.
+
 [GiveWP](https://wordpress.org/plugins/give/) is needed for the plugin to work.
 
 JS Libraries used:
