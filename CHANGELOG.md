@@ -1,4 +1,4 @@
-# 1.2.4 - 29/10/2024
+# 1.2.4 - 26/11/2024
 * Correção em url de redirecionamento.
 * Melhoria no fluxo de pagamento.
 
