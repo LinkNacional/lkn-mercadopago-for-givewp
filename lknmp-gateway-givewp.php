@@ -12,10 +12,10 @@
  * @package           LKNMP_Mercadopago_For_Givewp
  *
  * @wordpress-plugin
- * Plugin Name:       Link Nacional Payment Gateway for MercadoPago and GiveWP
- * Requires Plugins: give
+ * Plugin Name:       Mercado Pago para Give
+ * Requires Plugins:  give
  * Plugin URI:        https://www.linknacional.com.br/wordpress/givewp/
- * Description:       MercadoPago Payment Gateway for GiveWP donation plugin for WordPress.
+ * Description:       Gateway de pagamento Mercado Pago integrado ao plugin de doações GiveWP no WordPress.
  * Version:           1.2.4
  * Author:            Link Nacional
  * Author URI:        https://www.linknacional.com.br/wordpress/givewp//
