@@ -1,6 +1,7 @@
 <?php
 
 namespace Lknmp\Gateway\Includes;
+use Give\Log\LogFactory;
 use DateTime;
 
 /**
@@ -43,60 +44,17 @@ abstract class LknmpGatewayGiveWPHelper {
      *
      * @return void
      */
-    final public static function reg_log($advanced, $message, $configs): void {
-        global $wp_filesystem;
-        WP_Filesystem();
-
-        if ( ! $wp_filesystem ) {
-            return;
-        }
-
-        if ($advanced && 'enabled' === $configs['debugAdvanced']) {
-            $log = true;
-        }
-        if ($advanced && 'enabled' === $configs['debug']) {
-            $log = true;
-        }
-
-        if ($log) {
-            $jsonMsg = wp_json_encode($message, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
-
-            $file_path = $configs['base'];
-            $wp_filesystem->put_contents( $file_path, $jsonMsg, FS_CHMOD_FILE );
-            $wp_filesystem->chmod( $file_path, 0600 );
-        }
-    }
-
-    /**
-     * Delete the log files older than 5 days
-     *
-     * @return void
-     */
-    final public static function delete_old_logs(): void {
-        $configs = LknmpGatewayGiveWPHelper::get_configs();
-        $logsPath = $configs['basePath'];
-
-        foreach (scandir($logsPath) as $logFilename) {
-            if ('.' !== $logFilename && '..' !== $logFilename && 'index.php' !== $logFilename) {
-                $logDate = explode('-', $logFilename)[0];
-                $logDate = explode('.', $logDate);
-
-                $logDay = $logDate[0];
-                $logMonth = $logDate[1];
-                $logYear = $logDate[2];
-
-                $logDate = $logYear . '-' . $logMonth . '-' . $logDay;
-
-                $logDate = new DateTime($logDate);
-                $now = new DateTime(gmdate('Y-m-d'));
-
-                $interval = $logDate->diff($now);
-                $logAge = $interval->format('%a');
-
-                if ($logAge >= 5) {
-                    wp_delete_file($logsPath . '/' . $logFilename);
-                }
-            }
+    public static function regLog($logType, $category, $description, $data, $forceLog = false): void {
+        if (give_get_option('mercado_pago_debug') == 'enabled' || $forceLog) {
+            $logFactory = new LogFactory();
+            $log = $logFactory->make(
+                $logType,
+                $description,
+                $category,
+                'Give Mercado Pago',
+                $data
+            );
+            $log->save();
         }
     }
 
