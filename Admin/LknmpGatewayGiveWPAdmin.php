@@ -140,6 +140,18 @@ final class LknmpGatewayGiveWPAdmin
                 );
 
                 $settings[] = array(
+                    'name' => __('Debug Mode', 'lknmp-gateway-givewp'),
+                    'id' => 'mercado_pago_debug',
+                    'desc' => __('Enable Debug environment.' , 'lknmp-gateway-givewp') . '<a id="lkn-give-debug">' . __('See logs.' , 'lknmp-gateway-givewp') . '</a>',
+                    'type' => 'radio',
+                    'default' => 'disabled',
+                    'options' => array(
+                        'enabled' => __('Enable', 'lknmp-gateway-givewp'),
+                        'disabled' => __('Disable', 'lknmp-gateway-givewp'),
+                    ),
+                );
+
+                $settings[] = array(
                     'name' => __('Advanced Debug Mode', 'lknmp-gateway-givewp'),
                     'id' => 'mercado_pago_advanced_debug',
                     'desc' => __('Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable.', 'lknmp-gateway-givewp'),

@@ -76,3 +76,12 @@ msgstr ""
 
 msgid "Mercado Pago is not enabled for the classic and multistep form!"
 msgstr ""
+
+msgid "Debug Mode"
+msgstr ""
+
+msgid "Enable Debug environment."
+msgstr ""
+
+msgid "See logs."
+msgstr ""

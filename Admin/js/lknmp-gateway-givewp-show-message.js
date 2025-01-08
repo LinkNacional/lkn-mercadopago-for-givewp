@@ -2,6 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.href === varsPhp.admin_url) {
         initialize();
     }
+    let logBtn = document.getElementById('lkn-give-debug');
+    if(logBtn){
+        let logsUrl = wpApiSettings.root.replace('/wp-json/', '/wp-admin/edit.php?post_type=give_forms&page=give-tools&tab=logs');
+        logBtn.setAttribute('href', logsUrl);
+        logBtn.setAttribute('target', '_blank');
+    }
 });
 
 function initialize() {
