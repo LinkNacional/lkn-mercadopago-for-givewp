@@ -13,7 +13,7 @@ Link Nacional MercadoPago payment option for GiveWP.
 
 == Description ==
 
-The [MercadoPago Payment Gateway for GiveWP](https://www.linknacional.com.br/wordpress/givewp/) seamlessly integrates MercadoPago with the GiveWP donation plugin for WordPress, providing a secure and efficient solution for receiving online donations. This plugin supports multiple payment methods, recurring donations, and customizable donation forms. Enhance your donor's experience with a trusted payment gateway, boost your fundraising efforts, and manage donations effortlessly with detailed reporting and a user-friendly interface.
+The [MercadoPago Payment Gateway for GiveWP](https://www.linknacional.com.br/wordpress/givewp/mercadopago/) seamlessly integrates MercadoPago with the GiveWP donation plugin for WordPress, providing a secure and efficient solution for receiving online donations. This plugin supports multiple payment methods, recurring donations, and customizable donation forms. Enhance your donor's experience with a trusted payment gateway, boost your fundraising efforts, and manage donations effortlessly with detailed reporting and a user-friendly interface.
 
 [MercadoPago](https://www.mercadopago.com.br) is a leading online payment solution in Latin America, offering a comprehensive suite of services for secure and convenient financial transactions. As the fintech arm of Mercado Libre, one of the region’s largest e-commerce platforms, Mercado Pago provides a reliable and user-friendly payment gateway for businesses and individuals alike.
 
