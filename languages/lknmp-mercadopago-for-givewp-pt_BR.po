@@ -76,3 +76,12 @@ msgstr "Pagamento em processo, feche a guia atual e siga o procedimento de pagam
 
 msgid "Mercado Pago is not enabled for the classic and multistep form!"
 msgstr "Mercado Pago não está habilitado para o formulário clássico e multistep!"
+
+msgid "Debug Mode"
+msgstr "Modo de Depuração"
+
+msgid "Enable Debug environment."
+msgstr "Habilitar ambiente de depuração."
+
+msgid "See logs."
+msgstr "Ver logs."

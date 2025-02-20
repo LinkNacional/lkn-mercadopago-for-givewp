@@ -1,3 +1,6 @@
+# 1.3.0 - 08/01/2025
+* Adição de configuração para habilitar debug.
+
 # 1.2.4 - 26/11/2024
 * Correção em url de redirecionamento.
 * Melhoria no fluxo de pagamento.

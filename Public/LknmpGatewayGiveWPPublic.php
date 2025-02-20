@@ -115,7 +115,7 @@ final class LknmpGatewayGiveWPPublic {
                 'MenssageErrorNameEmpty' => $MenssageErrorNameEmpty,
                 'MenssageErrorName' => $MenssageErrorName,
                 'MenssageErrorEmailEmpty' => $MenssageErrorEmailEmpty,
-                'MenssageErrorEmailInvalid' => $$MenssageErrorEmailInvalid,
+                'MenssageErrorEmailInvalid' => $MenssageErrorEmailInvalid,
             ),
         );
 
