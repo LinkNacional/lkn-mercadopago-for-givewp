@@ -112,6 +112,16 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             $idTeste = $gatewayData['gatewayId'];
             add_option("lknmp_gateway_" . $idTeste, $donation->id);
 
+            LknmpGatewayGiveWPHelper::regLog(
+                'info', // logType
+                'createPayment', // category
+                'Criar pagamento', // description
+                array(
+                    'donation' => $donation->id,
+                    'gatewayData' => $gatewayData
+                )
+            );
+
             $donation->status = DonationStatus::PENDING();
             $donation->save();
 
