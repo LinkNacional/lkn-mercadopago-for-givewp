@@ -16,7 +16,7 @@ function renderComponentsOnce() {
                     const mp = new MercadoPago(configData.key);
                     //TODO se houver erro 400, temos que retornar ao usuário???
                     const bricksBuilder = mp.bricks();
-                    mp.bricks().create("wallet", "wallet_container", {
+                    mp?.bricks().create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
                             redirectMode: 'blank'
@@ -85,7 +85,8 @@ async function criarPreferenciaDePagamento() {
         valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
     }
 
-    const valorNumerico = parseFloat(valorText.replace(/[^\d.,]/g, ''));
+    const valorFormatado = await valorText.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(',', '.')
+    const valorNumerico = parseFloat(valorFormatado);
 
     if (configData.advDebug == 'enabled') {
         console.log(valorNumerico)
@@ -213,7 +214,7 @@ function observeDonationChanges() {
 
                 const nomeInput = document.querySelector('input[name="firstName"]');
                 const emailInput = document.querySelector('input[name="email"]');
-                const oldButton = document.querySelector('#wallet_container');
+                const oldButton = document.getElementById('wallet_container');
 
                 if (oldButton) {
                     oldButton.remove();
@@ -281,7 +282,7 @@ function observeFormChanges() {
 function checkInputs() {
     const nomeInput = document.querySelector('input[name="firstName"]');
     const emailInput = document.querySelector('input[name="email"]');
-    const walletContainer = document.querySelector('#wallet_container');
+    const walletContainer = document.getElementById('wallet_container');
     let warningText = document.querySelector('#warning-text');
 
     function isValidEmail(email) {
@@ -396,7 +397,7 @@ const LknmpGatewayGiveWP = {
                 //observeButtonChanges já está cumprindo a função de recarregar o formulário
                 updateDonationAmount();
 
-                const oldButton = document.querySelector('#wallet_container');
+                const oldButton = document.getElementById('wallet_container');
                 if (oldButton) {
                     oldButton.remove();
                 }
