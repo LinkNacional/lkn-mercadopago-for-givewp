@@ -3,6 +3,24 @@ let hasRenderedComponents = false;
 let OneLoad = true;
 let showMP = true;
 let confirmPayment = false
+let buttonValue = false
+
+window.onload = () => {
+    buttonValue = document.querySelector('.givewp-fields-amount__level')
+    if (buttonValue) {
+        buttonValue = buttonValue.textContent
+    }
+
+    const customInput = document.getElementById('amount-custom');
+
+    customInput.addEventListener('input', () => {
+        let value = customInput.value;
+
+        if (value.slice(-1) === '.' || value.slice(-1) === ',') {
+            customInput.value = value.slice(0, -1);
+        }
+    });
+};
 
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
@@ -16,7 +34,7 @@ function renderComponentsOnce() {
                     const mp = new MercadoPago(configData.key);
                     //TODO se houver erro 400, temos que retornar ao usuário???
                     const bricksBuilder = mp.bricks();
-                    mp?.bricks().create("wallet", "wallet_container", {
+                    bricksBuilder.create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
                             redirectMode: 'blank'
@@ -72,20 +90,26 @@ function sanitizeInput(input) {
 async function criarPreferenciaDePagamento() {
     const url = 'https://api.mercadopago.com/checkout/preferences';
 
-    // Obter valores dos campos HTML
-    const nome = sanitizeInput(document.querySelector('input[name="firstName"]').value);
-    const sobrenome = sanitizeInput(document.querySelector('input[name="lastName"]').value);
-    const email = sanitizeInput(document.querySelector('input[name="email"]').value);
-
-    let valorText
+    let valorText = 1
     const proAmount = document.querySelector('input[name="custom_amount"]');
     if (proAmount) {
         valorText = proAmount.value
     } else {
-        valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value').textContent;
+        valorText = document.querySelector('.givewp-elements-donationSummary__list__item__value')?.textContent;
     }
 
-    const valorFormatado = await valorText.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(',', '.')
+    if (valorText.includes('NaN')) {
+        valorText = document.getElementById('amount-custom')?.getAttribute('value')
+    }
+
+    valorText = valorText.replace(/[.,]$/, '')
+
+    let replaceValue = ','
+    if (buttonValue.includes(',')) {
+        replaceValue = '.'
+    }
+
+    const valorFormatado = await valorText.replace(/[^\d.,]/g, '').replace(new RegExp(`\\${replaceValue}`, 'g'), '').replace(',', '.')
     const valorNumerico = parseFloat(valorFormatado);
 
     if (configData.advDebug == 'enabled') {
@@ -117,7 +141,9 @@ async function criarPreferenciaDePagamento() {
             },
             body: JSON.stringify(preference)
         });
-        if (!response.ok) {
+        if (!response) {
+            throw new Error(`Erro ao criar preferência de pagamento: undefined`);
+        } else if (!response.ok) {
             throw new Error(`Erro ao criar preferência de pagamento: ${response.status}`);
         }
         const data = await response.json();
@@ -245,7 +271,7 @@ function observeDonationChanges() {
 
                     const mp = new MercadoPago(configData.key);
                     const bricksBuilder = mp.bricks();
-                    mp.bricks().create("wallet", "wallet_container", {
+                    bricksBuilder.create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
                             redirectMode: 'blank'
