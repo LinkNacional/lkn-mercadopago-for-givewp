@@ -1,4 +1,4 @@
-# 1.3.1 - 10/03/2025
+# 1.3.1 - 12/03/2025
 * Correção na conversão do valor para float.
 
 # 1.3.0 - 08/01/2025
