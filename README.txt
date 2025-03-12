@@ -4,7 +4,7 @@ Donate link: https://www.linknacional.com.br/wordpress/givewp/
 Tags: givewp, payment, mercadopago, card
 Requires at least: 5.7
 Tested up to: 6.7
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -83,6 +83,9 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 1. Nothing yet.
 
 == Changelog ==
+
+= 1.3.1 = *2025/03/12*
+* Fix in the conversion of the value to float.
 
 = 1.3.0 = *2025/01/08*
 * Add configuration to enable debug.

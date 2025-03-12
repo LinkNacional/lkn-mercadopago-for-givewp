@@ -48,7 +48,8 @@
 				console.log(valorText);
 			}
 
-			let amount = valorText
+			const valorFormatado = await valorText.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(',', '.')
+			let amount = valorFormatado
 
 			if (lknmpGlobals.advDebug == 'enabled') {
 				console.log(amount)
