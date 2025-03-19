@@ -280,7 +280,12 @@ final class LknmpGatewayGiveWP
                 $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
                 $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
 
-                header("Location: $redirect_url", true, 302);
+                setcookie('lkn_payment_url', $redirect_url, time() + 3600, '/');
+
+                return wp_send_json_success(array(
+                    'status' => true,
+                    'message' => 'Payment processed successfully'
+                ));
                 exit;
                 break;
             case '2':
@@ -300,7 +305,12 @@ final class LknmpGatewayGiveWP
                 $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
                 $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
 
-                header("Location: $redirect_url", true, 302);
+                setcookie('lkn_payment_url', $redirect_url, time() + 3600, '/');
+
+                return wp_send_json_success(array(
+                    'status' => true,
+                    'message' => 'Payment processing failed'
+                ));
                 exit;
                 break;
             case '3':
@@ -319,14 +329,15 @@ final class LknmpGatewayGiveWP
                     return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
                 }
 
-                $response_data = array(
-                    'id' => $id,
-                    'donation_id' => $donation_id,
-                );
+                $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
+                $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
 
-                $url_pagina = give_get_failed_transaction_uri();
+                setcookie('lkn_payment_url', 'success', time() + 3600, '/');
 
-                header("Location: $url_pagina", true, 302);
+                return wp_send_json_success(array(
+                    'status' => true,
+                    'message' => 'Payment error'
+                ));
                 exit;
                 break;
             default:
