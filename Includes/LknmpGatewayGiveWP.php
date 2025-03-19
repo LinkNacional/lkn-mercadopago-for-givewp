@@ -282,10 +282,55 @@ final class LknmpGatewayGiveWP
 
                 setcookie('lkn_payment_url', $redirect_url, time() + 3600, '/');
 
-                return wp_send_json_success(array(
-                    'status' => true,
-                    'message' => 'Payment processed successfully'
-                ));
+                header('Content-Type: text/html');
+
+                $html = '
+                    <!DOCTYPE html>
+                    <html lang="pt-BR">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Pagamento Concluído</title>
+                        <style>
+                            body {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                                background-color: #f9f9f9;
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                color: #333;
+                            }
+                            .message {
+                                text-align: center;
+                                padding: 20px;
+                                background-color: #e8f5e9;
+                                border: 1px solid #c8e6c9;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                            }
+                            h1 {
+                                color: #4caf50;
+                                font-size: 24px;
+                                margin-bottom: 10px;
+                            }
+                            p {
+                                font-size: 18px;
+                                margin-bottom: 20px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="message">
+                            <h1>✅ Pagamento realizado com sucesso!</h1>
+                            <p>Seu pagamento foi processado com sucesso. Você pode fechar esta guia ou retornar para a página anterior para verificar os detalhes da transação.</p>
+                        </div>
+                    </body>
+                    </html>
+                ';
+                echo $html;
+
                 exit;
                 break;
             case '2':
@@ -307,10 +352,55 @@ final class LknmpGatewayGiveWP
 
                 setcookie('lkn_payment_url', $redirect_url, time() + 3600, '/');
 
-                return wp_send_json_success(array(
-                    'status' => true,
-                    'message' => 'Payment processing failed'
-                ));
+                header('Content-Type: text/html');
+
+                $html = '
+                    <!DOCTYPE html>
+                    <html lang="pt-BR">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Pagamento Falhou</title>
+                        <style>
+                            body {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                                background-color: #fdf3f3;
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                color: #333;
+                            }
+                            .message {
+                                text-align: center;
+                                padding: 20px;
+                                background-color: #ffebee;
+                                border: 1px solid #ffcdd2;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                            }
+                            h1 {
+                                color: #f44336;
+                                font-size: 24px;
+                                margin-bottom: 10px;
+                            }
+                            p {
+                                font-size: 18px;
+                                margin-bottom: 20px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="message">
+                            <h1>❌ O pagamento não foi concluído</h1>
+                            <p>Ocorreu um problema ao processar seu pagamento. Retorne para a página anterior para verificar o resumo da transação e tentar novamente.</p>
+                        </div>
+                    </body>
+                    </html>
+                ';
+
+                echo $html;
                 exit;
                 break;
             case '3':
@@ -334,10 +424,54 @@ final class LknmpGatewayGiveWP
 
                 setcookie('lkn_payment_url', 'success', time() + 3600, '/');
 
-                return wp_send_json_success(array(
-                    'status' => true,
-                    'message' => 'Payment error'
-                ));
+                header('Content-Type: text/html');
+
+                $html = '
+                    <!DOCTYPE html>
+                    <html lang="pt-BR">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Erro no Pagamento</title>
+                        <style>
+                            body {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                                background-color: #fff8e1;
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                color: #333;
+                            }
+                            .message {
+                                text-align: center;
+                                padding: 20px;
+                                background-color: #ffecb3;
+                                border: 1px solid #ffe082;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                            }
+                            h1 {
+                                color: #ff9800;
+                                font-size: 24px;
+                                margin-bottom: 10px;
+                            }
+                            p {
+                                font-size: 18px;
+                                margin-bottom: 20px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="message">
+                            <h1>⚠️ Erro no processamento do pagamento</h1>
+                            <p>Ocorreu um erro durante o processamento do pagamento. Tente novamente ou entre em contato com o suporte.</p>
+                        </div>
+                    </body>
+                    </html>
+                ';
+                echo $html;
                 exit;
                 break;
             default:
