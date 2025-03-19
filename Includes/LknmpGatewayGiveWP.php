@@ -308,6 +308,7 @@ final class LknmpGatewayGiveWP
                                 background-color: #e8f5e9;
                                 border: 1px solid #c8e6c9;
                                 border-radius: 8px;
+                                max-width: 500px;
                                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                             }
                             h1 {
@@ -378,6 +379,7 @@ final class LknmpGatewayGiveWP
                                 background-color: #ffebee;
                                 border: 1px solid #ffcdd2;
                                 border-radius: 8px;
+                                max-width: 500px;
                                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                             }
                             h1 {
@@ -450,6 +452,7 @@ final class LknmpGatewayGiveWP
                                 background-color: #ffecb3;
                                 border: 1px solid #ffe082;
                                 border-radius: 8px;
+                                max-width: 500px;
                                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                             }
                             h1 {
