@@ -4,37 +4,49 @@ let OneLoad = true;
 let showMP = true;
 let confirmPayment = false
 let buttonValue = false
+let mercadoPagoWindow = null
 
 window.onload = () => {
-    buttonValue = document.querySelector('.givewp-fields-amount__level')
-    if (buttonValue) {
-        buttonValue = buttonValue.textContent
-    }
+    const observer = new MutationObserver((mutationsList, observer) => {
+        const customInput = document.getElementById('amount-custom');
 
-    const customInput = document.getElementById('amount-custom');
+        if (customInput) {
+            customInput.addEventListener('input', () => {
+                let value = customInput.value;
 
-    customInput.addEventListener('input', () => {
-        let value = customInput.value;
+                if (value.slice(-1) === '.' || value.slice(-1) === ',') {
+                    customInput.value = value.slice(0, -1);
+                }
+            });
+        }
 
-        if (value.slice(-1) === '.' || value.slice(-1) === ',') {
-            customInput.value = value.slice(0, -1);
+        const buttonFormValue = document.querySelector('.givewp-fields-amount__level');
+        if (buttonFormValue) {
+            buttonValue = buttonFormValue.textContent;
+
+            observer.disconnect();
         }
     });
+
+    const config = { childList: true, subtree: true };
+
+    // Começa a observar o `document.body`
+    observer.observe(document.body, config);
 };
 
 function renderComponentsOnce() {
     if (!hasRenderedComponents) {
         const tryRender = () => {
             criarPreferenciaDePagamento()
-                .then(preferenceID => {
+                .then(async preferenceID => {
                     if (configData.advDebug == 'enabled') {
                         console.log('ID da preferência criada:', preferenceID);
                     }
-                    preferenceID = preferenceID;
                     const mp = new MercadoPago(configData.key);
                     //TODO se houver erro 400, temos que retornar ao usuário???
                     const bricksBuilder = mp.bricks();
-                    bricksBuilder.create("wallet", "wallet_container", {
+
+                    await bricksBuilder.create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
                             redirectMode: 'blank'
@@ -317,7 +329,7 @@ function checkInputs() {
     }
 
     if (nomeInput && emailInput && walletContainer) {
-        const mercadoPagoButton = document.querySelector('.svelte-h6o0kp');
+        const mercadoPagoButton = document.querySelector('button[aria-label*="Mercado Pago"]');
         const handleClick = function () {
             const messageElement = document.createElement('div');
             messageElement.textContent = lknMercadoPagoGlobals.MenssageSuccess;
@@ -330,9 +342,8 @@ function checkInputs() {
                 donationForm.appendChild(messageElement);
             }
 
-            const submitDonationButton = document.querySelector('.givewp-layouts-section button[type="submit"]');
+            let submitDonationButton = document.querySelector('.givewp-layouts-section button[type="submit"]');
             if (submitDonationButton) {
-
                 if (!confirmPayment) {
                     submitDonationButton.removeAttribute('disabled');
                     submitDonationButton.click();
@@ -365,7 +376,9 @@ function checkInputs() {
             showMP = false;
         } else {
             walletContainer.style.display = 'block';
-            warningText.textContent = '';
+            if (warningText?.textContent) {
+                warningText.textContent = '';
+            }
             showMP = true;
         }
     }

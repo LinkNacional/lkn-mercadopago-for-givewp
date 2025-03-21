@@ -1,4 +1,5 @@
 <?php
+
 namespace Lknmp\Gateway\PublicView;
 
 use Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper;
@@ -23,7 +24,8 @@ use Lknmp\Gateway\Includes\LknmpGatewayGiveWPHelper;
  * @subpackage Lknmp_Gateway_Givewp/public
  * @author     Link Nacional <contato@linknacional>
  */
-final class LknmpGatewayGiveWPPublic {
+final class LknmpGatewayGiveWPPublic
+{
     /**
      * The ID of this plugin.
      *
@@ -49,7 +51,8 @@ final class LknmpGatewayGiveWPPublic {
      * @param      string    $plugin_name       The name of the plugin.
      * @param      string    $version    The version of this plugin.
      */
-    public function __construct( $plugin_name, $version ) {
+    public function __construct($plugin_name, $version)
+    {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
     }
@@ -59,7 +62,8 @@ final class LknmpGatewayGiveWPPublic {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles(): void {
+    public function enqueue_styles(): void
+    {
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -71,7 +75,7 @@ final class LknmpGatewayGiveWPPublic {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lknmp-gateway-givewp-public.css', array(), $this->version, 'all' );
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/lknmp-gateway-givewp-public.css', array(), $this->version, 'all');
     }
 
     /**
@@ -79,7 +83,8 @@ final class LknmpGatewayGiveWPPublic {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts(): void {
+    public function enqueue_scripts(): void
+    {
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -91,9 +96,9 @@ final class LknmpGatewayGiveWPPublic {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lknmp-gateway-givewp-public.js', array('jquery'), $this->version, false );
-    
-    
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-public.js', array('jquery'), $this->version, false);
+
+
         $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();
         $idUnique = uniqid();
@@ -104,7 +109,7 @@ final class LknmpGatewayGiveWPPublic {
         $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-gateway-givewp');
 
         $lknmp_globals = array(
-            'key' => $configs['key'], 
+            'key' => $configs['key'],
             'token' => $configs['token'],
             'pageUrl' => $url_pagina,
             'idUnique' => $idUnique,
