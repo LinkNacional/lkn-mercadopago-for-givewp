@@ -87,6 +87,9 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 = 1.4.0 = *2025/03/19*
 * Feedback pages for the MercadoPago sandbox environment.
 
+= 1.3.2 = *2025/03/21*
+* Fix in custom input.
+
 = 1.3.1 = *2025/03/12*
 * Fix in the conversion of the value to float.
 
