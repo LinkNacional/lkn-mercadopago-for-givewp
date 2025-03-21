@@ -205,10 +205,15 @@ function observeMetodoChanges() {
         const myGateway = document.querySelector('.givewp-fields-gateways__gateway.givewp-fields-gateways__gateway--lknmp-gateway-givewp.givewp-fields-gateways__gateway--active');
 
         // Se ele estiver ativo, habilita o botão Donate Now
+        const submitButton = document.querySelector('button[type="submit"]');
         if (myGateway) {
-            document.querySelector('button[type="submit"]').disabled = true;
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
         } else {
-            document.querySelector('button[type="submit"]').disabled = false;
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
             hasRenderedComponents = false;
         }
         updateDonationAmount();
