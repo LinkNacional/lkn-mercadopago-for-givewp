@@ -6,20 +6,31 @@ let confirmPayment = false
 let buttonValue = false
 
 window.onload = () => {
-    buttonValue = document.querySelector('.givewp-fields-amount__level')
-    if (buttonValue) {
-        buttonValue = buttonValue.textContent
-    }
+    const observer = new MutationObserver((mutationsList, observer) => {
+        const customInput = document.getElementById('amount-custom');
 
-    const customInput = document.getElementById('amount-custom');
+        if (customInput) {
+            customInput.addEventListener('input', () => {
+                let value = customInput.value;
 
-    customInput.addEventListener('input', () => {
-        let value = customInput.value;
+                if (value.slice(-1) === '.' || value.slice(-1) === ',') {
+                    customInput.value = value.slice(0, -1);
+                }
+            });
+        }
 
-        if (value.slice(-1) === '.' || value.slice(-1) === ',') {
-            customInput.value = value.slice(0, -1);
+        const buttonFormValue = document.querySelector('.givewp-fields-amount__level');
+        if (buttonFormValue) {
+            buttonValue = buttonFormValue.textContent;
+
+            observer.disconnect();
         }
     });
+
+    const config = { childList: true, subtree: true };
+
+    // Começa a observar o `document.body`
+    observer.observe(document.body, config);
 };
 
 function renderComponentsOnce() {
