@@ -1,3 +1,6 @@
+# 1.4.0 - 25/03/2025
+* Páginas de feedback para o ambiente de sandbox do MercadoPago.
+
 # 1.3.2 - 21/03/2025
 * Correção no custom input.
 

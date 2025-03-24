@@ -4,6 +4,7 @@ let OneLoad = true;
 let showMP = true;
 let confirmPayment = false
 let buttonValue = false
+let mercadoPagoWindow = null
 
 window.onload = () => {
     const observer = new MutationObserver((mutationsList, observer) => {
@@ -37,15 +38,15 @@ function renderComponentsOnce() {
     if (!hasRenderedComponents) {
         const tryRender = () => {
             criarPreferenciaDePagamento()
-                .then(preferenceID => {
+                .then(async preferenceID => {
                     if (configData.advDebug == 'enabled') {
                         console.log('ID da preferência criada:', preferenceID);
                     }
-                    preferenceID = preferenceID;
                     const mp = new MercadoPago(configData.key);
                     //TODO se houver erro 400, temos que retornar ao usuário???
                     const bricksBuilder = mp.bricks();
-                    bricksBuilder.create("wallet", "wallet_container", {
+
+                    await bricksBuilder.create("wallet", "wallet_container", {
                         initialization: {
                             preferenceId: preferenceID,
                             redirectMode: 'blank'
@@ -333,7 +334,7 @@ function checkInputs() {
     }
 
     if (nomeInput && emailInput && walletContainer) {
-        const mercadoPagoButton = document.querySelector('.svelte-h6o0kp');
+        const mercadoPagoButton = document.querySelector('button[aria-label*="Mercado Pago"]');
         const handleClick = function () {
             const messageElement = document.createElement('div');
             messageElement.textContent = lknMercadoPagoGlobals.MenssageSuccess;
@@ -346,9 +347,8 @@ function checkInputs() {
                 donationForm.appendChild(messageElement);
             }
 
-            const submitDonationButton = document.querySelector('.givewp-layouts-section button[type="submit"]');
+            let submitDonationButton = document.querySelector('button[type="submit"]');
             if (submitDonationButton) {
-
                 if (!confirmPayment) {
                     submitDonationButton.removeAttribute('disabled');
                     submitDonationButton.click();
@@ -381,7 +381,9 @@ function checkInputs() {
             showMP = false;
         } else {
             walletContainer.style.display = 'block';
-            warningText.textContent = '';
+            if (warningText?.textContent) {
+                warningText.textContent = '';
+            }
             showMP = true;
         }
     }

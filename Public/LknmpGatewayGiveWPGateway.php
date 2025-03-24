@@ -125,6 +125,11 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             $donation->status = DonationStatus::PENDING();
             $donation->save();
 
+            $receipt_id = give_get_payment_meta($donation->id, '_give_payment_purchase_key');
+            $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
+
+            header("Location: $redirect_url", true, 302);
+
             //return new PaymentPending();
             return wp_send_json_success(['status' => 'pending', 'message' => 'Pagamento está pendente.']);
             // return new GatewayCommand();
