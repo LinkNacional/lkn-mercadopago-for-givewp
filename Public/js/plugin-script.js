@@ -347,7 +347,7 @@ function checkInputs() {
                 donationForm.appendChild(messageElement);
             }
 
-            let submitDonationButton = document.querySelector('.givewp-layouts-section button[type="submit"]');
+            let submitDonationButton = document.querySelector('button[type="submit"]');
             if (submitDonationButton) {
                 if (!confirmPayment) {
                     submitDonationButton.removeAttribute('disabled');
