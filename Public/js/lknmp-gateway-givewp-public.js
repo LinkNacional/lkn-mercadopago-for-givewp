@@ -3,10 +3,12 @@
 
 	let mercadoPagoWindow = null
 	let lkninterval = null
+	let contentMercadoIFrame = null
 
 	document.addEventListener('DOMContentLoaded', () => {
 		let mercadoIFrame = document.querySelector('iframe[title="Donation Form"')
 		if (mercadoIFrame) {
+			contentMercadoIFrame = mercadoIFrame
 			mercadoIFrame = mercadoIFrame.contentWindow.window
 			const originalWindowOpen = mercadoIFrame.open;
 
@@ -46,21 +48,23 @@
 			if (parts.length === 2) return parts.pop().split(';').shift();
 		}
 
-		// Monitora o valor do cookie a cada 1 segundo
-		const checkPaymentStatus = setInterval(() => {
-			const paymentUrl = getCookie('lkn_payment_url');
+		if (contentMercadoIFrame) {
+			// Monitora o valor do cookie a cada 1 segundo
+			const checkPaymentStatus = setInterval(() => {
+				const paymentUrl = getCookie('lkn_payment_url');
 
-			if (paymentUrl !== 'empty') {
-				clearInterval(checkPaymentStatus);
-				clearInterval(lkninterval);
-				document.cookie = "lkn_payment_url=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-				if (mercadoPagoWindow) {
-					mercadoPagoWindow.close();
+				if (paymentUrl !== 'empty') {
+					clearInterval(checkPaymentStatus);
+					clearInterval(lkninterval);
+					document.cookie = "lkn_payment_url=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+					if (mercadoPagoWindow) {
+						mercadoPagoWindow.close();
+					}
+
+					window.location.href = decodeURIComponent(paymentUrl);
 				}
-
-				window.location.href = decodeURIComponent(paymentUrl);
-			}
-		}, 1000);
+			}, 1000);
+		}
 	});
 
 
