@@ -1,3 +1,6 @@
+# 1.4.1 - 02/04/2025
+* Erro na obtenção do cache através do script .
+
 # 1.4.0 - 25/03/2025
 * Páginas de feedback para o ambiente de sandbox do MercadoPago.
 
