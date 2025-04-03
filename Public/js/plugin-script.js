@@ -284,7 +284,9 @@ function observeDonationChanges() {
                         newButton.style.display = 'none';
                     }
 
-                    fieldset.appendChild(newButton);
+                    if (fieldset) {
+                        fieldset.appendChild(newButton);
+                    }
 
                     const mp = new MercadoPago(configData.key);
                     const bricksBuilder = mp.bricks();
