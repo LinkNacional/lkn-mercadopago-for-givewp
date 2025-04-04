@@ -178,7 +178,9 @@
 				newButton.style.display = 'none';
 			}
 
-			fieldset.appendChild(newButton);
+			if (fieldset) {
+				fieldset.appendChild(newButton);
+			}
 
 			const mp = new MercadoPago(lknmpGlobals.key);
 			const bricksBuilder = mp.bricks();
