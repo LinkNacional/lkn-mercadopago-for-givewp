@@ -51,57 +51,58 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
         return 'Mercado Pago Checkout';
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getLegacyFormFieldMarkup(int $formId, array $args): string
-    {
-        // Step 1: add any gateway fields to the form using html.  In order to retrieve this data later the name of the input must be inside the key gatewayData (name='gatewayData[input_name]').
-        // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
-        $formTb = new Give_DB_Form_Meta();
-        $formTb->table_name = "wp_give_formmeta";
-        $resultForm = $formTb->get_results_by(array('form_id' => $formId, 'meta_key' => '_give_form_template'));
+    // TODO Next version
+    // /**
+    //  * @inheritDoc
+    //  */
+    // public function getLegacyFormFieldMarkup(int $formId, array $args): string
+    // {
+    //     // Step 1: add any gateway fields to the form using html.  In order to retrieve this data later the name of the input must be inside the key gatewayData (name='gatewayData[input_name]').
+    //     // Step 2: you can alternatively send this data to the $gatewayData param using the filter `givewp_create_payment_gateway_data_{gatewayId}`.
+    //     $formTb = new Give_DB_Form_Meta();
+    //     $formTb->table_name = "wp_give_formmeta";
+    //     $resultForm = $formTb->get_results_by(array('form_id' => $formId, 'meta_key' => '_give_form_template'));
 
-        if ('legacy' != $resultForm[0]->meta_value) {
-            $html = '
-            <div class="donation-errors">
-                <div class="give-notice give-notice-error" id="give_error_warning">
-                    <p class="give_notice give_warning">
-                    <strong>' . esc_html__('Notice:', 'lknmp-gateway-givewp') . '</strong>
-                    ' . esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'lknmp-gateway-givewp') . '</p>
-                </div>
-            </div>';
-            return $html;
-        }
+    //     if ('legacy' != $resultForm[0]->meta_value) {
+    //         $html = '
+    //         <div class="donation-errors">
+    //             <div class="give-notice give-notice-error" id="give_error_warning">
+    //                 <p class="give_notice give_warning">
+    //                 <strong>' . esc_html__('Notice:', 'lknmp-gateway-givewp') . '</strong>
+    //                 ' . esc_html__('Mercado Pago is not enabled for the classic and multistep form!', 'lknmp-gateway-givewp') . '</p>
+    //             </div>
+    //         </div>';
+    //         return $html;
+    //     }
 
-        $configs = LknmpGatewayGiveWPHelper::get_configs();
+    //     $configs = LknmpGatewayGiveWPHelper::get_configs();
 
-        if (empty($configs['token']) && strlen($configs['token']) <= 5) {
-            Give()->notices->print_frontend_notice(
-                sprintf(
-                    '%1$s %2$s',
-                    esc_html__('Erro:', 'lknmp-gateway-givewp'),
-                    esc_html__('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp')
-                )
-            );
-        } elseif (empty($configs['key']) && strlen($configs['token']) <= 5) {
-            Give()->notices->print_frontend_notice(
-                sprintf(
-                    '%1$s %2$s',
-                    esc_html__('Erro:', 'lknmp-gateway-givewp'),
-                    esc_html__('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp')
-                )
-            );
-        }
+    //     if (empty($configs['token']) && strlen($configs['token']) <= 5) {
+    //         Give()->notices->print_frontend_notice(
+    //             sprintf(
+    //                 '%1$s %2$s',
+    //                 esc_html__('Erro:', 'lknmp-gateway-givewp'),
+    //                 esc_html__('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp')
+    //             )
+    //         );
+    //     } elseif (empty($configs['key']) && strlen($configs['token']) <= 5) {
+    //         Give()->notices->print_frontend_notice(
+    //             sprintf(
+    //                 '%1$s %2$s',
+    //                 esc_html__('Erro:', 'lknmp-gateway-givewp'),
+    //                 esc_html__('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp')
+    //             )
+    //         );
+    //     }
 
-        $html = "
-            <fieldset class=\"no-fields-lknmp\">
-                <h3 id=\"warning-text\"></h3>
-                <div id=\"wallet_container\"></div>
-            </fieldset>";
+    //     $html = "
+    //         <fieldset class=\"no-fields-lknmp\">
+    //             <h3 id=\"warning-text\"></h3>
+    //             <div id=\"wallet_container\"></div>
+    //         </fieldset>";
 
-        return $html;
-    }
+    //     return $html;
+    // }
 
     /**
      * @inheritDoc
@@ -167,24 +168,39 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
         $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();
 
-        $MenssageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
-        $MenssageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-gateway-givewp');
-        $MenssageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
-        $MenssageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-gateway-givewp');
-        $MenssageDonation = __('Donation of ', 'lknmp-gateway-givewp');
-        $MenssageErrorToken = __('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp');
-        $MenssageErrorPublicKey = __('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp');
-        $MenssageSuccess = __('Payment in process, please close the current tab and follow the payment procedure in the other tab.', 'lknmp-gateway-givewp');
+        $MessageErrorNameEmpty = __('The Name field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MessageErrorName = __('The Name field must be at least 3 letters.', 'lknmp-gateway-givewp');
+        $MessageErrorLastNameEmpty = __('The Last Name field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MessageErrorLastName = __('The Last Name field must be at least 3 letters.', 'lknmp-gateway-givewp');
+        $MessageErrorEmailEmpty = __('The Email field is empty. Please fill in this field before proceeding.', 'lknmp-gateway-givewp');
+        $MessageErrorEmailInvalid = __('The Email field is invalid. Please enter a valid email address.', 'lknmp-gateway-givewp');
+        $MessageDonation = __('Donation of ', 'lknmp-gateway-givewp');
+        $MessageErrorToken = __('Mercado Pago Token was not provided or is invalid!', 'lknmp-gateway-givewp');
+        $MessageErrorPublicKey = __('Mercado Pago Public Key was not provided or is invalid!', 'lknmp-gateway-givewp');
+        $MessageSuccess = __('Payment in process, please close the current tab and follow the payment procedure in the other tab.', 'lknmp-gateway-givewp');
+        $MessageNotFoundField = __('Field not found.', 'lknmp-gateway-givewp');
+        $MessageNotFoundFields = __('Field(s) not found.', 'lknmp-gateway-givewp');
+        $MessageNotInvalidValue = __('Please provide a valid value.', 'lknmp-gateway-givewp');
         // Pagamento em processo, feche a guia atual e siga o procedimento de pagamento na outra aba.
 
         $hastoken = ! empty($configs['token']) && strlen($configs['token']) > 10 ? 'true' : 'false';
         $haspublicKey = ! empty($configs['key']) && strlen($configs['key']) > 10 ? 'true' : 'false';
 
-        wp_enqueue_script(self::id(), plugin_dir_url(__FILE__) . 'js/plugin-script.js', array('jquery'), LKNMP_GATEWAY_GIVEWP_VERSION, true);
+        wp_enqueue_script(
+            'lkn-mp-wallet',
+            plugin_dir_url(__FILE__) . 'js/lkn-mercadopago-checkout.js',
+            array('jquery'),
+            LKNMP_GATEWAY_GIVEWP_VERSION,
+            true
+        );
 
-        wp_localize_script(self::id(), 'urlPag', $url_pagina);
-        wp_localize_script(self::id(), 'idUnique', uniqid());
-        wp_localize_script(self::id(), 'configData', array(
+
+
+        wp_localize_script('lkn-mp-wallet', 'urlPag', $url_pagina);
+        wp_localize_script('lkn-mp-wallet', 'idUnique', uniqid());
+        wp_localize_script('lkn-mp-wallet', 'decimalSeparator', give_get_price_decimal_separator());
+
+        wp_localize_script('lkn-mp-wallet', 'lknGlobalData', array(
             'advDebug' => $configs['advDebug'],
             'key' => $configs['key'],
             'tittle' => $configs['tittle'],
@@ -192,15 +208,20 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             'token' => $configs['token']
         ));
 
-        wp_localize_script(self::id(), 'lknMercadoPagoGlobals', array(
-            'MenssageErrorNameEmpty' => $MenssageErrorNameEmpty,
-            'MenssageErrorName' => $MenssageErrorName,
-            'MenssageErrorEmailEmpty' => $MenssageErrorEmailEmpty,
-            'MenssageErrorEmailInvalid' => $MenssageErrorEmailInvalid,
-            'MenssageDonation' => $MenssageDonation,
-            'MenssageSuccess' => $MenssageSuccess,
-            'MenssageErrorToken' => $MenssageErrorToken,
-            'MenssageErrorPublicKey' => $MenssageErrorPublicKey,
+        wp_localize_script('lkn-mp-wallet', 'lknMercadoPagoGlobals', array(
+            'MessageErrorNameEmpty' => $MessageErrorNameEmpty,
+            'MessageErrorName' => $MessageErrorName,
+            'MessageErrorLastNameEmpty' => $MessageErrorLastNameEmpty,
+            'MessageErrorLastName' => $MessageErrorLastName,
+            'MessageErrorEmailEmpty' => $MessageErrorEmailEmpty,
+            'MessageErrorEmailInvalid' => $MessageErrorEmailInvalid,
+            'MessageDonation' => $MessageDonation,
+            'MessageSuccess' => $MessageSuccess,
+            'MessageErrorToken' => $MessageErrorToken,
+            'MessageErrorPublicKey' => $MessageErrorPublicKey,
+            'MessageNotFoundField' => $MessageNotFoundField,
+            'MessageNotFoundFields' => $MessageNotFoundFields,
+            'MessageNotInvalidValue' => $MessageNotInvalidValue,
             'token' => $hastoken,
             'publicKey' => $haspublicKey
         ));
