@@ -96,8 +96,7 @@ final class LknmpGatewayGiveWPPublic
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-public.js', array('jquery'), $this->version, false);
-
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-observer.js', array('jquery'), $this->version, false);
 
         $configs = LknmpGatewayGiveWPHelper::get_configs();
         $url_pagina = site_url();

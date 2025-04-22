@@ -1,3 +1,6 @@
+# 1.5.0 - 22/04/2025
+* Atualização no script de geração do botão do MercadoPago.
+
 # 1.4.1 - 02/04/2025
 * Erro na obtenção do cache através do script .
 
