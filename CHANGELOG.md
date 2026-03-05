@@ -1,3 +1,6 @@
+# 1.5.1 - 05/03/2026
+* Novos ícones e banners.
+
 # 1.5.0 - 22/04/2025
 * Atualização no script de geração do botão do MercadoPago.
 
