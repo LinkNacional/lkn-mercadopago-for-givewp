@@ -84,7 +84,7 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 
 == Changelog ==
 
-= 1.5.1 = *2026/03/04*
+= 1.5.1 = *2026/03/05*
 * New icons and banners.
 
 = 1.5.0 = *2025/04/22*
