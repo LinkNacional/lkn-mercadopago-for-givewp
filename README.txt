@@ -80,7 +80,7 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 
 == Screenshots ==
 
-1. Nothing yet.
+
 
 == Changelog ==
 
