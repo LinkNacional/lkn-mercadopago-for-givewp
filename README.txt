@@ -2,7 +2,7 @@
 Contributors: linknacional
 Donate link: https://www.linknacional.com.br/wordpress/givewp/
 Tags: givewp, payment, mercadopago, card
-Requires at least: 5.7
+Requires at least: 6.5
 Tested up to: 7.1
 Stable tag: 1.5.2
 Requires PHP: 8.1

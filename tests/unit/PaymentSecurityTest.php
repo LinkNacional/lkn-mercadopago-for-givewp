@@ -679,4 +679,56 @@ final class PaymentSecurityTest extends TestCase
 
         return substr($source, (int) $start, (int) $end - (int) $start);
     }
+
+    /**
+     * O WordPress mínimo suportado é 6.5. Abaixo disso o requisito do próprio
+     * GiveWP (6.9) já impede a ativação, então declarar 5.7 fazia o wp.org
+     * oferecer o plugin para versões que nunca conseguiriam rodar.
+     */
+    public function testDeclaresWordPressMinimum65(): void
+    {
+        $readme = self::read('README.txt');
+
+        $this->assertMatchesRegularExpression(
+            '/^Requires at least:\s*6\.5\s*$/m',
+            $readme,
+            'O README.txt precisa declarar "Requires at least: 6.5".'
+        );
+    }
+
+    /**
+     * "Tested up to" tem que refletir a versão recente do WordPress: é ela que
+     * o Plugin Check cobra na cobertura de testes. Declarar versão antiga
+     * derruba a nota e esconde incompatibilidade real.
+     */
+    public function testTestedUpToIsRecent(): void
+    {
+        $readme = self::read('README.txt');
+
+        $this->assertMatchesRegularExpression(
+            '/^Tested up to:\s*(\d+)\.(\d+)\s*$/m',
+            $readme,
+            'O README.txt precisa de "Tested up to: X.Y".'
+        );
+
+        preg_match('/^Tested up to:\s*(\d+)\.(\d+)\s*$/m', $readme, $m);
+
+        $tested = (int) $m[1] * 100 + (int) $m[2];
+
+        preg_match('/^Requires at least:\s*(\d+)\.(\d+)\s*$/m', $readme, $r);
+
+        $required = (int) $r[1] * 100 + (int) $r[2];
+
+        $this->assertGreaterThan(
+            $required,
+            $tested,
+            '"Tested up to" precisa ser maior que "Requires at least".'
+        );
+
+        $this->assertGreaterThanOrEqual(
+            700,
+            $tested,
+            '"Tested up to" precisa acompanhar a versão recente do WordPress (7.x).'
+        );
+    }
 }
