@@ -520,4 +520,163 @@ final class PaymentSecurityTest extends TestCase
             'O readme-pt_BR.po precisa cobrir o readme atual (mais de 40 msgids).'
         );
     }
+
+    /**
+     * O PHP mínimo suportado é 8.1 e precisa estar declarado em todo lugar que
+     * o WordPress e o wp.org leem: header do plugin, readme, CI e composer.
+     * Divergência aqui faz o wp.org liberar instalação em versão que quebra.
+     */
+    public function testDeclaresPhpMinimum81Everywhere(): void
+    {
+        $header = self::read('lknmp-gateway-givewp.php');
+
+        $this->assertMatchesRegularExpression(
+            '/^\s*\*\s*Requires PHP:\s*8\.1\s*$/m',
+            $header,
+            'O header do plugin precisa declarar "Requires PHP: 8.1".'
+        );
+
+        $readme = self::read('README.txt');
+
+        $this->assertMatchesRegularExpression(
+            '/^Requires PHP:\s*8\.1\s*$/m',
+            $readme,
+            'O README.txt precisa declarar "Requires PHP: 8.1".'
+        );
+
+        $composer = json_decode(self::read('composer.json'), true);
+
+        $this->assertSame(
+            '8.1.0',
+            $composer['config']['platform']['php'] ?? null,
+            'O composer.json precisa fixar config.platform.php em 8.1.0 para o lock resolver igual ao alvo.'
+        );
+    }
+
+    /**
+     * O CI tem que buildar e testar na versão mínima declarada. Se o CI roda
+     * 7.4 e o plugin declara 8.1 (ou o contrário), nada é provado de verdade.
+     */
+    public function testCiUsesTheDeclaredMinimumPhp(): void
+    {
+        foreach (array('.github/workflows/main.yml', '.github/workflows/wordpress-release.yml') as $workflow) {
+            $source = self::read($workflow);
+
+            $this->assertMatchesRegularExpression(
+                '/PHP_VERSION:\s*["\']8\.1["\']/',
+                $source,
+                "{$workflow} precisa usar PHP_VERSION 8.1."
+            );
+
+            $this->assertStringNotContainsString(
+                '"7.4"',
+                $source,
+                "{$workflow} ainda referencia PHP 7.4."
+            );
+        }
+    }
+
+    /**
+     * phan estava em require-dev e nunca era invocado: nem config, nem step no
+     * CI, nem script. Dependência morta engorda o lock e quebra ao atualizar.
+     */
+    public function testHasNoUnusedDevDependencyPhan(): void
+    {
+        $composer = json_decode(self::read('composer.json'), true);
+
+        $this->assertArrayNotHasKey(
+            'phan/phan',
+            $composer['require-dev'] ?? array(),
+            'phan/phan não é usado em lugar nenhum — remover do require-dev.'
+        );
+
+        $lock = json_decode(self::read('composer.lock'), true);
+        $names = array_column($lock['packages-dev'] ?? array(), 'name');
+
+        $this->assertNotContains('phan/phan', $names, 'phan/phan ainda está no composer.lock.');
+    }
+
+    /**
+     * A rota /lknmp/v1/payments era um hello world público, sem propósito e sem
+     * permission_callback. Endpoint público que não serve a nada é superfície.
+     */
+    public function testHasNoDemoRestRoute(): void
+    {
+        $main = self::main();
+
+        $this->assertStringNotContainsString(
+            'mercadopago_get_endpoint_payments',
+            $main,
+            'A rota demo /payments precisa ser removida.'
+        );
+
+        $this->assertStringNotContainsString(
+            'Hello World, this is the WordPress REST API',
+            $main,
+            'Texto da rota demo ainda presente.'
+        );
+    }
+
+    /**
+     * A rota de retorno confirma doação e chama a API do Mercado Pago com o
+     * access token. Sem limite, uma referência vazada vira consumo de quota.
+     */
+    public function testPaymentReturnRouteIsRateLimited(): void
+    {
+        $main = self::main();
+
+        $handler = $this->methodBody($main, 'get_handle_custom_payment_route');
+
+        $this->assertStringContainsString(
+            'get_transient',
+            $handler,
+            'A rota de retorno precisa de rate limit, como a de preferência.'
+        );
+
+        $this->assertStringContainsString(
+            'rate_limited',
+            $handler,
+            'A rota de retorno precisa devolver 429 quando estourar o limite.'
+        );
+    }
+
+    /**
+     * As referências são criadas com add_option() (wp_options), mas o uninstall
+     * só limpava give_get_settings(). Sobram linhas órfãs para sempre.
+     */
+    public function testUninstallRemovesGatewayReferenceOptions(): void
+    {
+        $uninstall = self::read('uninstall.php');
+
+        // (?<!give_) evita casar com give_delete_option(), que é outra tabela.
+        $this->assertMatchesRegularExpression(
+            '/(?<!give_)delete_option\s*\(|DELETE FROM \{\$wpdb->options\}/i',
+            $uninstall,
+            'O uninstall precisa apagar as options lknmp_gateway_* criadas com add_option().'
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/lknmp_gateway_/',
+            $uninstall,
+            'O uninstall precisa filtrar o prefixo lknmp_gateway_.'
+        );
+    }
+
+    /**
+     * Recorta o corpo de um método público do fonte do plugin.
+     */
+    private function methodBody(string $source, string $method): string
+    {
+        $needle = 'function ' . $method;
+
+        $start = strpos($source, $needle);
+
+        $this->assertNotFalse($start, "Método {$method} não encontrado.");
+
+        $end = strpos($source, "\n    }", (int) $start);
+
+        $this->assertNotFalse($end, "Fim do método {$method} não encontrado.");
+
+        return substr($source, (int) $start, (int) $end - (int) $start);
+    }
 }

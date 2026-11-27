@@ -15,6 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Mercado Pago para Give
  * Requires Plugins:  give
+ * Requires PHP:      8.1
  * Plugin URI:        https://www.linknacional.com.br/wordpress/givewp/
  * Description:       Mercado Pago payment gateway integrated with the GiveWP donation plugin for WordPress.
  * Version:           1.5.2

@@ -145,7 +145,6 @@ final class LknmpGatewayGiveWP
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'new_gateway_register');
-        $this->loader->add_action('rest_api_init', $this, 'register_payment_routes');
         $this->loader->add_action('rest_api_init', $this, 'register_rest_route');
         $this->loader->add_filter('give_get_settings_gateways', $plugin_admin, 'add_setting_into_new_section');
         $this->loader->add_filter('give_get_sections_gateways', $plugin_admin, 'new_setting_section');
@@ -223,24 +222,6 @@ final class LknmpGatewayGiveWP
     public function new_gateway_register($paymentGatewayRegister): void
     {
         $paymentGatewayRegister->registerGateway('Lknmp\Gateway\PublicView\LknmpGatewayGiveWPGateway');
-    }
-
-    final public function mercadopago_get_endpoint_payments()
-    {
-        // rest_ensure_response() wraps the data we want to return into a WP_REST_Response, and ensures it will be properly returned.
-        return rest_ensure_response('Hello World, this is the WordPress REST API');
-    }
-
-    /**
-     * This function is where we register our routes for our example endpoint.
-     */
-    final public function register_payment_routes(): void
-    {
-        // register_rest_route() handles more arguments but we are going to stick to the basics for now.
-        register_rest_route('lknmp/v1', '/payments', array(
-            'methods' => WP_REST_Server::READABLE,
-            'callback' => array($this, 'mercadopago_get_endpoint_payments'),
-        ));
     }
 
     public function register_rest_route(): void
@@ -419,6 +400,18 @@ final class LknmpGatewayGiveWP
         if ('' === $reference || '' === $paymentId) {
             return new WP_Error('missing_params', 'Missing parameter ref or payment_id', array('status' => 422));
         }
+
+        // Rota pública que chama a API do Mercado Pago com o access token da
+        // conta: sem limite, uma referência vazada consome a quota do gateway.
+        $rawIp = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash((string) $_SERVER['REMOTE_ADDR'])) : '';
+        $rateKey = 'lknmp_mp_rl_ret_' . md5('' !== $rawIp ? $rawIp : 'unknown');
+        $hits = (int) get_transient($rateKey);
+
+        if ($hits >= 30) {
+            return new WP_Error('rate_limited', 'Too many requests', array('status' => 429));
+        }
+
+        set_transient($rateKey, $hits + 1, MINUTE_IN_SECONDS);
 
         $configs = LknmpGatewayGiveWPHelper::get_configs();
         $accessToken = trim((string) $configs['token']);

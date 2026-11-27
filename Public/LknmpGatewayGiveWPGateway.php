@@ -139,7 +139,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             LknmpGatewayGiveWPHelper::regLog(
                 'info', // logType
                 'createPayment', // category
-                'Criar pagamento', // description
+                esc_html__('Create payment', 'lknmp-gateway-givewp'), // description
                 array(
                     'donation' => $donation->id,
                     'reference' => $reference
