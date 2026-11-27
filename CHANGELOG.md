@@ -1,3 +1,9 @@
+# 1.5.2 - 27/11/2026
+* Confirmacao de pagamento validada na API do Mercado Pago, sem token no navegador.
+* Conferencia de valor e moeda do pagamento com a doacao.
+* Suporte a moeda escolhida nos plugins de multimoeda.
+* Limite de requisicoes na criacao de preferencia.
+
 # 1.5.1 - 05/03/2026
 * Novos ícones e banners.
 
