@@ -270,6 +270,20 @@ final class LknmpGatewayGiveWP
             return new WP_Error('missing_token', 'Mercado Pago token not configured', array('status' => 500));
         }
 
+        // A rota é pública e cria objeto cobrável na conta. Sem limite, vira
+        // proxy para criar preferências em massa.
+        // REMOTE_ADDR vem do servidor, mas o Plugin Check exige sanitização
+        // explícita. Sem IP, a chave cai em 'unknown'.
+        $rawIp = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash((string) $_SERVER['REMOTE_ADDR'])) : '';
+        $rateKey = 'lknmp_mp_rl_' . md5('' !== $rawIp ? $rawIp : 'unknown');
+        $hits = (int) get_transient($rateKey);
+
+        if ($hits >= 20) {
+            return new WP_Error('rate_limited', 'Too many requests', array('status' => 429));
+        }
+
+        set_transient($rateKey, $hits + 1, MINUTE_IN_SECONDS);
+
         $amount = (float) $request->get_param('amount');
 
         if ($amount <= 0) {
@@ -296,7 +310,7 @@ final class LknmpGatewayGiveWP
                             'description' => (string) $configs['description'],
                             'quantity' => 1,
                             'unit_price' => round($amount, 2),
-                            'currency_id' => 'BRL',
+                            'currency_id' => give_get_currency(),
                         ),
                     ),
                     'external_reference' => $reference,
@@ -318,7 +332,25 @@ final class LknmpGatewayGiveWP
         $body = json_decode((string) wp_remote_retrieve_body($response), true);
 
         if ($statusCode < 200 || $statusCode >= 300 || ! is_array($body) || empty($body['id'])) {
-            return new WP_Error('preference_failed', 'Mercado Pago refused the preference', array('status' => 502));
+            // Repassa o motivo real (ex.: currency_id invalid) em vez de um
+            // 502 mudo que não diz o que corrigir.
+            $reason = '';
+
+            if (is_array($body)) {
+                if (! empty($body['message'])) {
+                    $reason = (string) $body['message'];
+                }
+
+                if (! empty($body['cause'][0]['description'])) {
+                    $reason .= ' ' . (string) $body['cause'][0]['description'];
+                }
+            }
+
+            return new WP_Error(
+                'preference_failed',
+                'Mercado Pago refused the preference' . ('' !== trim($reason) ? ': ' . trim($reason) : ''),
+                array('status' => 502)
+            );
         }
 
         return new WP_REST_Response(
@@ -386,6 +418,19 @@ final class LknmpGatewayGiveWP
         $mpStatus = (string) ($payment['status'] ?? '');
 
         if ('approved' === $mpStatus) {
+            // Sem comparar valores, dá para pagar centavos e concluir uma
+            // doação de qualquer valor. Compara em centavos para evitar float.
+            $paidCents = (int) round(((float) ($payment['transaction_amount'] ?? 0)) * 100);
+            $dueCents = (int) round(((float) $donation->amount->formatToDecimal()) * 100);
+
+            if ($paidCents !== $dueCents) {
+                return new WP_Error(
+                    'amount_mismatch',
+                    'Paid amount does not match the donation amount',
+                    array('status' => 409)
+                );
+            }
+
             $donation->status = DonationStatus::COMPLETE();
         } elseif ('rejected' === $mpStatus || 'cancelled' === $mpStatus) {
             $donation->status = DonationStatus::FAILED();
