@@ -61,10 +61,37 @@ const LknmpGatewayGiveWP = {
         // A moeda escolhida vive no form do Give (multimoeda). O servidor nao
         // consegue ve-la: a rota REST recebe JSON e o filtro give_currency le
         // $_POST. Entao ela vai no corpo da requisicao.
+        //
+        // Cada caminho de multimoeda usa um markup diferente:
+        //   - GiveWP v3:        .givewp-fields-amount__currency-select
+        //   - GiveWP legado:    select.give-cs-select-currency + input give-cs-form-currency
+        //   - Link Nacional:    #give-mc-select + input give-mc-selected-currency
+        function lknCurrencyInputs() {
+            return [
+                '.givewp-fields-amount__currency-select',
+                'select.give-cs-select-currency',
+                'input[name="give-cs-form-currency"]',
+                '#give-mc-select',
+                'input[name="give-mc-selected-currency"]'
+            ];
+        }
+
         function lknSelectedCurrency() {
-            const select = document.querySelector('.givewp-fields-amount__currency-select');
-            if (select && select.value) {
-                return String(select.value).toUpperCase();
+            const v3Select = document.querySelector('.givewp-fields-amount__currency-select');
+            if (v3Select && v3Select.value) {
+                return String(v3Select.value).toUpperCase();
+            }
+
+            // Os inputs escondidos sao os mais confiaveis: sao eles que os
+            // plugins atualizam e que vao no POST do Give.
+            const hidden = document.querySelector('input[name="give-cs-form-currency"], input[name="give-mc-selected-currency"]');
+            if (hidden && hidden.value) {
+                return String(hidden.value).toUpperCase();
+            }
+
+            const legacySelect = document.querySelector('select.give-cs-select-currency, #give-mc-select');
+            if (legacySelect && legacySelect.value) {
+                return String(legacySelect.value).toUpperCase();
             }
 
             const label = document.querySelector('.givewp-fields-amount__currency-container span');
@@ -73,6 +100,19 @@ const LknmpGatewayGiveWP = {
             }
 
             return (typeof lknGlobalData !== 'undefined' && lknGlobalData.baseCurrency) || '';
+        }
+
+        function lknCurrentFormId() {
+            if (typeof lknGlobalData !== 'undefined' && lknGlobalData.formId) {
+                return parseInt(lknGlobalData.formId, 10) || 0;
+            }
+
+            const field = document.querySelector('input[name="give-form-id"]');
+            if (field && field.value) {
+                return parseInt(field.value, 10) || 0;
+            }
+
+            return 0;
         }
 
         // Função para exibir mensagens de erro
@@ -216,7 +256,8 @@ const LknmpGatewayGiveWP = {
                         },
                         body: JSON.stringify({
                             amount: floatValue,
-                            currency: lknSelectedCurrency()
+                            currency: lknSelectedCurrency(),
+                            form_id: lknCurrentFormId()
                         })
                     });
 
@@ -299,14 +340,30 @@ const LknmpGatewayGiveWP = {
             });
 
             // Trocar a moeda muda o valor cobrado: a preferência precisa ser
-            // refeita com o novo par valor/moeda.
-            const currencySelect = document.querySelector('.givewp-fields-amount__currency-select');
-            if (currencySelect) {
-                currencySelect.addEventListener('change', () => {
-                    clearTimeout(debounceTimeout);
-                    debounceTimeout = setTimeout(preferenceGeneration, 600);
-                });
+            // refeita com o novo par valor/moeda. Vale para os três markups.
+            function lknRegenerateForCurrencyChange() {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(preferenceGeneration, 600);
             }
+
+            document.querySelectorAll('select.give-cs-select-currency, #give-mc-select, .givewp-fields-amount__currency-select').forEach((el) => {
+                el.addEventListener('change', lknRegenerateForCurrencyChange);
+            });
+
+            // O Give atualiza os inputs escondidos depois do change (e o modo
+            // leitura nem dispara change), então observa o valor deles.
+            lknCurrencyInputs().forEach((selector) => {
+                const el = document.querySelector(selector);
+                if (!el) {
+                    return;
+                }
+
+                el.addEventListener('change', lknRegenerateForCurrencyChange);
+                new MutationObserver(lknRegenerateForCurrencyChange).observe(el, {
+                    attributes: true,
+                    attributeFilter: ['value']
+                });
+            });
 
             // Inicializa a preferência assim que o componente é montado
             preferenceGeneration();

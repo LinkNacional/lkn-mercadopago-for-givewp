@@ -222,7 +222,9 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             'tittle' => $configs['tittle'],
             'description' => $configs['description'],
             'preferenceEndpoint' => rest_url('lknmp/v1/payments/preference'),
-            'nonce' => wp_create_nonce('wp_rest')
+            'nonce' => wp_create_nonce('wp_rest'),
+            'baseCurrency' => strtoupper((string) give_get_option('currency')),
+            'formId' => $formId
         ));
 
         wp_localize_script('lkn-mp-wallet', 'lknMercadoPagoGlobals', array(

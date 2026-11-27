@@ -257,4 +257,88 @@ final class PaymentSecurityTest extends TestCase
             'O corpo da requisição de preferência precisa incluir a moeda escolhida.'
         );
     }
+
+    /**
+     * O form pode oferecer só algumas moedas. O cliente não pode pedir uma
+     * moeda que o form não habilita, mesmo sendo uma moeda válida do Give.
+     * Vale para o multimoeda da Link Nacional e para o nativo do Give, porque
+     * os dois registram CurrencySwitcherSetting no schema do form.
+     */
+    public function testPreferenceValidatesCurrencyAgainstFormSettings(): void
+    {
+        $source = self::main();
+
+        $this->assertMatchesRegularExpression(
+            '/getCurrencySwitcherSettings\s*\(/',
+            $source,
+            'A moeda precisa ser validada contra as moedas do próprio form.'
+        );
+    }
+
+    /**
+     * Cada caminho de multimoeda renderiza um markup diferente: v3 usa
+     * .givewp-fields-amount__currency-select, o legado do Give usa
+     * select.give-cs-select-currency e o da Link Nacional usa #give-mc-select.
+     * O helper precisa cobrir os três.
+     */
+    public function testCheckoutReadsEveryCurrencySelector(): void
+    {
+        $js = self::read('Public/js/lkn-mercadopago-checkout.js');
+
+        foreach (array(
+            'givewp-fields-amount__currency-select',
+            'give-cs-select-currency',
+            'give-mc-select',
+        ) as $selector) {
+            $this->assertStringContainsString(
+                $selector,
+                $js,
+                "O helper de moeda precisa cobrir o seletor {$selector}."
+            );
+        }
+    }
+
+    /**
+     * Trocar a moeda muda o valor cobrado. Sem observar o seletor, a
+     * preferência fica com o par valor/moeda antigo.
+     */
+    public function testCheckoutWatchesCurrencyChanges(): void
+    {
+        $js = self::read('Public/js/lkn-mercadopago-checkout.js');
+
+        $this->assertMatchesRegularExpression(
+            '/addEventListener\s*\(\s*[\'"]change[\'"]/',
+            $js,
+            'O checkout precisa reagir à troca de moeda.'
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/MutationObserver/',
+            $js,
+            'A moeda também muda sem evento change (label do modo leitura).'
+        );
+    }
+
+    /**
+     * O servidor precisa saber de qual form veio o pedido para validar a
+     * moeda contra as moedas daquele form.
+     */
+    public function testCheckoutSendsFormId(): void
+    {
+        $js = self::read('Public/js/lkn-mercadopago-checkout.js');
+
+        $this->assertMatchesRegularExpression(
+            '/form_id\s*:/',
+            $js,
+            'O corpo da preferência precisa enviar o id do form.'
+        );
+
+        $gateway = self::read('Public/LknmpGatewayGiveWPGateway.php');
+
+        $this->assertMatchesRegularExpression(
+            "/'formId'\s*=>/",
+            $gateway,
+            'O formId precisa chegar ao JS via localize.'
+        );
+    }
 }

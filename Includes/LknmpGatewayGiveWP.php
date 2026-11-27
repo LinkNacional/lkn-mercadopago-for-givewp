@@ -2,6 +2,7 @@
 
 namespace Lknmp\Gateway\Includes;
 
+use Give\DonationForms\Models\DonationForm;
 use Give\Donations\Models\Donation;
 use Give\Donations\ValueObjects\DonationStatus;
 use Lknmp\Gateway\Admin\LknmpGatewayGiveWPAdmin;
@@ -302,6 +303,31 @@ final class LknmpGatewayGiveWP
 
         if (! isset($knownCurrencies[$currency])) {
             return new WP_Error('invalid_currency', 'Unsupported currency', array('status' => 422));
+        }
+
+        // O form pode habilitar só algumas moedas. O multimoeda da Link
+        // Nacional e o nativo do GiveWP registram a mesma CurrencySwitcherSetting
+        // no schema, então esta checagem cobre os dois.
+        $formId = absint($request->get_param('form_id'));
+
+        if ($formId > 0) {
+            $form = DonationForm::find($formId);
+
+            if ($form) {
+                $formCurrencies = array();
+
+                foreach ($form->schema()->getCurrencySwitcherSettings() as $setting) {
+                    $formCurrencies[] = strtoupper((string) $setting->getId());
+                }
+
+                if (! empty($formCurrencies) && ! in_array($currency, $formCurrencies, true)) {
+                    return new WP_Error(
+                        'currency_not_in_form',
+                        'Currency is not enabled for this form',
+                        array('status' => 422)
+                    );
+                }
+            }
         }
 
         $reference = wp_generate_password(32, false, false);
