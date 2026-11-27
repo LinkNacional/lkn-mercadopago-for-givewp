@@ -124,10 +124,13 @@ final class PaymentSecurityTest extends TestCase
     {
         $source = self::main();
 
+        // Com multimoeda, give_get_currency() lê $_POST e esta rota recebe
+        // JSON — usá-la aqui ignoraria a escolha do doador. O valor aceito
+        // precisa vir do cliente e ser validado contra give_get_currencies().
         $this->assertMatchesRegularExpression(
-            "/'currency_id'\s*=>\s*give_get_currency\s*\(/",
+            "/give_get_currencies\s*\(/",
             $source,
-            'A preferência deve usar give_get_currency() como currency_id.'
+            'A moeda precisa ser validada contra give_get_currencies().'
         );
 
         $this->assertDoesNotMatchRegularExpression(
@@ -185,6 +188,73 @@ final class PaymentSecurityTest extends TestCase
             '/cause/',
             $source,
             'O motivo devolvido pelo Mercado Pago precisa ser lido e repassado.'
+        );
+    }
+
+    /**
+     * O multimoeda troca a moeda pelo filtro give_currency, que lê $_POST. A
+     * rota REST recebe JSON, então $_POST fica vazio e o filtro nunca roda:
+     * a preferência sairia sempre na moeda base com o valor já convertido na
+     * tela — cobrando o valor errado. A moeda escolhida precisa vir do cliente
+     * e ser validada contra as moedas do Give.
+     */
+    public function testPreferenceUsesClientCurrencyValidatedAgainstGive(): void
+    {
+        $source = self::main();
+
+        $this->assertMatchesRegularExpression(
+            '/give_get_currencies\s*\(/',
+            $source,
+            'A moeda enviada pelo cliente precisa ser validada contra give_get_currencies().'
+        );
+
+        $this->assertDoesNotMatchRegularExpression(
+            "/'currency_id'\s*=>\s*give_get_currency\s*\(\s*\)/",
+            $source,
+            'Não pode usar give_get_currency() sem argumento: com multimoeda ela ignora a escolha do doador.'
+        );
+    }
+
+    /**
+     * A moeda da cobrança precisa ficar travada na referência. Sem isso o
+     * retorno não tem como saber em que moeda o pagamento foi feito.
+     */
+    public function testReferencePinsTheCurrency(): void
+    {
+        $source = self::main();
+
+        $this->assertMatchesRegularExpression(
+            '/\'currency\'\s*=>\s*\$currency/s',
+            $source,
+            'A referência precisa guardar a moeda junto do valor.'
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/currency_mismatch/',
+            $source,
+            'Pagamento em moeda diferente da referência precisa ser recusado.'
+        );
+    }
+
+    /**
+     * O JavaScript precisa enviar a moeda que o doador escolheu no formulário.
+     */
+    public function testCheckoutSendsSelectedCurrency(): void
+    {
+        $js = self::read('Public/js/lkn-mercadopago-checkout.js');
+
+        // O gateway é JS puro (registrado via givewp.gateways.register), não um
+        // componente React: lê o select do form do Give direto do DOM.
+        $this->assertMatchesRegularExpression(
+            '/givewp-fields-amount__currency-select/',
+            $js,
+            'O JS do gateway precisa ler a moeda selecionada no form do Give.'
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/currency:\s*lknSelectedCurrency\s*\(\s*\)/',
+            $js,
+            'O corpo da requisição de preferência precisa incluir a moeda escolhida.'
         );
     }
 }

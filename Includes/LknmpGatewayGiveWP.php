@@ -285,13 +285,31 @@ final class LknmpGatewayGiveWP
         set_transient($rateKey, $hits + 1, MINUTE_IN_SECONDS);
 
         $amount = (float) $request->get_param('amount');
+        $currency = strtoupper(sanitize_text_field((string) $request->get_param('currency')));
 
         if ($amount <= 0) {
             return new WP_Error('invalid_amount', 'Invalid amount', array('status' => 422));
         }
 
+        // O multimoeda troca a moeda pelo filtro give_currency, que lê $_POST.
+        // Esta rota recebe JSON, então $_POST fica vazio e o filtro nunca roda:
+        // a moeda escolhida precisa vir do cliente. Só aceita moeda do Give.
+        if ('' === $currency) {
+            $currency = strtoupper((string) give_get_option('currency'));
+        }
+
+        $knownCurrencies = give_get_currencies();
+
+        if (! isset($knownCurrencies[$currency])) {
+            return new WP_Error('invalid_currency', 'Unsupported currency', array('status' => 422));
+        }
+
         $reference = wp_generate_password(32, false, false);
-        set_transient('lknmp_mp_ref_' . $reference, round($amount, 2), 2 * HOUR_IN_SECONDS);
+        set_transient(
+            'lknmp_mp_ref_' . $reference,
+            array('amount' => round($amount, 2), 'currency' => $currency),
+            2 * HOUR_IN_SECONDS
+        );
         $returnUrl = rest_url('lknmp/v1/payments/checkpayment');
 
         $response = wp_remote_post(
@@ -310,7 +328,7 @@ final class LknmpGatewayGiveWP
                             'description' => (string) $configs['description'],
                             'quantity' => 1,
                             'unit_price' => round($amount, 2),
-                            'currency_id' => give_get_currency(),
+                            'currency_id' => $currency,
                         ),
                     ),
                     'external_reference' => $reference,
@@ -357,6 +375,7 @@ final class LknmpGatewayGiveWP
             array(
                 'preference_id' => (string) $body['id'],
                 'reference' => $reference,
+                'currency' => $currency,
             ),
             200
         );
@@ -416,6 +435,24 @@ final class LknmpGatewayGiveWP
         }
 
         $mpStatus = (string) ($payment['status'] ?? '');
+
+        // A moeda cobrada precisa ser a mesma da referência. O multimoeda pode
+        // trocar a moeda do doador, e o valor só faz sentido junto dela.
+        $expectedCurrency = strtoupper((string) give_get_payment_meta($donationId, 'lknmp_mp_currency'));
+
+        if ('' === $expectedCurrency) {
+            $expectedCurrency = strtoupper((string) $donation->amount->getCurrency());
+        }
+
+        $paidCurrency = strtoupper((string) ($payment['currency_id'] ?? ''));
+
+        if ('' !== $paidCurrency && ! hash_equals($expectedCurrency, $paidCurrency)) {
+            return new WP_Error(
+                'currency_mismatch',
+                'Paid currency does not match the donation currency',
+                array('status' => 409)
+            );
+        }
 
         if ('approved' === $mpStatus) {
             // Sem comparar valores, dá para pagar centavos e concluir uma

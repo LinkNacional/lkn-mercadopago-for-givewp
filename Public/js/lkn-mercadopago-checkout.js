@@ -58,6 +58,23 @@ const LknmpGatewayGiveWP = {
     Fields() {
         let floatValue
 
+        // A moeda escolhida vive no form do Give (multimoeda). O servidor nao
+        // consegue ve-la: a rota REST recebe JSON e o filtro give_currency le
+        // $_POST. Entao ela vai no corpo da requisicao.
+        function lknSelectedCurrency() {
+            const select = document.querySelector('.givewp-fields-amount__currency-select');
+            if (select && select.value) {
+                return String(select.value).toUpperCase();
+            }
+
+            const label = document.querySelector('.givewp-fields-amount__currency-container span');
+            if (label && label.textContent.trim()) {
+                return label.textContent.trim().toUpperCase();
+            }
+
+            return (typeof lknGlobalData !== 'undefined' && lknGlobalData.baseCurrency) || '';
+        }
+
         // Função para exibir mensagens de erro
         function lknNotice(title, message) {
             return React.createElement("div", { className: "error-notice" },
@@ -198,7 +215,8 @@ const LknmpGatewayGiveWP = {
                             'X-WP-Nonce': lknGlobalData.nonce
                         },
                         body: JSON.stringify({
-                            amount: floatValue
+                            amount: floatValue,
+                            currency: lknSelectedCurrency()
                         })
                     });
 
@@ -279,6 +297,16 @@ const LknmpGatewayGiveWP = {
                 attributes: true,
                 attributeFilter: ['value'] // Observa mudanças no atributo 'value'
             });
+
+            // Trocar a moeda muda o valor cobrado: a preferência precisa ser
+            // refeita com o novo par valor/moeda.
+            const currencySelect = document.querySelector('.givewp-fields-amount__currency-select');
+            if (currencySelect) {
+                currencySelect.addEventListener('change', () => {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(preferenceGeneration, 600);
+                });
+            }
 
             // Inicializa a preferência assim que o componente é montado
             preferenceGeneration();

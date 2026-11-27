@@ -114,12 +114,26 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             // preferência. Sem isso o cliente escolheria o id da ligação.
             $reference = isset($gatewayData['gatewayId']) ? sanitize_text_field((string) $gatewayData['gatewayId']) : '';
 
-            if ('' === $reference || ! get_transient('lknmp_mp_ref_' . $reference)) {
+            $pinned = '' !== $reference ? get_transient('lknmp_mp_ref_' . $reference) : false;
+
+            if ('' === $reference || ! is_array($pinned) || empty($pinned['amount']) || empty($pinned['currency'])) {
                 throw new Exception(esc_html__('Referência de pagamento inválida.', 'lknmp-gateway-givewp'));
+            }
+
+            // A referência carrega valor e moeda. Se a doação chegou com outro
+            // valor, o doador pagaria diferente do que doou.
+            $pinnedCents = (int) round(((float) $pinned['amount']) * 100);
+            $donationCents = (int) round(((float) $donation->amount->formatToDecimal()) * 100);
+            $pinnedCurrency = strtoupper((string) $pinned['currency']);
+            $donationCurrency = strtoupper((string) $donation->amount->getCurrency());
+
+            if ($pinnedCents !== $donationCents || $pinnedCurrency !== $donationCurrency) {
+                throw new Exception(esc_html__('Valor ou moeda do pagamento não confere com a doação.', 'lknmp-gateway-givewp'));
             }
 
             add_option('lknmp_gateway_' . $reference, $donation->id);
             give_update_payment_meta($donation->id, 'lknmp_mp_reference', $reference);
+            give_update_payment_meta($donation->id, 'lknmp_mp_currency', $pinnedCurrency);
             delete_transient('lknmp_mp_ref_' . $reference);
 
             LknmpGatewayGiveWPHelper::regLog(
