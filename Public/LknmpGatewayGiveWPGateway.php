@@ -110,8 +110,17 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
     public function createPayment(Donation $donation, $gatewayData)
     {
         try {
-            $idTeste = $gatewayData['gatewayId'];
-            add_option("lknmp_gateway_" . $idTeste, $donation->id);
+            // A referência só é aceita se foi emitida pelo nosso endpoint de
+            // preferência. Sem isso o cliente escolheria o id da ligação.
+            $reference = isset($gatewayData['gatewayId']) ? sanitize_text_field((string) $gatewayData['gatewayId']) : '';
+
+            if ('' === $reference || ! get_transient('lknmp_mp_ref_' . $reference)) {
+                throw new Exception(esc_html__('Referência de pagamento inválida.', 'lknmp-gateway-givewp'));
+            }
+
+            add_option('lknmp_gateway_' . $reference, $donation->id);
+            give_update_payment_meta($donation->id, 'lknmp_mp_reference', $reference);
+            delete_transient('lknmp_mp_ref_' . $reference);
 
             LknmpGatewayGiveWPHelper::regLog(
                 'info', // logType
@@ -119,21 +128,14 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
                 'Criar pagamento', // description
                 array(
                     'donation' => $donation->id,
-                    'gatewayData' => $gatewayData
+                    'reference' => $reference
                 )
             );
 
             $donation->status = DonationStatus::PENDING();
             $donation->save();
 
-            $receipt_id = give_get_payment_meta($donation->id, '_give_payment_purchase_key');
-            $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
-
-            header("Location: $redirect_url", true, 302);
-
-            //return new PaymentPending();
-            return wp_send_json_success(['status' => 'pending', 'message' => 'Pagamento está pendente.']);
-            // return new GatewayCommand();
+            return new PaymentPending();
         } catch (Exception $e) {
             $errorMessage = $e->getMessage();
 
@@ -205,7 +207,8 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             'key' => $configs['key'],
             'tittle' => $configs['tittle'],
             'description' => $configs['description'],
-            'token' => $configs['token']
+            'preferenceEndpoint' => rest_url('lknmp/v1/payments/preference'),
+            'nonce' => wp_create_nonce('wp_rest')
         ));
 
         wp_localize_script('lkn-mp-wallet', 'lknMercadoPagoGlobals', array(

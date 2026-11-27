@@ -1,5 +1,6 @@
 let checkPaymentStatus = null;
 let totalElement = ''
+let paymentReference = ''
 
 const LknmpGatewayGiveWP = {
     id: 'lknmp-gateway-givewp',
@@ -41,8 +42,12 @@ const LknmpGatewayGiveWP = {
             throw new Error('Gateway failed');
         }
 
+        if (!paymentReference) {
+            throw new Error(lknMercadoPagoGlobals.MessageErrorToken);
+        }
+
         return {
-            gatewayId: idUnique // substitua por algo relevante
+            gatewayId: paymentReference
         };
     },
 
@@ -186,33 +191,28 @@ const LknmpGatewayGiveWP = {
                 }
 
                 try {
-                    const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+                    const response = await fetch(lknGlobalData.preferenceEndpoint, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${lknGlobalData.token}`
+                            'X-WP-Nonce': lknGlobalData.nonce
                         },
                         body: JSON.stringify({
-                            items: [{
-                                id: `Doação X ${idUnique}`,
-                                title: lknGlobalData.title,
-                                description: lknGlobalData.description,
-                                quantity: 1,
-                                unit_price: floatValue,
-                                currency_id: 'BRL',
-                            }],
-                            back_urls: {
-                                "success": `${urlPag}/wp-json/lknmp/v1/payments/checkpayment?id=${idUnique}&statusFront=1`,
-                                "pending": `${urlPag}/wp-json/lknmp/v1/payments/checkpayment?id=${idUnique}&statusFront=2`,
-                                "failure": `${urlPag}/wp-json/lknmp/v1/payments/checkpayment?id=${idUnique}&statusFront=3`
-                            },
-                            auto_return: "approved"
+                            amount: floatValue
                         })
                     });
 
                     const data = await response.json();
 
-                    const preferenceId = data.id;
+                    if (!data || !data.preference_id || !data.reference) {
+                        if (warningEl) {
+                            warningEl.textContent = lknMercadoPagoGlobals.MessageErrorToken;
+                        }
+                        return;
+                    }
+
+                    paymentReference = data.reference;
+                    const preferenceId = data.preference_id;
 
                     const bricksBuilder = mp.bricks();
                     const marcadoPagoButton = await bricksBuilder.create("wallet", "wallet_container", {

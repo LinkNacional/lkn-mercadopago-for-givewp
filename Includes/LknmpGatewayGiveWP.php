@@ -244,6 +244,12 @@ final class LknmpGatewayGiveWP
 
     public function register_rest_route(): void
     {
+        register_rest_route('lknmp/v1', '/payments/preference', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'create_preference'),
+            'permission_callback' => '__return_true',
+        ));
+
         register_rest_route('lknmp/v1', '/payments/checkpayment', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_handle_custom_payment_route'),
@@ -251,235 +257,148 @@ final class LknmpGatewayGiveWP
         ));
     }
 
+    /**
+     * Cria a preferência de checkout no Mercado Pago usando o access token do
+     * servidor. O navegador nunca recebe essa credencial.
+     */
+    public function create_preference($request)
+    {
+        $configs = LknmpGatewayGiveWPHelper::get_configs();
+        $accessToken = trim((string) $configs['token']);
+
+        if ('' === $accessToken) {
+            return new WP_Error('missing_token', 'Mercado Pago token not configured', array('status' => 500));
+        }
+
+        $amount = (float) $request->get_param('amount');
+
+        if ($amount <= 0) {
+            return new WP_Error('invalid_amount', 'Invalid amount', array('status' => 422));
+        }
+
+        $reference = wp_generate_password(32, false, false);
+        set_transient('lknmp_mp_ref_' . $reference, round($amount, 2), 2 * HOUR_IN_SECONDS);
+        $returnUrl = rest_url('lknmp/v1/payments/checkpayment');
+
+        $response = wp_remote_post(
+            'https://api.mercadopago.com/checkout/preferences',
+            array(
+                'timeout' => 30,
+                'headers' => array(
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ),
+                'body' => wp_json_encode(array(
+                    'items' => array(
+                        array(
+                            'id' => $reference,
+                            'title' => (string) $configs['tittle'],
+                            'description' => (string) $configs['description'],
+                            'quantity' => 1,
+                            'unit_price' => round($amount, 2),
+                            'currency_id' => 'BRL',
+                        ),
+                    ),
+                    'external_reference' => $reference,
+                    'back_urls' => array(
+                        'success' => add_query_arg('ref', $reference, $returnUrl),
+                        'pending' => add_query_arg('ref', $reference, $returnUrl),
+                        'failure' => add_query_arg('ref', $reference, $returnUrl),
+                    ),
+                    'auto_return' => 'approved',
+                )),
+            )
+        );
+
+        if (is_wp_error($response)) {
+            return new WP_Error('api_unreachable', 'Could not reach Mercado Pago', array('status' => 502));
+        }
+
+        $statusCode = (int) wp_remote_retrieve_response_code($response);
+        $body = json_decode((string) wp_remote_retrieve_body($response), true);
+
+        if ($statusCode < 200 || $statusCode >= 300 || ! is_array($body) || empty($body['id'])) {
+            return new WP_Error('preference_failed', 'Mercado Pago refused the preference', array('status' => 502));
+        }
+
+        return new WP_REST_Response(
+            array(
+                'preference_id' => (string) $body['id'],
+                'reference' => $reference,
+            ),
+            200
+        );
+    }
+
+    /**
+     * Trata o retorno do checkout. O status nunca vem da URL: é consultado na
+     * API do Mercado Pago e comparado ao external_reference guardado.
+     */
     public function get_handle_custom_payment_route($request)
     {
-        $id = $request->get_param('id');
-        $statusFront = $request->get_param('statusFront');
-        if (empty($id)) {
-            return new WP_Error('missing_params', 'Missing parameter id', array('status' => 422));
+        $reference = sanitize_text_field((string) $request->get_param('ref'));
+        $paymentId = sanitize_text_field((string) $request->get_param('payment_id'));
+
+        if ('' === $reference || '' === $paymentId) {
+            return new WP_Error('missing_params', 'Missing parameter ref or payment_id', array('status' => 422));
         }
 
-        switch ($statusFront) {
-            case '1':
-                $donation_id = get_option("lknmp_gateway_" . $id);
-                if (! $donation_id) {
-                    return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
-                }
+        $configs = LknmpGatewayGiveWPHelper::get_configs();
+        $accessToken = trim((string) $configs['token']);
 
-                $donation = Donation::find($donation_id);
-                if (! $donation) {
-                    return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
-                }
-
-                $donation->status = DonationStatus::COMPLETE();
-                $donation->save();
-                if (! $donation) {
-                    return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
-                }
-
-                $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
-                $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
-
-                setcookie('lkn_payment_url', $redirect_url, time() + 3600, '/');
-
-                header('Content-Type: text/html');
-
-                $html = '
-                    <!DOCTYPE html>
-                    <html lang="pt-BR">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Pagamento Concluído</title>
-                        <style>
-                            body {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                                background-color: #f9f9f9;
-                                font-family: Arial, sans-serif;
-                                margin: 0;
-                                color: #333;
-                            }
-                            .message {
-                                text-align: center;
-                                padding: 20px;
-                                background-color: #e8f5e9;
-                                border: 1px solid #c8e6c9;
-                                border-radius: 8px;
-                                max-width: 500px;
-                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                            }
-                            h1 {
-                                color: #4caf50;
-                                font-size: 24px;
-                                margin-bottom: 10px;
-                            }
-                            p {
-                                font-size: 18px;
-                                margin-bottom: 20px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="message">
-                            <h1>✅ Pagamento realizado com sucesso!</h1>
-                            <p>Seu pagamento foi processado com sucesso. Você pode fechar esta guia ou retornar para a página anterior para verificar os detalhes da transação.</p>
-                        </div>
-                    </body>
-                    </html>
-                ';
-                echo $html;
-
-                exit;
-                break;
-            case '2':
-                $donation_id = get_option("lknmp_gateway_" . $id);
-                if (! $donation_id) {
-                    return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
-                }
-                $donation = Donation::find($donation_id);
-                if (! $donation) {
-                    return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
-                }
-                $donation->status = DonationStatus::PENDING();
-                $donation->save();
-                if (! $donation) {
-                    return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
-                }
-                $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
-                $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
-
-                setcookie('lkn_payment_url', $redirect_url, time() + 3600, '/');
-
-                header('Content-Type: text/html');
-
-                $html = '
-                    <!DOCTYPE html>
-                    <html lang="pt-BR">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Pagamento Falhou</title>
-                        <style>
-                            body {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                                background-color: #fdf3f3;
-                                font-family: Arial, sans-serif;
-                                margin: 0;
-                                color: #333;
-                            }
-                            .message {
-                                text-align: center;
-                                padding: 20px;
-                                background-color: #ffebee;
-                                border: 1px solid #ffcdd2;
-                                border-radius: 8px;
-                                max-width: 500px;
-                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                            }
-                            h1 {
-                                color: #f44336;
-                                font-size: 24px;
-                                margin-bottom: 10px;
-                            }
-                            p {
-                                font-size: 18px;
-                                margin-bottom: 20px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="message">
-                            <h1>❌ O pagamento não foi concluído</h1>
-                            <p>Ocorreu um problema ao processar seu pagamento. Retorne para a página anterior para verificar o resumo da transação e tentar novamente.</p>
-                        </div>
-                    </body>
-                    </html>
-                ';
-
-                echo $html;
-                exit;
-                break;
-            case '3':
-                $donation_id = get_option("lknmp_gateway_" . $id);
-                if (! $donation_id) {
-                    return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
-                }
-                $donation = Donation::find($donation_id);
-                if (! $donation) {
-                    return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
-                }
-
-                $donation->status = DonationStatus::FAILED();
-                $donation->save();
-                if (! $donation) {
-                    return new WP_Error('save_failed', 'Failed to update donation status', array('status' => 500));
-                }
-
-                $receipt_id = give_get_payment_meta($donation_id, '_give_payment_purchase_key');
-                $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
-
-                setcookie('lkn_payment_url', 'success', time() + 3600, '/');
-
-                header('Content-Type: text/html');
-
-                $html = '
-                    <!DOCTYPE html>
-                    <html lang="pt-BR">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Erro no Pagamento</title>
-                        <style>
-                            body {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                                background-color: #fff8e1;
-                                font-family: Arial, sans-serif;
-                                margin: 0;
-                                color: #333;
-                            }
-                            .message {
-                                text-align: center;
-                                padding: 20px;
-                                background-color: #ffecb3;
-                                border: 1px solid #ffe082;
-                                border-radius: 8px;
-                                max-width: 500px;
-                                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                            }
-                            h1 {
-                                color: #ff9800;
-                                font-size: 24px;
-                                margin-bottom: 10px;
-                            }
-                            p {
-                                font-size: 18px;
-                                margin-bottom: 20px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="message">
-                            <h1>⚠️ Erro no processamento do pagamento</h1>
-                            <p>Ocorreu um erro durante o processamento do pagamento. Tente novamente ou entre em contato com o suporte.</p>
-                        </div>
-                    </body>
-                    </html>
-                ';
-                echo $html;
-                exit;
-                break;
-            default:
-                return new WP_REST_Response(array('message' => 'Houve erro no pagamento'), 200);
-                break;
+        if ('' === $accessToken) {
+            return new WP_Error('missing_token', 'Mercado Pago token not configured', array('status' => 500));
         }
+
+        $donationId = (int) get_option('lknmp_gateway_' . $reference);
+
+        if ($donationId <= 0) {
+            return new WP_Error('no_donation_id', 'No donation ID found', array('status' => 404));
+        }
+
+        $apiResponse = wp_remote_get(
+            'https://api.mercadopago.com/v1/payments/' . rawurlencode($paymentId),
+            array(
+                'timeout' => 30,
+                'headers' => array('Authorization' => 'Bearer ' . $accessToken),
+            )
+        );
+
+        if (is_wp_error($apiResponse) || 200 !== (int) wp_remote_retrieve_response_code($apiResponse)) {
+            return new WP_Error('api_unreachable', 'Could not verify payment with Mercado Pago', array('status' => 502));
+        }
+
+        $payment = json_decode((string) wp_remote_retrieve_body($apiResponse), true);
+
+        if (! is_array($payment)
+            || empty($payment['external_reference'])
+            || ! hash_equals($reference, (string) $payment['external_reference'])
+        ) {
+            return new WP_Error('reference_mismatch', 'Payment does not belong to this donation', array('status' => 403));
+        }
+
+        $donation = Donation::find($donationId);
+
+        if (! $donation) {
+            return new WP_Error('donation_not_found', 'Donation not found', array('status' => 404));
+        }
+
+        $mpStatus = (string) ($payment['status'] ?? '');
+
+        if ('approved' === $mpStatus) {
+            $donation->status = DonationStatus::COMPLETE();
+        } elseif ('rejected' === $mpStatus || 'cancelled' === $mpStatus) {
+            $donation->status = DonationStatus::FAILED();
+        } else {
+            $donation->status = DonationStatus::PENDING();
+        }
+
+        $donation->save();
+
+        $receiptId = give_get_payment_meta($donationId, '_give_payment_purchase_key');
+        $redirect = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receiptId));
+
+        wp_safe_redirect($redirect);
+        exit;
     }
 }
