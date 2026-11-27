@@ -89,6 +89,7 @@ The Link Nacional MercadoPago for GiveWP plugin is now live and working.
 * Check of the payment amount and currency against the donation.
 * Support for the currency selected in multi-currency plugins.
 * Rate limit on preference creation.
+* Fix pt_BR translation: files named after the text domain and English source strings.
 
 = 1.5.1 = *2026/03/05*
 * New icons and banners.

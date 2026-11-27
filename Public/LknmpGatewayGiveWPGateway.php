@@ -117,7 +117,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             $pinned = '' !== $reference ? get_transient('lknmp_mp_ref_' . $reference) : false;
 
             if ('' === $reference || ! is_array($pinned) || empty($pinned['amount']) || empty($pinned['currency'])) {
-                throw new Exception(esc_html__('Referência de pagamento inválida.', 'lknmp-gateway-givewp'));
+                throw new Exception(esc_html__('Invalid payment reference.', 'lknmp-gateway-givewp'));
             }
 
             // A referência carrega valor e moeda. Se a doação chegou com outro
@@ -128,7 +128,7 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             $donationCurrency = strtoupper((string) $donation->amount->getCurrency());
 
             if ($pinnedCents !== $donationCents || $pinnedCurrency !== $donationCurrency) {
-                throw new Exception(esc_html__('Valor ou moeda do pagamento não confere com a doação.', 'lknmp-gateway-givewp'));
+                throw new Exception(esc_html__('Payment amount or currency does not match the donation.', 'lknmp-gateway-givewp'));
             }
 
             add_option('lknmp_gateway_' . $reference, $donation->id);
@@ -158,7 +158,11 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
 
             DonationNote::create(array(
                 'donationId' => $donation->id,
-                'content' => esc_html('Falha na doação. Razão: ' . $errorMessage) // Translators: %s é um espaço reservado para a mensagem de erro
+                'content' => sprintf(
+                    /* Translators: %s is the payment error message. */
+                    esc_html__('Donation failed. Reason: %s', 'lknmp-gateway-givewp'),
+                    esc_html($errorMessage)
+                )
             ));
 
             throw new PaymentGatewayException(esc_html($errorMessage));

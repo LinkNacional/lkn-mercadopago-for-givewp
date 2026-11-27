@@ -341,4 +341,183 @@ final class PaymentSecurityTest extends TestCase
             'O formId precisa chegar ao JS via localize.'
         );
     }
+
+    /**
+     * Msgid tem que ser o texto de origem (inglês). String em português como
+     * msgid nunca é traduzida: o doador lê português num site em inglês e o
+     * site em pt_BR não casa a tradução. Era o defeito antigo destes plugins.
+     */
+    public function testMsgidsAreNeverPortuguese(): void
+    {
+        $accented = '/[áàâãéêíóôõúüçÁÀÂÃÉÊÍÓÔÕÚÜÇ]/';
+        $sources = $this->phpSources();
+
+        $this->assertNotEmpty($sources, 'Nenhum fonte PHP encontrado para varrer.');
+
+        foreach ($sources as $file => $source) {
+            preg_match_all(
+                "/(?:esc_html__|esc_attr__|__|_e|esc_html_e)\(\s*'([^']*)'/",
+                $source,
+                $matches
+            );
+
+            foreach ($matches[1] as $msgid) {
+                $this->assertDoesNotMatchRegularExpression(
+                    $accented,
+                    $msgid,
+                    "Msgid em português em {$file}: \"{$msgid}\" — o texto de origem precisa estar em inglês."
+                );
+            }
+        }
+    }
+
+    /**
+     * Texto em português escapado direto com esc_html() não passa por
+     * tradução nenhuma: fica cravado no idioma, sem text-domain.
+     */
+    public function testPortugueseTextIsNeverEscapedWithoutI18n(): void
+    {
+        $accented = '/[áàâãéêíóôõúüçÁÀÂÃÉÊÍÓÔÕÚÜÇ]/';
+        $sources = $this->phpSources();
+
+        // Guarda contra o scan casar nada e passar vazio.
+        $this->assertNotEmpty($sources, 'Nenhum fonte PHP encontrado para varrer.');
+
+        foreach ($sources as $file => $source) {
+            preg_match_all("/(?<!_)esc_html\(\s*'([^']*)'/", $source, $matches);
+
+            foreach ($matches[1] as $text) {
+                $this->assertDoesNotMatchRegularExpression(
+                    $accented,
+                    $text,
+                    "Texto em português sem i18n em {$file}: \"{$text}\" — use esc_html__() com o texto em inglês."
+                );
+            }
+        }
+    }
+
+    /**
+     * Texto visível no admin também precisa de text-domain, não string solta.
+     */
+    public function testAdminLabelsAreTranslatable(): void
+    {
+        $helper = self::read('Includes/LknmpGatewayGiveWPHelper.php');
+
+        $this->assertStringNotContainsString(
+            "'Configurações',",
+            $helper,
+            "O rótulo 'Configurações' precisa passar por esc_html__() com texto em inglês."
+        );
+    }
+
+    /**
+     * O JS do admin mostra o ambiente da chave. Texto fixo em português ali
+     * nunca é traduzido e não acompanha o idioma do painel.
+     */
+    public function testAdminJsLabelsComeFromPhp(): void
+    {
+        $js = self::read('Admin/js/lknmp-gateway-givewp-show-message.js');
+
+        $this->assertStringNotContainsString(
+            'Ambiente Produç',
+            $js,
+            'O rótulo do ambiente precisa vir do PHP traduzido, não cravado no JS.'
+        );
+
+        $this->assertStringNotContainsString(
+            'Chave incorreta',
+            $js,
+            'A mensagem de chave inválida precisa vir do PHP traduzido.'
+        );
+    }
+
+    /**
+     * @return array<string,string> arquivo => conteudo
+     */
+    private function phpSources(): array
+    {
+        $dir = self::pluginDir();
+        $sources = array();
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            /** @var SplFileInfo $file */
+            if ('php' !== $file->getExtension()) {
+                continue;
+            }
+
+            $path = $file->getPathname();
+
+            if (false !== strpos($path, '/vendor/')
+                || false !== strpos($path, '/tests/')
+                || false !== strpos($path, '/node_modules/')
+            ) {
+                continue;
+            }
+
+            $relative = ltrim(str_replace($dir, '', $path), '/');
+            $sources[$relative] = (string) file_get_contents($path);
+        }
+
+        return $sources;
+    }
+
+    /**
+     * O .pot é o contrato de tradução. Msgid em português aqui vira string que
+     * nunca casa com a tradução e vaza em qualquer idioma. Inclui os metadados
+     * do header (Plugin Name / Description), que o make-pot extrai direto.
+     */
+    public function testPotHasNoPortugueseMsgid(): void
+    {
+        $pot = self::read('languages/lknmp-gateway-givewp.pot');
+        $accented = '/[áàâãéêíóôõúüçÁÀÂÃÉÊÍÓÔÕÚÜÇ]/';
+
+        preg_match_all('/^msgid "(.*)"$/m', $pot, $matches);
+
+        $this->assertNotEmpty($matches[1], 'Nenhum msgid encontrado no .pot.');
+
+        foreach ($matches[1] as $msgid) {
+            $this->assertDoesNotMatchRegularExpression(
+                $accented,
+                $msgid,
+                "Msgid em português no .pot: \"{$msgid}\" — o texto de origem precisa estar em inglês."
+            );
+        }
+    }
+
+    /**
+     * O .pot existe, tem header válido e cobre as strings do código. Um pot
+     * sem referências (#:) é um pot gerado à mão que não serve de base.
+     */
+    public function testPotIsGeneratedFromSource(): void
+    {
+        $pot = self::read('languages/lknmp-gateway-givewp.pot');
+
+        $this->assertStringContainsString('Content-Type: text/plain; charset=UTF-8', $pot);
+        $this->assertStringContainsString('X-Domain: lknmp-gateway-givewp', $pot);
+        $this->assertGreaterThan(
+            30,
+            preg_match_all('/^#:/m', $pot),
+            'O .pot precisa ter referências de código (#:); sem elas não veio do make-pot.'
+        );
+    }
+
+    /**
+     * O readme traduzido acompanha o readme versionado: se existe no GlotPress
+     * o projeto usa o fluxo e o arquivo precisa estar no repositório.
+     */
+    public function testReadmeTranslationExistsAndIsValid(): void
+    {
+        $readmePo = self::read('languages/lknmp-gateway-givewp-readme-pt_BR.po');
+
+        $this->assertStringContainsString('Content-Type: text/plain; charset=UTF-8', $readmePo);
+        $this->assertGreaterThan(
+            40,
+            preg_match_all('/^msgid /m', $readmePo),
+            'O readme-pt_BR.po precisa cobrir o readme atual (mais de 40 msgids).'
+        );
+    }
 }

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mercado Pago para Give 1.5.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mp-check\n"
-"POT-Creation-Date: 2026-11-27T18:42:30+00:00\n"
+"POT-Creation-Date: 2026-11-27T18:55:31+00:00\n"
 "PO-Revision-Date: 2026-11-27T15:45:00-03:00\n"
 "Last-Translator: Link Nacional <contato@linknacional.com.br>\n"
 "Language-Team: Portugues do Brasil\n"
@@ -28,7 +28,7 @@ msgstr "https://www.linknacional.com.br/wordpress/givewp/"
 #. Description of the plugin
 #: lknmp-gateway-givewp.php
 msgid ""
-"Gateway de pagamento Mercado Pago integrado ao plugin de doações GiveWP no "
+"Mercado Pago payment gateway integrated with the GiveWP donation plugin for "
 "WordPress."
 msgstr ""
 "Gateway de pagamento Mercado Pago integrado ao plugin de doações GiveWP no "
@@ -44,63 +44,75 @@ msgstr "Link Nacional"
 msgid "https://www.linknacional.com.br/wordpress/givewp//"
 msgstr "https://www.linknacional.com.br/wordpress/givewp//"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:115
+#: Admin/LknmpGatewayGiveWPAdmin.php:101
+msgid "Production environment"
+msgstr "Ambiente de produção"
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:102
+msgid "Sandbox environment"
+msgstr "Ambiente de sandbox"
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:103
+msgid "Invalid key"
+msgstr "Chave inválida"
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:118
 msgid "Mercado Pago Public Key"
 msgstr "Chave Pública do Mercado Pago"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:117
+#: Admin/LknmpGatewayGiveWPAdmin.php:120
 msgid "Mercado Pago Public Key."
 msgstr "Chave Pública do Mercado Pago."
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:122
+#: Admin/LknmpGatewayGiveWPAdmin.php:125
 msgid "Mercado Pago Token"
 msgstr "Token do Mercado Pago"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:124
+#: Admin/LknmpGatewayGiveWPAdmin.php:127
 msgid "Mercado Pago Token Code."
 msgstr "Código Token do Mercado Pago."
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:129
+#: Admin/LknmpGatewayGiveWPAdmin.php:132
 msgid "Title in Mercado Pago"
 msgstr "Título no Mercado Pago"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:131
+#: Admin/LknmpGatewayGiveWPAdmin.php:134
 msgid "This title will be used during checkout in Mercado Pago."
 msgstr "Esse título será utilizado durante o checkout no Mercado Pago."
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:136
+#: Admin/LknmpGatewayGiveWPAdmin.php:139
 msgid "Description in Mercado Pago"
 msgstr "Descrição no Mercado Pago"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:138
+#: Admin/LknmpGatewayGiveWPAdmin.php:141
 msgid "This description will be used during checkout in Mercado Pago."
 msgstr "Essa descrição será utilizada durante o checkout no Mercado Pago."
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:143
+#: Admin/LknmpGatewayGiveWPAdmin.php:146
 msgid "Debug Mode"
 msgstr "Modo de Depuração"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:145
+#: Admin/LknmpGatewayGiveWPAdmin.php:148
 msgid "Enable Debug environment."
 msgstr "Habilitar ambiente para Debug."
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:145
+#: Admin/LknmpGatewayGiveWPAdmin.php:148
 msgid "See logs."
 msgstr "Ver logs."
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:149 Admin/LknmpGatewayGiveWPAdmin.php:161
+#: Admin/LknmpGatewayGiveWPAdmin.php:152 Admin/LknmpGatewayGiveWPAdmin.php:164
 msgid "Enable"
 msgstr "Habilitar"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:150 Admin/LknmpGatewayGiveWPAdmin.php:162
+#: Admin/LknmpGatewayGiveWPAdmin.php:153 Admin/LknmpGatewayGiveWPAdmin.php:165
 msgid "Disable"
 msgstr "Desabilitar"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:155
+#: Admin/LknmpGatewayGiveWPAdmin.php:158
 msgid "Advanced Debug Mode"
 msgstr "Modo de Depuração avançada"
 
-#: Admin/LknmpGatewayGiveWPAdmin.php:157
+#: Admin/LknmpGatewayGiveWPAdmin.php:160
 msgid ""
 "Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful "
 "enabling this option will leave your site vulnerable."
@@ -108,61 +120,91 @@ msgstr ""
 "Habilitar ambiente para Debug avançado (CONSOLE - JAVASCRIPT). Atenção "
 "habilitar essa opção deixará seu site vulnerável."
 
+#: Includes/LknmpGatewayGiveWPHelper.php:70
+msgid "Activation error:"
+msgstr "Erro de ativação:"
+
+#: Includes/LknmpGatewayGiveWPHelper.php:71
+msgid "You need to have"
+msgstr "Você precisa ter o"
+
+#: Includes/LknmpGatewayGiveWPHelper.php:73
+msgid "Give"
+msgstr "Give"
+
+#: Includes/LknmpGatewayGiveWPHelper.php:74
+msgid "installed and active, version"
+msgstr "instalado e ativo, versão"
+
+#: Includes/LknmpGatewayGiveWPHelper.php:76
+msgid "for the Mercado Pago for GiveWP plugin to activate"
+msgstr "para o plugin Mercado Pago para GiveWP ativar"
+
+#: Includes/LknmpGatewayGiveWPHelper.php:95
+msgid "Settings"
+msgstr "Configurações"
+
 #: Public/LknmpGatewayGiveWPGateway.php:120
-msgid "Referência de pagamento inválida."
+msgid "Invalid payment reference."
 msgstr "Referência de pagamento inválida."
 
 #: Public/LknmpGatewayGiveWPGateway.php:131
-msgid "Valor ou moeda do pagamento não confere com a doação."
+msgid "Payment amount or currency does not match the donation."
 msgstr "Valor ou moeda do pagamento não confere com a doação."
 
-#: Public/LknmpGatewayGiveWPGateway.php:187
+#. Translators: %s is the payment error message.
+#: Public/LknmpGatewayGiveWPGateway.php:163
+#, php-format
+msgid "Donation failed. Reason: %s"
+msgstr "Falha na doação. Razão: %s"
+
+#: Public/LknmpGatewayGiveWPGateway.php:191
 #: Public/LknmpGatewayGiveWPPublic.php:105
 msgid "The Name field is empty. Please fill in this field before proceeding."
 msgstr ""
 "O campo Nome está vazio. Por favor, preencha este campo antes de prosseguir."
 
-#: Public/LknmpGatewayGiveWPGateway.php:188
+#: Public/LknmpGatewayGiveWPGateway.php:192
 #: Public/LknmpGatewayGiveWPPublic.php:106
 msgid "The Name field must be at least 3 letters."
 msgstr "O campo Nome deve ter no mínimo 3 letras."
 
-#: Public/LknmpGatewayGiveWPGateway.php:189
+#: Public/LknmpGatewayGiveWPGateway.php:193
 msgid ""
 "The Last Name field is empty. Please fill in this field before proceeding."
 msgstr ""
 "O campo Sobrenome está vazio. Por favor, preencha este campo antes de "
 "prosseguir."
 
-#: Public/LknmpGatewayGiveWPGateway.php:190
+#: Public/LknmpGatewayGiveWPGateway.php:194
 msgid "The Last Name field must be at least 3 letters."
 msgstr "O campo Sobrenome deve ter no mínimo 3 letras."
 
-#: Public/LknmpGatewayGiveWPGateway.php:191
+#: Public/LknmpGatewayGiveWPGateway.php:195
 #: Public/LknmpGatewayGiveWPPublic.php:107
 msgid "The Email field is empty. Please fill in this field before proceeding."
 msgstr ""
 "O campo Email está vazio. Por favor, preencha este campo antes de prosseguir."
 
-#: Public/LknmpGatewayGiveWPGateway.php:192
+#: Public/LknmpGatewayGiveWPGateway.php:196
 #: Public/LknmpGatewayGiveWPPublic.php:108
 msgid "The Email field is invalid. Please enter a valid email address."
 msgstr ""
 "O campo Email está inválido. Por favor, insira um endereço de email válido."
 
-#: Public/LknmpGatewayGiveWPGateway.php:193
+#: Public/LknmpGatewayGiveWPGateway.php:197
 msgid "Donation of "
 msgstr "Doação de "
 
-#: Public/LknmpGatewayGiveWPGateway.php:194
+#: Public/LknmpGatewayGiveWPGateway.php:198
 msgid "Mercado Pago Token was not provided or is invalid!"
 msgstr "O Token do Mercado Pago não foi fornecido ou é inválido!"
 
-#: Public/LknmpGatewayGiveWPGateway.php:195
+#: Public/LknmpGatewayGiveWPGateway.php:199
 msgid "Mercado Pago Public Key was not provided or is invalid!"
 msgstr "A Chave Pública do Mercado Pago não foi fornecida ou é inválida!"
 
-#: Public/LknmpGatewayGiveWPGateway.php:196
+#: Public/LknmpGatewayGiveWPGateway.php:200
 msgid ""
 "Payment in process, please close the current tab and follow the payment "
 "procedure in the other tab."
@@ -170,17 +212,30 @@ msgstr ""
 "Pagamento em processo, feche a guia atual e siga o procedimento de pagamento "
 "na outra aba."
 
-#: Public/LknmpGatewayGiveWPGateway.php:197
+#: Public/LknmpGatewayGiveWPGateway.php:201
 msgid "Field not found."
 msgstr "Campo não encontrado."
 
-#: Public/LknmpGatewayGiveWPGateway.php:198
+#: Public/LknmpGatewayGiveWPGateway.php:202
 msgid "Field(s) not found."
 msgstr "Campo(s) não encontrado(s)."
 
-#: Public/LknmpGatewayGiveWPGateway.php:199
+#: Public/LknmpGatewayGiveWPGateway.php:203
 msgid "Please provide a valid value."
 msgstr "Por favor, forneça um valor válido."
+
+#~ msgid ""
+#~ "Gateway de pagamento Mercado Pago integrado ao plugin de doações GiveWP "
+#~ "no WordPress."
+#~ msgstr ""
+#~ "Gateway de pagamento Mercado Pago integrado ao plugin de doações GiveWP "
+#~ "no WordPress."
+
+#~ msgid "Referência de pagamento inválida."
+#~ msgstr "Referência de pagamento inválida."
+
+#~ msgid "Valor ou moeda do pagamento não confere com a doação."
+#~ msgstr "Valor ou moeda do pagamento não confere com a doação."
 
 #~ msgid "Mercado Pago Token (Access Token)"
 #~ msgstr "Token do Mercado Pago (Acess Token)"
@@ -194,9 +249,6 @@ msgstr "Por favor, forneça um valor válido."
 #~ msgid "Enable the desired development environment: Sandbox or Production."
 #~ msgstr ""
 #~ "Habilite o ambiente de desenvolvimento desejado: Sandbox ou Produção."
-
-#~ msgid "Production"
-#~ msgstr "Produção"
 
 #~ msgid "Sandbox"
 #~ msgstr "Sandbox"

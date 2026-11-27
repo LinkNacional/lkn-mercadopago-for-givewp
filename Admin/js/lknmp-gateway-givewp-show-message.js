@@ -26,10 +26,10 @@ function formatValue(value) {
     const formatedValue = value.split("-");
     switch (formatedValue[0].toUpperCase()) {
         case "APP_USR":
-            return "Ambiente Produção";
+            return varsPhp.labelProduction;
         case "TEST":
-            return "Ambiente Sandbox";
+            return varsPhp.labelSandbox;
         default:
-            return "Chave incorreta";
+            return varsPhp.labelInvalid;
     }
 }

@@ -3,6 +3,7 @@
 * Conferencia de valor e moeda do pagamento com a doacao.
 * Suporte a moeda escolhida nos plugins de multimoeda.
 * Limite de requisicoes na criacao de preferencia.
+* Traducao pt_BR corrigida: arquivos com o text domain correto e strings de origem em ingles.
 
 # 1.5.1 - 05/03/2026
 * Novos ícones e banners.

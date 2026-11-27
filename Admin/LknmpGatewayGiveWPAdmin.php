@@ -97,7 +97,10 @@ final class LknmpGatewayGiveWPAdmin
         wp_enqueue_script("lkn-mercadopago-givewp-show-message.js", plugin_dir_url(__FILE__) . 'js/lknmp-gateway-givewp-show-message.js', null, $this->version, false);
 
         wp_localize_script("lkn-mercadopago-givewp-show-message.js", "varsPhp", array(
-            "admin_url" => admin_url("edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago")
+            "admin_url" => admin_url("edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago"),
+            "labelProduction" => esc_html__('Production environment', 'lknmp-gateway-givewp'),
+            "labelSandbox" => esc_html__('Sandbox environment', 'lknmp-gateway-givewp'),
+            "labelInvalid" => esc_html__('Invalid key', 'lknmp-gateway-givewp')
         ));
     }
 

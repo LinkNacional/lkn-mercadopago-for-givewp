@@ -1,0 +1,309 @@
+# Translation of Plugins - Link Nacional Payment Gateway for MercadoPago and GiveWP - Stable Readme (latest release) in Portuguese (Brazil)
+# This file is distributed under the same license as the Plugins - Link Nacional Payment Gateway for MercadoPago and GiveWP - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-12-22 18:33:44+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: pt_BR\n"
+"Project-Id-Version: Plugins - Link Nacional Payment Gateway for MercadoPago and GiveWP - Stable Readme (latest release)\n"
+
+#. Short description.
+#, gp-priority: high
+msgid "Link Nacional MercadoPago payment option for GiveWP."
+msgstr "Link Nacional opção de pagamento MercadoPago para GiveWP."
+
+#. Plugin name.
+#, gp-priority: high
+msgid "Link Nacional Payment Gateway for MercadoPago and GiveWP"
+msgstr "Gateway de Pagamento Nacional para MercadoPago e GiveWP"
+
+#. Found in description paragraph.
+msgid "As a payment gateway, this plugin communicates with an external API to function properly. Specifically, it connects to the following endpoint: <a href=\"https://api.mercadopago.com\">https://api.mercadopago.com</a>, which is used to process transactions securely."
+msgstr "Como um gateway de pagamento, este plugin se comunica com uma API externa para funcionar corretamente. Especificamente, ele se conecta ao seguinte endpoint: <a href=\"https://api.mercadopago.com\">https://api.mercadopago.com</a>, que é usado para processar transações de forma segura."
+
+#. Found in description paragraph.
+msgid "This plugin adds Mercado Pago as a payment option for the GiveWP donation plugin. It uses the <a href=\"https://www.mercadopago.com.br/developers/pt/reference\">Mercado Pago API</a> to process transactions. To use this plugin, you must have an active Mercado Pago account."
+msgstr "Este plugin adiciona o Mercado Pago como uma opção de pagamento para o plugin de doações GiveWP. Ele utiliza a <a href=\"https://www.mercadopago.com.br/developers/pt/reference\">API do Mercado Pago</a> para processar transações. Para utilizar este plugin, você deve ter uma conta ativa no Mercado Pago."
+
+#. Found in faq list item.
+msgid "Yes, it is necessary to configure the token and public key according to your Mercado Pago account."
+msgstr "Sim, é necessário configurar o token e a chave pública de acordo com a sua conta do Mercado Pago."
+
+#. Found in faq list item.
+msgid "Have installed the GiveWP plugin."
+msgstr "Tenha instalado o plugin GiveWP."
+
+#. Found in faq list item.
+msgid "This plugin is released under a GPLv3 license."
+msgstr "Este plugin é lançado sob uma licença GPLv3."
+
+#. Found in faq header.
+msgid "Is it necessary to edit the settings? Which are they?"
+msgstr "É necessário editar as configurações? Quais são elas?"
+
+#. Found in faq header.
+msgid "What do I need to use this plugin?"
+msgstr "O que eu preciso para usar este plugin?"
+
+#. Found in faq header.
+msgid "What is the license of the plugin?"
+msgstr "Qual é a licença do plugin?"
+
+#. Found in installation paragraph.
+msgid "The Link Nacional MercadoPago for GiveWP plugin is now live and working."
+msgstr "O plugin Link Nacional MercadoPago para o GiveWP está agora ativo e funcionando."
+
+#. Found in installation paragraph.
+msgid "Save  your settings."
+msgstr "Salve suas configurações."
+
+#. Found in installation paragraph.
+msgid "Under \"Payment Gateways\", locate \"Mercado Pago\" and configure settings."
+msgstr "Em \"Portões de Pagamento\", localize \"Mercado Pago\" e configure as configurações."
+
+#. Found in installation paragraph.
+msgid "Access GiveWP settings from the WordPress admin dashboard."
+msgstr "Acesse as configurações do GiveWP a partir do painel de administração do WordPress."
+
+#. Found in installation list item, installation paragraph.
+msgid "Enter the necessary configuration information, such as Mercado Pago TOKEN and PUBLIC KEY. Additionally, also customize the title and description that will appear at checkout."
+msgstr "Digite as informações de configuração necessárias, como o TOKEN e CHAVE PÚBLICA do Mercado Pago. Além disso, também personalize o título e a descrição que aparecerão na finalização de compra."
+
+#. Found in installation list item.
+msgid "Locate “Mercado Pago” in the list of payment methods and go to settings."
+msgstr "Localize \"Mercado Pago\" na lista de métodos de pagamento e vá para as configurações."
+
+#. Found in installation list item.
+msgid "In the \"Payments Gateways\" tab, you'll see a list of available payment methods."
+msgstr "Na aba \"Portais de Pagamento\", você verá uma lista de métodos de pagamento disponíveis."
+
+#. Found in installation list item.
+msgid "In the sidebar menu, click on \"Donations\" and then on \"Settings\"."
+msgstr "Na barra lateral, clique em \"Doações\" e então em \"Configurações\"."
+
+#. Found in installation list item.
+msgid "After installing the plugin, access the WordPress admin dashboard and navigate to the GiveWP settings."
+msgstr "Após instalar o plugin, acesse o painel de administração do WordPress e navegue até as configurações do GiveWP."
+
+#. Found in installation header.
+msgid "Payments Settings"
+msgstr "Configurações de Pagamento"
+
+#. Found in description paragraph.
+msgid "You have successfully configured the MercadoPago National Link for GiveWP and allowed your customers to choose to pay for donations with Mercado Pago."
+msgstr "Você configurou com sucesso o Link Nacional do MercadoPago para o GiveWP e permitiu que seus clientes escolham pagar por doações com o Mercado Pago."
+
+#. Found in description paragraph.
+msgid "Save your settings."
+msgstr "Salve suas configurações."
+
+#. Found in description paragraph.
+msgid "In the GiveWP, navigate to settings, then 'Payments Gateways', and activate 'Mercado Pago'."
+msgstr "No GiveWP, navegue até configurações, então 'Formas de Pagamento', e ative 'Mercado Pago'."
+
+#. Found in description paragraph.
+msgid "Download and activate the plugin."
+msgstr "Baixe e ative o plugin."
+
+#. Found in description paragraph.
+msgid "Search the WordPress sidebar for 'Link Nacional MercadoPago for GiveWP'."
+msgstr "Pesquise na barra lateral do WordPress por 'Link Nacional MercadoPago para Give WP'."
+
+#. Found in description paragraph.
+msgid "<strong>User instructions</strong>"
+msgstr "<strong>Instruções do usuário</strong>"
+
+#. Found in description paragraph.
+msgid ""
+"As a Payment Gateway this plugin contacts these external resources to complete the payment:\n"
+"<a href=\"https://api.mercadopago.com/checkout/preferences\">Mercado Pago Checkout API</a>\n"
+"<a href=\"https://sdk.mercadopago.com/js/v2\">Mercado Pago Checkout JS SDK</a>"
+msgstr ""
+"Como um Gateway de Pagamento, este plugin entra em contato com esses recursos externos para concluir o pagamento:\n"
+"<a href=\"https://api.mercadopago.com/checkout/preferences\">Mercado Pago Checkout API</a>\n"
+"<a href=\"https://sdk.mercadopago.com/js/v2\">Mercado Pago Checkout JS SDK</a>"
+
+#. Found in description paragraph.
+msgid ""
+"JS Libraries used:\n"
+"The <a href=\"https://github.com/mercadopago/sdk-js\">MercadoPago sdk-js</a> is needed for the plugin to work. <a href=\"https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/integrate-checkout-pro/web\">Learn more</a>."
+msgstr ""
+"Bibliotecas JS utilizadas:\n"
+"O <a href=\"https://github.com/mercadopago/sdk-js\">MercadoPago sdk-js</a> é necessário para o plugin funcionar. <a href=\"https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/integrate-checkout-pro/web\">Saiba mais</a>."
+
+#. Found in description paragraph.
+msgid "<a href=\"https://wordpress.org/plugins/give/\">GiveWP</a> is needed for the plugin to work."
+msgstr "O <a href=\"https://wordpress.org/plugins/give/\">GiveWP</a> é necessário para que o plugin funcione."
+
+#. Found in description paragraph.
+msgid "<strong>Dependencies</strong>"
+msgstr "<strong>Dependências</strong>"
+
+#. Found in description paragraph.
+msgid "<a href=\"https://www.mercadopago.com.br\">MercadoPago</a> is a leading online payment solution in Latin America, offering a comprehensive suite of services for secure and convenient financial transactions. As the fintech arm of Mercado Libre, one of the region’s largest e-commerce platforms, Mercado Pago provides a reliable and user-friendly payment gateway for businesses and individuals alike."
+msgstr "<a href=\"https://www.mercadopago.com.br\">MercadoPago</a> é uma solução líder de pagamento on-line na América Latina, oferecendo uma ampla gama de serviços para transações financeiras seguras e convenientes. Como o braço fintech do Mercado Livre, uma das maiores plataformas de e-commerce da região, o Mercado Pago fornece um gateway de pagamento confiável e fácil de usar para empresas e indivíduos."
+
+#. Found in description paragraph.
+msgid "The <a href=\"https://www.linknacional.com.br/wordpress/givewp/mercadopago/\">MercadoPago Payment Gateway for GiveWP</a> seamlessly integrates MercadoPago with the GiveWP donation plugin for WordPress, providing a secure and efficient solution for receiving online donations. This plugin supports multiple payment methods, recurring donations, and customizable donation forms. Enhance your donor's experience with a trusted payment gateway, boost your fundraising efforts, and manage donations effortlessly with detailed reporting and a user-friendly interface."
+msgstr "O <a href=\"https://www.linknacional.com.br/wordpress/givewp/mercadopago/\">Gateway de Pagamento MercadoPago para GiveWP</a> integra perfeitamente o MercadoPago com o plugin de doações GiveWP para o WordPress, fornecendo uma solução segura e eficiente para receber doações on-line. Este plugin suporta vários métodos de pagamento, doações recorrentes e formulários de doação personalizados. Aprimore a experiência do seu doador com um gateway de pagamento confiável, impulsione seus esforços de arrecadação de fundos e gerencie doações sem esforço com relatórios detalhados e uma interface amigável para o usuário."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2026/11/27</em>\n"
+"* Payment confirmation validated against the Mercado Pago API, no token in the browser;\n"
+"* Check of the payment amount and currency against the donation;\n"
+"* Support for the currency selected in multi-currency plugins;\n"
+"* Rate limit on preference creation."
+msgstr ""
+"<em>27/11/2026</em>\n"
+"* Confirmação de pagamento validada na API do Mercado Pago, sem token no navegador;\n"
+"* Conferência de valor e moeda do pagamento com a doação;\n"
+"* Suporte a moeda escolhida nos plugins de multimoeda;\n"
+"* Limite de requisições na criação de preferência."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2026/03/05</em>\n"
+"* New icons and banners."
+msgstr ""
+"<em>05/03/2026</em>\n"
+"* Novos ícones e banners."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2025/04/22</em>\n"
+"* Update in the MercadoPago button generation script."
+msgstr ""
+"<em>2025/04/22</em>\n"
+"* Atualização no script de geração do botão MercadoPago."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2025/04/02</em>\n"
+"* Error retrieving cache through the script."
+msgstr ""
+"<em>2025/04/02</em>\n"
+"* Erro ao recuperar o cache através do script."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2025/03/21</em>\n"
+"* Fix in custom input."
+msgstr ""
+"<em>2025/03/21</em>\n"
+"* Correção na entrada personalizada."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2025/03/19</em>\n"
+"* Feedback pages for the MercadoPago sandbox environment."
+msgstr ""
+"<em>19/03/2025</em>\n"
+"* Páginas de comentário ou sugestão para o ambiente de sandbox do MercadoPago."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2025/03/12</em>\n"
+"* Fix in the conversion of the value to float."
+msgstr ""
+"<em>2025/03/12</em>\n"
+"* Correção na conversão do valor para float."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2025/01/08</em>\n"
+"* Add configuration to enable debug."
+msgstr "<em>2025/01/08</em> * Adicionar configuração para ativar depuração."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/11/26</em>\n"
+"* Fixed redirect URL.\n"
+"* Improved payment flow."
+msgstr ""
+"<em>26/11/2024</em>\n"
+"* Corrigido redirecionamento de URL.\n"
+"* Melhorado fluxo de pagamento."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/05/31</em>\n"
+"* Plugin launch."
+msgstr ""
+"<em>31/05/2024</em>\n"
+"* Lançamento do plugin."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/08/05</em>\n"
+"* Message added when inserting the Mercado Pago token;\n"
+"* Plugin namespace updated;\n"
+"* Refactor with new WordPress guidelines;\n"
+"* Update README."
+msgstr ""
+"<em>2024/08/05</em>\n"
+"* Mensagem adicionada ao inserir o token do Mercado Pago;\n"
+"* Namespace do plugin atualizado;\n"
+"* Refatoração de acordo com as novas diretrizes do WordPress;\n"
+"* Atualização do README."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/08/15</em>\n"
+"* Plugin rendering fixed\n"
+"* Payment method change correction\n"
+"* WordPress guidelines applied\n"
+"* Notice of plugin inapplicability in the classic and multistep form"
+msgstr ""
+"<em>15/08/2024</em>\n"
+"* Correção na renderização do plugin\n"
+"* Correção na alteração do método de pagamento\n"
+"* Diretrizes do WordPress aplicadas\n"
+"* Aviso de inaplicabilidade do plugin no formulário clássico e multietapas"
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/09/10</em>\n"
+"* Refactor with requested name and slug changes."
+msgstr ""
+"<em>2024/09/10</em>\n"
+"* Refatorar com as mudanças de nome e slug solicitadas."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/09/25</em>\n"
+"* Update documentation;\n"
+"* Fix translation mismatch issues;\n"
+"* Change option names to avoid collisions."
+msgstr ""
+"<em>2024/09/25</em>\n"
+"* Atualizar documentação;\n"
+"* Corrigir problemas de tradução;\n"
+"* Alterar nomes de opções para evitar colisões."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid ""
+"<em>2024/09/27</em>\n"
+"* Fixed bug on Mercado Pago SDK load."
+msgstr ""
+"<em>27/09/2024</em>\n"
+"* Erro corrigido no carregamento do SDK do Mercado Pago."
