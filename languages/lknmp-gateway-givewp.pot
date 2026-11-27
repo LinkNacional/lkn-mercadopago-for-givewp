@@ -1,0 +1,208 @@
+# Copyright (C) 2026 Link Nacional
+# This file is distributed under the GPL-3.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Mercado Pago para Give 1.5.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mp-check\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-27T18:55:31+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: lknmp-gateway-givewp\n"
+
+#. Plugin Name of the plugin
+#: lknmp-gateway-givewp.php
+msgid "Mercado Pago para Give"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: lknmp-gateway-givewp.php
+msgid "https://www.linknacional.com.br/wordpress/givewp/"
+msgstr ""
+
+#. Description of the plugin
+#: lknmp-gateway-givewp.php
+msgid "Mercado Pago payment gateway integrated with the GiveWP donation plugin for WordPress."
+msgstr ""
+
+#. Author of the plugin
+#: lknmp-gateway-givewp.php
+msgid "Link Nacional"
+msgstr ""
+
+#. Author URI of the plugin
+#: lknmp-gateway-givewp.php
+msgid "https://www.linknacional.com.br/wordpress/givewp//"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:101
+msgid "Production environment"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:102
+msgid "Sandbox environment"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:103
+msgid "Invalid key"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:118
+msgid "Mercado Pago Public Key"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:120
+msgid "Mercado Pago Public Key."
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:125
+msgid "Mercado Pago Token"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:127
+msgid "Mercado Pago Token Code."
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:132
+msgid "Title in Mercado Pago"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:134
+msgid "This title will be used during checkout in Mercado Pago."
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:139
+msgid "Description in Mercado Pago"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:141
+msgid "This description will be used during checkout in Mercado Pago."
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:146
+msgid "Debug Mode"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:148
+msgid "Enable Debug environment."
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:148
+msgid "See logs."
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:152
+#: Admin/LknmpGatewayGiveWPAdmin.php:164
+msgid "Enable"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:153
+#: Admin/LknmpGatewayGiveWPAdmin.php:165
+msgid "Disable"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:158
+msgid "Advanced Debug Mode"
+msgstr ""
+
+#: Admin/LknmpGatewayGiveWPAdmin.php:160
+msgid "Enable advanced Debug environment (CONSOLE - JAVASCRIPT). Be careful enabling this option will leave your site vulnerable."
+msgstr ""
+
+#: Includes/LknmpGatewayGiveWPHelper.php:70
+msgid "Activation error:"
+msgstr ""
+
+#: Includes/LknmpGatewayGiveWPHelper.php:71
+msgid "You need to have"
+msgstr ""
+
+#: Includes/LknmpGatewayGiveWPHelper.php:73
+msgid "Give"
+msgstr ""
+
+#: Includes/LknmpGatewayGiveWPHelper.php:74
+msgid "installed and active, version"
+msgstr ""
+
+#: Includes/LknmpGatewayGiveWPHelper.php:76
+msgid "for the Mercado Pago for GiveWP plugin to activate"
+msgstr ""
+
+#: Includes/LknmpGatewayGiveWPHelper.php:95
+msgid "Settings"
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:120
+msgid "Invalid payment reference."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:131
+msgid "Payment amount or currency does not match the donation."
+msgstr ""
+
+#. Translators: %s is the payment error message.
+#: Public/LknmpGatewayGiveWPGateway.php:163
+#, php-format
+msgid "Donation failed. Reason: %s"
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:191
+#: Public/LknmpGatewayGiveWPPublic.php:105
+msgid "The Name field is empty. Please fill in this field before proceeding."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:192
+#: Public/LknmpGatewayGiveWPPublic.php:106
+msgid "The Name field must be at least 3 letters."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:193
+msgid "The Last Name field is empty. Please fill in this field before proceeding."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:194
+msgid "The Last Name field must be at least 3 letters."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:195
+#: Public/LknmpGatewayGiveWPPublic.php:107
+msgid "The Email field is empty. Please fill in this field before proceeding."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:196
+#: Public/LknmpGatewayGiveWPPublic.php:108
+msgid "The Email field is invalid. Please enter a valid email address."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:197
+msgid "Donation of "
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:198
+msgid "Mercado Pago Token was not provided or is invalid!"
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:199
+msgid "Mercado Pago Public Key was not provided or is invalid!"
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:200
+msgid "Payment in process, please close the current tab and follow the payment procedure in the other tab."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:201
+msgid "Field not found."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:202
+msgid "Field(s) not found."
+msgstr ""
+
+#: Public/LknmpGatewayGiveWPGateway.php:203
+msgid "Please provide a valid value."
+msgstr ""

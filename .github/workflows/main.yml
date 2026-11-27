@@ -7,7 +7,7 @@ on:
 
 env:
   PLUGIN_NAME: lknmp-gateway-givewp
-  PHP_VERSION: "7.4"
+  PHP_VERSION: "8.1"
 
 jobs:
   release-build:
@@ -34,6 +34,8 @@ jobs:
         mkdir -p build
         mv ./Admin ./Includes ./languages ./Public *.php *.txt ./build
         cp -r vendor build/vendor
+        # .po/.mo sao insumo de traducao: ficam no Git e saem do pacote
+        rm -f ./build/languages/*.po ./build/languages/*.mo
         find ./build -type f -exec chmod 0644 {} +
         find ./build -type d -exec chmod 0755 {} +
 
@@ -57,7 +59,7 @@ jobs:
       uses: mathieudutour/github-tag-action@v6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        custom_tag: '1.5.1' # // TODO caso necessário definir a tag da release manualmente
+        custom_tag: '1.5.2' # // TODO caso necessário definir a tag da release manualmente
 
     # Generate new release
     - name: Generate new Release

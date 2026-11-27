@@ -110,30 +110,46 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
     public function createPayment(Donation $donation, $gatewayData)
     {
         try {
-            $idTeste = $gatewayData['gatewayId'];
-            add_option("lknmp_gateway_" . $idTeste, $donation->id);
+            // A referência só é aceita se foi emitida pelo nosso endpoint de
+            // preferência. Sem isso o cliente escolheria o id da ligação.
+            $reference = isset($gatewayData['gatewayId']) ? sanitize_text_field((string) $gatewayData['gatewayId']) : '';
+
+            $pinned = '' !== $reference ? get_transient('lknmp_mp_ref_' . $reference) : false;
+
+            if ('' === $reference || ! is_array($pinned) || empty($pinned['amount']) || empty($pinned['currency'])) {
+                throw new Exception(esc_html__('Invalid payment reference.', 'lknmp-gateway-givewp'));
+            }
+
+            // A referência carrega valor e moeda. Se a doação chegou com outro
+            // valor, o doador pagaria diferente do que doou.
+            $pinnedCents = (int) round(((float) $pinned['amount']) * 100);
+            $donationCents = (int) round(((float) $donation->amount->formatToDecimal()) * 100);
+            $pinnedCurrency = strtoupper((string) $pinned['currency']);
+            $donationCurrency = strtoupper((string) $donation->amount->getCurrency());
+
+            if ($pinnedCents !== $donationCents || $pinnedCurrency !== $donationCurrency) {
+                throw new Exception(esc_html__('Payment amount or currency does not match the donation.', 'lknmp-gateway-givewp'));
+            }
+
+            add_option('lknmp_gateway_' . $reference, $donation->id);
+            give_update_payment_meta($donation->id, 'lknmp_mp_reference', $reference);
+            give_update_payment_meta($donation->id, 'lknmp_mp_currency', $pinnedCurrency);
+            delete_transient('lknmp_mp_ref_' . $reference);
 
             LknmpGatewayGiveWPHelper::regLog(
                 'info', // logType
                 'createPayment', // category
-                'Criar pagamento', // description
+                esc_html__('Create payment', 'lknmp-gateway-givewp'), // description
                 array(
                     'donation' => $donation->id,
-                    'gatewayData' => $gatewayData
+                    'reference' => $reference
                 )
             );
 
             $donation->status = DonationStatus::PENDING();
             $donation->save();
 
-            $receipt_id = give_get_payment_meta($donation->id, '_give_payment_purchase_key');
-            $redirect_url = home_url('/?givewp-route=donation-confirmation-receipt-view&receipt-id=' . sanitize_text_field($receipt_id));
-
-            header("Location: $redirect_url", true, 302);
-
-            //return new PaymentPending();
-            return wp_send_json_success(['status' => 'pending', 'message' => 'Pagamento está pendente.']);
-            // return new GatewayCommand();
+            return new PaymentPending();
         } catch (Exception $e) {
             $errorMessage = $e->getMessage();
 
@@ -142,7 +158,11 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
 
             DonationNote::create(array(
                 'donationId' => $donation->id,
-                'content' => esc_html('Falha na doação. Razão: ' . $errorMessage) // Translators: %s é um espaço reservado para a mensagem de erro
+                'content' => sprintf(
+                    /* Translators: %s is the payment error message. */
+                    esc_html__('Donation failed. Reason: %s', 'lknmp-gateway-givewp'),
+                    esc_html($errorMessage)
+                )
             ));
 
             throw new PaymentGatewayException(esc_html($errorMessage));
@@ -205,7 +225,10 @@ final class LknmpGatewayGiveWPGateway extends PaymentGateway
             'key' => $configs['key'],
             'tittle' => $configs['tittle'],
             'description' => $configs['description'],
-            'token' => $configs['token']
+            'preferenceEndpoint' => rest_url('lknmp/v1/payments/preference'),
+            'nonce' => wp_create_nonce('wp_rest'),
+            'baseCurrency' => strtoupper((string) give_get_option('currency')),
+            'formId' => $formId
         ));
 
         wp_localize_script('lkn-mp-wallet', 'lknMercadoPagoGlobals', array(

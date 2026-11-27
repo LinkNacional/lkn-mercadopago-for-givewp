@@ -4,3 +4,4 @@ vendor
 node_modules
 Includes/logs/*.log
 .vscode/functions
+.phpunit.result.cache

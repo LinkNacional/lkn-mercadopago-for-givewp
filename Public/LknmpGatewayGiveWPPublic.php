@@ -109,7 +109,6 @@ final class LknmpGatewayGiveWPPublic
 
         $lknmp_globals = array(
             'key' => $configs['key'],
-            'token' => $configs['token'],
             'pageUrl' => $url_pagina,
             'idUnique' => $idUnique,
             'tittle' => $configs['tittle'],

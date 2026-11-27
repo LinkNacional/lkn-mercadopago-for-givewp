@@ -67,13 +67,13 @@ abstract class LknmpGatewayGiveWPHelper {
         // Admin notice.
         $message = sprintf(
             '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s %6$s+ %7$s.</p></div>',
-            esc_html('Erro de ativação:'),
-            esc_html('Você precisa ter o'),
+            esc_html__('Activation error:', 'lknmp-gateway-givewp'),
+            esc_html__('You need to have', 'lknmp-gateway-givewp'),
             esc_url('https://givewp.com'),
-            esc_html('Give'),
-            esc_html('instalado e ativo versão'),
+            esc_html__('Give', 'lknmp-gateway-givewp'),
+            esc_html__('installed and active, version', 'lknmp-gateway-givewp'),
             esc_html(LKNMP_GATEWAY_MIN_GIVE_VERSION),
-            esc_html('para o plugin Mercado Pago para GiveWP ativar')
+            esc_html__('for the Mercado Pago for GiveWP plugin to activate', 'lknmp-gateway-givewp')
         );
 
         echo wp_kses_post($message);
@@ -92,8 +92,7 @@ abstract class LknmpGatewayGiveWPHelper {
         $new_meta_links['setting'] = sprintf(
             '<a href="%1$s">%2$s</a>',
             admin_url('edit.php?post_type=give_forms&page=give-settings&tab=gateways&section=mercado_pago'),
-            'Configurações',
-            'lknmp-gateway-givewp'
+            esc_html__('Settings', 'lknmp-gateway-givewp')
         );
 
         return array_merge($plugin_meta, $new_meta_links);

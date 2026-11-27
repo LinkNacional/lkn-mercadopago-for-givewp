@@ -51,3 +51,24 @@ if ( ! empty($lkn_array_remove_options)) {
         give_delete_option($option_key);
     }
 }
+
+// As referencias e os transientes do gateway sao criados com add_option() e
+// set_transient(), que escrevem direto em wp_options. O give_get_settings()
+// nao os enxerga, entao sem isso ficam linhas orfas para sempre.
+global $wpdb;
+
+// Consulta direta e sem cache de proposito: o uninstall roda uma vez, e as
+// options orfas nao tem chave conhecida para delete_option() individual.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+$lknmp_option_names = $wpdb->get_col(
+    $wpdb->prepare(
+        "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s",
+        $wpdb->esc_like('lknmp_gateway_') . '%',
+        $wpdb->esc_like('_transient_lknmp_mp_') . '%',
+        $wpdb->esc_like('_transient_timeout_lknmp_mp_') . '%'
+    )
+);
+
+foreach ((array) $lknmp_option_names as $lknmp_option_name) {
+    delete_option($lknmp_option_name);
+}
